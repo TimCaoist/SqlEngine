@@ -11,7 +11,7 @@ namespace Tim.SqlEngine.ReflectUtil
     {
         private readonly static Dictionary<string, WeakReference<Assembly>> Assemblies = new Dictionary<string, WeakReference<Assembly>>();
 
-        public static object CreateInstance(string assemblyString, string typeStr)
+        private static Assembly GetAssembly(string assemblyString)
         {
             WeakReference<Assembly> weakReference;
             Assembly assembly;
@@ -26,13 +26,26 @@ namespace Tim.SqlEngine.ReflectUtil
                     }
                 }
             }
-            else {
+            else
+            {
                 assembly = Assembly.Load(assemblyString);
                 weakReference = new WeakReference<Assembly>(assembly);
                 Assemblies.Add(assemblyString, weakReference);
             }
 
+            return assembly;
+        }
+
+        public static object CreateInstance(string assemblyString, string typeStr)
+        {
+            Assembly assembly = GetAssembly(assemblyString);
             return assembly.CreateInstance(typeStr);
+        }
+
+        public static Type CreateType(string assemblyString, string typeStr)
+        {
+            Assembly assembly = GetAssembly(assemblyString);
+            return assembly.GetType(typeStr);
         }
     }
 }

@@ -35,7 +35,13 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
             var datas = SqlQueryExcuter.ExcuteQuery(queryConfig, valueSetter, queryParams);
             if (queryConfig.OnlyOne)
             {
-                return datas.First();
+                if (datas.Any())
+                {
+                    return datas.First();
+                }
+                else {
+                    return new object();
+                }
             }
 
             return datas;

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using Tim.SqlEngine.Models;
+using Tim.SqlEngine.Parser;
 
 namespace Tim.SqlEngine.ValueSetter
 {
@@ -24,13 +25,19 @@ namespace Tim.SqlEngine.ValueSetter
         public IEnumerable<object> SetterDatas(QueryConfig queryConfig, MySqlDataReader dataReader, IEnumerable<string> columns)
         {
             ICollection<object> datas = new List<object>();
+            var alias = queryConfig.Alais;
+            var count = columns.Count();
+            var alaisParser = new AlaisParser(columns, alias);
+
             while (dataReader.Read())
             {
                 object data = ReflectUtil.ReflectUtil.CreateInstance(AssemblyString, TypeStr);
                 var type = data.GetType();
-                foreach (var col in columns)
+                for (var i = 0; i < count; i++)
                 {
-                    var property = type.GetProperty(col);
+                    var col = columns.ElementAt(i);
+                    var realName = alaisParser.GetName(i, col);
+                    var property = type.GetProperty(realName);
                     if (property == null)
                     {
                         continue;

@@ -21,5 +21,11 @@ namespace Tim.SqlEngine.Models
         public const string NotEqulas = "!=";
 
         public const string Equlas = "==";
+
+        public const string ParamStart = "@";
+
+        public const string GlobalStart = "g_";
+
+        public const char Split = ':';
     }
 }

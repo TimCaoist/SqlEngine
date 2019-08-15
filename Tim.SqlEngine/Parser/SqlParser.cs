@@ -15,8 +15,8 @@ namespace Tim.SqlEngine.Parser
 
         public static Tuple<string, IDictionary<string, object>> Convert(string sql, IDictionary<string, object> queryParams = null)
         {
+            sql = sql.Insert(sql.Length - 1, " ");
             var matches = Regex.Matches(sql, SegmentStr);
-
             if (matches.Count > 0)
             {
                 var grammar = new Grammar(matches, sql);
@@ -27,7 +27,7 @@ namespace Tim.SqlEngine.Parser
                 }
             }
 
-            matches = Regex.Matches(sql, "@.*? ");
+            matches = Regex.Matches(sql, string.Intern("@.*? "));
             var usedParams = ParamsUtil.GetParams(matches, queryParams);
             sql = ParamsUtil.ApplyParams(sql, usedParams);
             return Tuple.Create(sql, ParamsUtil.Convert(usedParams));

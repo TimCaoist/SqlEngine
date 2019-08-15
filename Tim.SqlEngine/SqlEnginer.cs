@@ -41,5 +41,11 @@ namespace Tim.SqlEngine
             HandlerConfig handlerConfig = JsonParser.ReadHandlerConfig(name);
             return Query(handlerConfig, queryParams);
         }
+
+        public static object Query(string name, string data, string assemblyString, string typeStr)
+        {
+            var type = ReflectUtil.ReflectUtil.CreateType(assemblyString, typeStr);
+            return Query(name, JsonParser.CreateInstance(data, type));
+        }
     }
 }

@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\git代码\sd.plamclass.com.v2\sd.plamclass.com\libs\SqlEngine\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -34,8 +34,9 @@
     <Reference Include="MySql.Data">
       <HintPath>..\..\..\..\..\git代码\sd.plamclass.com.v2\sd.plamclass.com\libs\MySql.Data.6.9.5\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\git代码\sd.plamclass.com.v2\sd.plamclass.com\libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,11 +54,13 @@
     <Compile Include="Models\ParamType.cs" />
     <Compile Include="Models\Segment.cs" />
     <Compile Include="Models\SqlKeyWorld.cs" />
+    <Compile Include="Parser\AlaisParser.cs" />
     <Compile Include="Parser\Grammar.cs" />
     <Compile Include="Parser\ParamsUtil.cs" />
     <Compile Include="Parser\SegmentBuilder\IfSegmentBuilder.cs" />
     <Compile Include="Parser\SegmentBuilder\SegmentUtil.cs" />
     <Compile Include="Parser\SqlParser.cs" />
+    <Compile Include="PlugIn\IGobalValue.cs" />
     <Compile Include="ReflectUtil\ReflectUtil.cs" />
     <Compile Include="SqlEnginer.cs" />
     <Compile Include="Parser\JsonParser.cs" />

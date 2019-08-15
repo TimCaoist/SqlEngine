@@ -20,5 +20,8 @@ namespace Tim.SqlEngine.Models
 
         [DataMember(Name = "field")]
         public string Filed { get;  set; }
+
+        [DataMember(Name = "alais")]
+        public string[] Alais { get; set; }
     }
 }

@@ -24,5 +24,10 @@ namespace Tim.SqlEngine.Parser
 
             return JsonConvert.DeserializeObject<HandlerConfig>(text);
         }
+
+        public static object CreateInstance(string data, Type type)
+        {
+            return JsonConvert.DeserializeObject(data, type);
+        }
     }
 }
