@@ -64,20 +64,15 @@ namespace Tim.SqlEngine.ValueSetter
             return datas;
         }
 
-        public void SetterField(string filed, object data)
+        public void SetField(string field, object data)
         {
-            var property = intanceType.GetProperty(filed);
-            if (property == null)
-            {
-                return;
-            }
+            ReflectUtil.ReflectUtil.SetProperty(instance, field, data);
+        }
 
-            if (property.PropertyType != data.GetType())
-            {
-                throw new ArgumentException(string.Concat(filed, "字段类型不匹配！"));
-            }
-
-            property.SetValue(instance, data);
+        public void SetField(ReleatedQuery queryConfig, object parent, object obj, string field)
+        {
+            var fieldVal = ValueGetter.GetValue(queryConfig, obj);
+            ReflectUtil.ReflectUtil.SetProperty(parent, field, fieldVal);
         }
     }
 }

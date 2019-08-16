@@ -14,6 +14,9 @@ namespace Tim.SqlEngine.Models
         public string Name { get; set; }
 
         public object Data { get; set; }
+
         public Match Match { get; internal set; }
+
+        public bool ReBuilder { get; set; }
     }
 }

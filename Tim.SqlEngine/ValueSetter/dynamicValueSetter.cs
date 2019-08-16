@@ -41,9 +41,14 @@ namespace Tim.SqlEngine.ValueSetter
             return datas;
         }
 
-        public void SetterField(string filed, object data)
+        public void SetField(string filed, object data)
         {
             instance.Add(filed, data);
+        }
+
+        public void SetField(ReleatedQuery queryConfig, object parent, object obj, string field)
+        {
+            ((IDictionary<string, object>)parent).Add(field, ValueGetter.GetValue(queryConfig, obj));
         }
     }
 }

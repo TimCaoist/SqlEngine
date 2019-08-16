@@ -65,7 +65,7 @@ namespace Tim.SqlEngine.Parser
                 {
                     if (segment == null)
                     {
-                        var strs = text.Replace(string.Intern("<"), string.Empty).Replace(string.Intern(">"), string.Empty).Split(' ');
+                        var strs = text.Replace(string.Intern("<"), string.Empty).Replace(string.Intern(">"), string.Empty).Split(new char[] { ' ', ':'});
                         segment = new Segment(start)
                         {
                             Start = match,
@@ -86,11 +86,6 @@ namespace Tim.SqlEngine.Parser
                 c--;
                 if (c == 0)
                 {
-                    if (!text.Contains(segment.Token))
-                    {
-                        throw new ArgumentException(sql + "语法错误");
-                    }
-
                     segment.End = match;
                     return segment;
                 }

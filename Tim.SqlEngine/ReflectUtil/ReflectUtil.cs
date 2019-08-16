@@ -51,6 +51,19 @@ namespace Tim.SqlEngine.ReflectUtil
         public static object GetProperty(object data, string field)
         {
             var itemType = data.GetType();
+            IDictionary<string, object> dictObj = data as IDictionary<string, object>;
+            
+            if (dictObj != null)
+            {
+                object val;
+                if (!dictObj.TryGetValue(field, out val))
+                {
+                    throw new ArgumentException(string.Concat(field, "不存在"));
+                }
+
+                return val;
+            }
+
             var ps = itemType.GetProperty(field);
             if (ps == null)
             {
@@ -58,6 +71,23 @@ namespace Tim.SqlEngine.ReflectUtil
             }
 
             return ps.GetValue(data);
+        }
+
+        public static void SetProperty(object data, string field, object fieldVal)
+        {
+            var instanceType = data.GetType();
+            var property = instanceType.GetProperty(field);
+            if (property == null)
+            {
+                return;
+            }
+
+            if (property.PropertyType != fieldVal.GetType())
+            {
+                throw new ArgumentException(string.Concat(field, "字段类型不匹配！"));
+            }
+
+            property.SetValue(data, fieldVal);
         }
     }
 }

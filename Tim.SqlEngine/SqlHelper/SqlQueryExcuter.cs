@@ -55,7 +55,7 @@ namespace Tim.SqlEngine.SqlHelper
                 {
                     if (realSql.Item2 == null || !realSql.Item2.Any())
                     {
-                        return doExcute(cmd); ;
+                        return doExcute(cmd);
                     }
 
                     foreach (var ps in realSql.Item2)

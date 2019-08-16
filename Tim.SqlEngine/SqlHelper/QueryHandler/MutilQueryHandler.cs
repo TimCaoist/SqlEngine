@@ -32,7 +32,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
 
                 context.Childs.Add(subContext);
                 var data = queryHandler.Query(subContext);
-                valueSetter.SetterField(queryConfig.Filed, data);
+                valueSetter.SetField(queryConfig.Filed, data);
             }
 
             return outData;

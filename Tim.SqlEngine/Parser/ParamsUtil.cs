@@ -17,7 +17,7 @@ namespace Tim.SqlEngine.Parser
             ICollection<ParamInfo> paramInfos = new List<ParamInfo>();
             foreach (Match match in matches)
             {
-                var paramInfo = GetParamData(context, match.ToString().TrimEnd());
+                var paramInfo = GetParamData(context, match.ToString().TrimEnd(')', ' '));
                 paramInfo.Match = match;
                 paramInfos.Add(paramInfo);
             }

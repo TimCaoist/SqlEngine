@@ -32,7 +32,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
         public ParamInfo GetParamInfo(Context context, string dataStr)
         {
             var key = dataStr.Substring(1, dataStr.Length - 1);
-            var keyArray = dataStr.Split('_');
+            var keyArray = key.Split('_');
             var str = keyArray[1];
             var array = str.Split('.');
             if (array.Count() <= 1)
@@ -52,7 +52,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
                 return new ParamInfo
                 {
                     Type = ParamType.Object,
-                    Name = realKey,
+                    Name = key,
                     Data = outData
                 };
             }
@@ -65,7 +65,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
             return new ParamInfo
             {
                 Type = ParamType.Object,
-                Name = realKey,
+                Name = key,
                 Data = outData
             };
         }

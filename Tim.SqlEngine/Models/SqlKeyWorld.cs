@@ -10,6 +10,8 @@ namespace Tim.SqlEngine.Models
     {
         public const string If = "if";
 
+        public const string In = "in";
+
         public const string Less = "l";
 
         public const string LessEqulas = "l=";

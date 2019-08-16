@@ -19,13 +19,14 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
                 return string.Empty;
             }
 
-            var parentStatIndex = segment.Start.Index + segment.Start.Length; 
-            var parentEndIndex = segment.End.Index;
-            var content = oldSql.Substring(parentStatIndex, parentEndIndex - parentStatIndex);
+            var content = SegmentUtil.GetContent(oldSql, segment);
             if (segment.Segments.Any() == false)
             {
                 return content;
             }
+
+            var parentStatIndex = segment.Start.Index + segment.Start.Length;
+            var parentEndIndex = segment.End.Index;
 
             var total = segment.Segments.Count();
             for (var i = total - 1; i >= 0; i--)

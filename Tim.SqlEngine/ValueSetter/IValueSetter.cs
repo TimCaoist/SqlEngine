@@ -13,6 +13,9 @@ namespace Tim.SqlEngine.ValueSetter
         object CreateInstance();
 
         IEnumerable<object> SetterDatas(QueryConfig queryConfig, MySqlDataReader dataReader, IEnumerable<string> columns);
-        void SetterField(string filed, object data);
+
+        void SetField(string filed, object data);
+
+        void SetField(ReleatedQuery queryConfig, object parent, object obj, string field);
     }
 }
