@@ -11,7 +11,7 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
     {
         internal static string BuildSql(Context context, string oldSql, Segment segment)
         {
-            var queryParams = context.ExcutedQueryParams;
+            var queryParams = context.QueryParams;
             var args = segment.Args;
             var result = IsMatch(context, args);
             if (!result)

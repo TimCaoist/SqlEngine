@@ -51,22 +51,12 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
                 return;
             }
 
-            var queryParams = context.ExcutedQueryParams;
-            var newParams = new Dictionary<string, object>();
-            foreach (var item in queryParams)
-            {
-                newParams.Add(item.Key, item.Value);
-            }
-
-            newParams.Add(SqlKeyWorld.ParnetKey, context.Data);
-
             foreach (var relatedQueryConfig in relatedQueryConfigs)
             {
                 IQueryHandler queryHandler = QueryHandlerFactory.GetQueryHandler(relatedQueryConfig.QueryType);
                 var subContext = new Context(context)
                 {
-                    Configs = new QueryConfig[] { relatedQueryConfig },
-                    ExcutedQueryParams = newParams
+                    Configs = new QueryConfig[] { relatedQueryConfig }
                 };
 
                 context.Childs.Add(subContext);

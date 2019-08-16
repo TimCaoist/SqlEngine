@@ -56,12 +56,14 @@
     <Compile Include="Models\ReleatedQuery.cs" />
     <Compile Include="Models\Segment.cs" />
     <Compile Include="Models\SqlKeyWorld.cs" />
+    <Compile Include="Models\ValueInfo.cs" />
     <Compile Include="Parser\AlaisParser.cs" />
     <Compile Include="Parser\Grammar.cs" />
     <Compile Include="Parser\ParamHandler\ConstParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\GlobalParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\IParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\NormalParamHandler.cs" />
+    <Compile Include="Parser\ParamHandler\ObjectParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\ParamHandlerFactory.cs" />
     <Compile Include="Parser\ParamsUtil.cs" />
     <Compile Include="Parser\SegmentBuilder\IfSegmentBuilder.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="ValueSetter\DynamicValueSetter.cs" />
     <Compile Include="ValueSetter\IValueSetter.cs" />
     <Compile Include="ValueSetter\ReflectValueSetter.cs" />
+    <Compile Include="ValueSetter\ValueGetter.cs" />
     <Compile Include="ValueSetter\ValueSetterCreater.cs" />
   </ItemGroup>
   <ItemGroup>

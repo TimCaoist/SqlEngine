@@ -22,7 +22,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
             }
 
             var gobalValue = data as IGobalValue;
-            var queryParams = context.ExcutedQueryParams;
+            var queryParams = context.QueryParams;
             if (gobalValue != null && !queryParams.TryGetValue(key, out data))
             {
                 data = gobalValue.GetValue(queryParams, realKey);

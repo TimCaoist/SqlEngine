@@ -17,7 +17,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
         {
             var handlerConfig = context.HandlerConfig;
             var queryConfigs = context.Configs;
-            var queryParam = context.ExcutedQueryParams;
+            var queryParam = context.QueryParams;
             IValueSetter valueSetter = handlerConfig.Create();
             object outData = valueSetter.CreateInstance();
             context.Data = outData;

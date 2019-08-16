@@ -4,6 +4,7 @@
     {
         Normal = 0,
         Global = 1,
-        Constant = 2
+        Constant = 2,
+        Object =3
     }
 }

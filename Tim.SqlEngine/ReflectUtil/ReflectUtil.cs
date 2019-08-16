@@ -47,5 +47,17 @@ namespace Tim.SqlEngine.ReflectUtil
             Assembly assembly = GetAssembly(assemblyString);
             return assembly.GetType(typeStr);
         }
+
+        public static object GetProperty(object data, string field)
+        {
+            var itemType = data.GetType();
+            var ps = itemType.GetProperty(field);
+            if (ps == null)
+            {
+                throw new ArgumentException(string.Concat(field, "不存在"));
+            }
+
+            return ps.GetValue(data);
+        }
     }
 }

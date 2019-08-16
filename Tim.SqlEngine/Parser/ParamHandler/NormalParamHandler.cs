@@ -13,7 +13,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
         {
             var key = dataStr.Replace(SqlKeyWorld.ParamStart, string.Empty);
             object data;
-            if (!context.ExcutedQueryParams.TryGetValue(key, out data))
+            if (!context.QueryParams.TryGetValue(key, out data))
             {
                 throw new ArgumentNullException(string.Concat("参数", key, "不存在!"));
             }

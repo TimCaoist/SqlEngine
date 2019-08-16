@@ -71,20 +71,9 @@ namespace Tim.SqlEngine.Models
             }
         }
 
-        public IDictionary<string, object> _excutedQueryParams;
-
-        public IDictionary<string, object> ExcutedQueryParams {
-            get {
-                if (_excutedQueryParams == null)
-                {
-                    return QueryParams;
-                }
-
-                return _excutedQueryParams;
-            }
-            set {
-                _excutedQueryParams = value;
-            }
-        }
+        public IDictionary<string, object> ContentQueryParams
+        {
+            get;set;
+        } = new Dictionary<string, object>();
     }
 }

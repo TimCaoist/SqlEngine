@@ -26,7 +26,15 @@ namespace Tim.SqlEngine.Models
 
         public const string GlobalStart = "@g_";
 
+        public const string ObjectStart = "@v_";
+
+        public const string ParentObjectStart = "@v_parent.";
+
         public const char Split = ':';
+
+        public const string Split1 = ",";
+
+        public const char Split2 = '\'';
 
         public const string ParnetKey = "parent";
     }

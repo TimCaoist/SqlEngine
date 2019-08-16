@@ -8,6 +8,8 @@ namespace Tim.SqlEngine.Parser.ParamHandler
         {
             new ConstParamHandler(),
             new GlobalParamHandler(),
+            new ParentParamHandler(),
+            new ObjectParamHandler(),
             new NormalParamHandler()
         };
 
