@@ -13,9 +13,9 @@ namespace Tim.SqlEngine.Parser
     {
         private readonly static string SegmentStr = "<.*?>";
 
-        public static Tuple<string, IDictionary<string, object>> Convert(string sql, IDictionary<string, object> queryParams = null)
+        public static Tuple<string, IDictionary<string, object>> Convert(Context context, string sql)
         {
-            sql = sql.Insert(sql.Length - 1, " ");
+            sql = sql.Insert(sql.Length, " ");
             var matches = Regex.Matches(sql, SegmentStr);
             if (matches.Count > 0)
             {
@@ -23,17 +23,17 @@ namespace Tim.SqlEngine.Parser
                 IEnumerable<Segment> segments = grammar.Parser();
                 if (segments.Any())
                 {
-                    sql = ApplyGramar(sql, segments, queryParams);
+                    sql = ApplyGramar(context, sql, segments);
                 }
             }
 
             matches = Regex.Matches(sql, string.Intern("@.*? "));
-            var usedParams = ParamsUtil.GetParams(matches, queryParams);
+            var usedParams = ParamsUtil.GetParams(context, matches);
             sql = ParamsUtil.ApplyParams(sql, usedParams);
             return Tuple.Create(sql, ParamsUtil.Convert(usedParams));
         }
 
-        public static string ApplyGramar(string sql, IEnumerable<Segment> segments, IDictionary<string, object> queryParams)
+        public static string ApplyGramar(Context contex, string sql, IEnumerable<Segment> segments)
         {
             var oldSql = sql.Clone().ToString();
             var total = segments.Count();
@@ -43,7 +43,7 @@ namespace Tim.SqlEngine.Parser
                 var startIndex = seg.Start.Index;
                 var endIndex = seg.End.Index + seg.End.Length;
                 sql = sql.Remove(startIndex, endIndex - startIndex);
-                sql = sql.Insert(startIndex, SegmentUtil.BuildSql(oldSql, seg, queryParams));
+                sql = sql.Insert(startIndex, SegmentUtil.BuildSql(contex, oldSql, seg));
             }
 
             return sql;

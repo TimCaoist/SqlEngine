@@ -24,48 +24,46 @@ namespace Tim.SqlEngine.SqlHelper
 
             return columns;
         }
-        internal static IEnumerable<object> ExcuteQuery(QueryConfig queryConfig, IValueSetter valueSetter, IDictionary<string, object> queryParam)
+        internal static IEnumerable<object> ExcuteQuery(Context context, IValueSetter valueSetter)
         {
-            using (var connection = new MySqlConnection(SqlEnginerConfig.GetConnection(queryConfig.Connection)))
+            return Excute<IEnumerable<object>>(context, (cmd) =>
             {
-                connection.Open();
-                var realSql = SqlParser.Convert(queryConfig.Sql, queryParam);
-                using (var cmd = new MySqlCommand(realSql.Item1, connection))
+                using (var dataReader = cmd.ExecuteReader())
                 {
-                    if (realSql.Item2 != null && realSql.Item2.Any())
-                    {
-                        foreach (var ps in realSql.Item2)
-                        {
-                            cmd.Parameters.AddWithValue(ps.Key, ps.Value);
-                        }
-                    }
-
-                    using(var dataReader = cmd.ExecuteReader())
-                    {
-                        var columns = GetColumns(dataReader);
-                        return valueSetter.SetterDatas(queryConfig, dataReader, columns);
-                    }
+                    var columns = GetColumns(dataReader);
+                    return valueSetter.SetterDatas(context.Config, dataReader, columns);
                 }
-            }
+            });
         }
 
-        internal static object ExcuteScalar(QueryConfig queryConfig, IDictionary<string, object> queryParam)
+        internal static object ExcuteScalar(Context context)
         {
+            return Excute(context, (cmd) =>
+            {
+                return cmd.ExecuteScalar();
+            });
+        }
+
+        public static TObject Excute<TObject>(Context context, Func<MySqlCommand, TObject> doExcute)
+        {
+            var queryConfig = context.Config;
             using (var connection = new MySqlConnection(SqlEnginerConfig.GetConnection(queryConfig.Connection)))
             {
                 connection.Open();
-                var realSql = SqlParser.Convert(queryConfig.Sql, queryParam);
+                var realSql = SqlParser.Convert(context, queryConfig.Sql);
                 using (var cmd = new MySqlCommand(realSql.Item1, connection))
                 {
-                    if (realSql.Item2 != null && realSql.Item2.Any())
+                    if (realSql.Item2 == null || !realSql.Item2.Any())
                     {
-                        foreach (var ps in realSql.Item2)
-                        {
-                            cmd.Parameters.AddWithValue(ps.Key, ps.Value);
-                        }
+                        return doExcute(cmd); ;
                     }
 
-                    return cmd.ExecuteScalar();
+                    foreach (var ps in realSql.Item2)
+                    {
+                        cmd.Parameters.AddWithValue(ps.Key, ps.Value);
+                    }
+
+                    return doExcute(cmd);
                 }
             }
         }

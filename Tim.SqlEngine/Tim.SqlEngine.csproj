@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\..\..\git代码\sd.plamclass.com.v2\sd.plamclass.com\libs\SqlEngine\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -50,12 +50,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\BaseHadlerConfig.cs" />
+    <Compile Include="Models\Context.cs" />
     <Compile Include="Models\ParamInfo.cs" />
     <Compile Include="Models\ParamType.cs" />
+    <Compile Include="Models\ReleatedQuery.cs" />
     <Compile Include="Models\Segment.cs" />
     <Compile Include="Models\SqlKeyWorld.cs" />
     <Compile Include="Parser\AlaisParser.cs" />
     <Compile Include="Parser\Grammar.cs" />
+    <Compile Include="Parser\ParamHandler\ConstParamHandler.cs" />
+    <Compile Include="Parser\ParamHandler\GlobalParamHandler.cs" />
+    <Compile Include="Parser\ParamHandler\IParamHandler.cs" />
+    <Compile Include="Parser\ParamHandler\NormalParamHandler.cs" />
+    <Compile Include="Parser\ParamHandler\ParamHandlerFactory.cs" />
     <Compile Include="Parser\ParamsUtil.cs" />
     <Compile Include="Parser\SegmentBuilder\IfSegmentBuilder.cs" />
     <Compile Include="Parser\SegmentBuilder\SegmentUtil.cs" />
@@ -78,6 +85,7 @@
     <Compile Include="ValueSetter\DynamicValueSetter.cs" />
     <Compile Include="ValueSetter\IValueSetter.cs" />
     <Compile Include="ValueSetter\ReflectValueSetter.cs" />
+    <Compile Include="ValueSetter\ValueSetterCreater.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

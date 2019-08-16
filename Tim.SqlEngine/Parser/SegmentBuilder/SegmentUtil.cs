@@ -9,12 +9,12 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
 {
     public static class SegmentUtil
     {
-        public static string BuildSql(string oldSql, Segment segment, IDictionary<string, object> queryParams)
+        public static string BuildSql(Context context, string oldSql, Segment segment)
         {
             switch (segment.Token.ToLower())
             {
                 case SqlKeyWorld.If:
-                    return IfSegmentBuilder.BuildSql(oldSql, segment, queryParams);
+                    return IfSegmentBuilder.BuildSql(context, oldSql, segment);
             }
 
             return string.Empty;

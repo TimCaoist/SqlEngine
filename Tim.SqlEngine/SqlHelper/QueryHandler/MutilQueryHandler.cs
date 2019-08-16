@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tim.SqlEngine.Models;
+using Tim.SqlEngine.ValueSetter;
 
 namespace Tim.SqlEngine.SqlHelper.QueryHandler
 {
@@ -12,41 +13,29 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
     {
         public override int Type => 2;
 
-        public override object Query(HandlerConfig handlerConfig, IDictionary<string, object> queryParam)
+        public override object Query(Context context)
         {
-            var queryConfigs = handlerConfig.Configs;
-            IDictionary<string, object> outData = new ExpandoObject();
+            var handlerConfig = context.HandlerConfig;
+            var queryConfigs = context.Configs;
+            var queryParam = context.ExcutedQueryParams;
+            IValueSetter valueSetter = handlerConfig.Create();
+            object outData = valueSetter.CreateInstance();
+            context.Data = outData;
+
             foreach (var queryConfig in queryConfigs)
             {
                 IQueryHandler queryHandler = QueryHandlerFactory.GetQueryHandler(queryConfig.QueryType);
-                var data = queryHandler.Query(handlerConfig, queryConfig, queryParam);
-                outData.Add(queryConfig.Filed, data);
-            }
-
-            if (handlerConfig.Config == null)
-            {
-                return outData;
-            }
-
-            object instance = ReflectUtil.ReflectUtil.CreateInstance(handlerConfig.Config["assembly_str"].ToString(), handlerConfig.Config["type_str"].ToString());
-            var type = instance.GetType();
-            foreach (var data in outData)
-            {
-                var p = type.GetProperty(data.Key);
-                if (p == null)
+                var subContext = new Context(context)
                 {
-                    continue;
-                }
+                    Configs = new QueryConfig[] { queryConfig }
+                };
 
-                p.SetValue(instance, data.Value);
+                context.Childs.Add(subContext);
+                var data = queryHandler.Query(subContext);
+                valueSetter.SetterField(queryConfig.Filed, data);
             }
 
-            return instance;
-        }
-
-        public override object Query(HandlerConfig handlerConfig, QueryConfig config, IDictionary<string, object> queryParam)
-        {
-            throw new NotImplementedException();
+            return outData;
         }
     }
 }

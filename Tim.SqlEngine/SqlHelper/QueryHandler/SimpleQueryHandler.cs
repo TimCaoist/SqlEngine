@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.ValueSetter;
@@ -9,42 +11,66 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
     {
         public override int Type => 1;
 
-        public override object Query(HandlerConfig handlerConfig, IDictionary<string, object> queryParams)
+        public override object Query(Context context)
         {
-            var queryConfig = handlerConfig.Configs.First();
-            return Query(handlerConfig, queryConfig, queryParams);
-        }
-
-        public override object Query(HandlerConfig handlerConfig, QueryConfig queryConfig, IDictionary<string, object> queryParams)
-        {
+            var queryConfig = context.Config;
+            var handlerConfig = context.HandlerConfig;
             if (string.IsNullOrEmpty(queryConfig.Connection))
             {
                 queryConfig.Connection = handlerConfig.Connection;
             }
 
-            IValueSetter valueSetter;
-            if (queryConfig.Config == null)
+            IValueSetter valueSetter = queryConfig.Create();
+            var datas = SqlQueryExcuter.ExcuteQuery(context, valueSetter);
+            context.Data = datas;
+            ExcuteSubQueries(context, queryConfig);
+            if (!queryConfig.OnlyOne)
             {
-                valueSetter = new DynamicValueSetter();
-            }
-            else
-            {
-                valueSetter = new ReflectValueSetter(queryConfig.Config["assembly_str"].ToString(), queryConfig.Config["type_str"].ToString());
+                return datas;
             }
 
-            var datas = SqlQueryExcuter.ExcuteQuery(queryConfig, valueSetter, queryParams);
-            if (queryConfig.OnlyOne)
+            if (datas.Any())
             {
-                if (datas.Any())
+                return datas.First();
+            }
+
+            return new object();
+        }
+
+        public void ExcuteSubQueries(Context context, QueryConfig queryConfig)
+        {
+            if (queryConfig.Config == null || 
+                queryConfig.Config["related_queries"] == null)
+            {
+                return;
+            }
+
+            var relatedQueryConfigs = JsonConvert.DeserializeObject<IEnumerable<ReleatedQuery>>(queryConfig.Config["related_queries"].ToString());
+            if (relatedQueryConfigs.Any() == false)
+            {
+                return;
+            }
+
+            var queryParams = context.ExcutedQueryParams;
+            var newParams = new Dictionary<string, object>();
+            foreach (var item in queryParams)
+            {
+                newParams.Add(item.Key, item.Value);
+            }
+
+            newParams.Add(SqlKeyWorld.ParnetKey, context.Data);
+
+            foreach (var relatedQueryConfig in relatedQueryConfigs)
+            {
+                IQueryHandler queryHandler = QueryHandlerFactory.GetQueryHandler(relatedQueryConfig.QueryType);
+                var subContext = new Context(context)
                 {
-                    return datas.First();
-                }
-                else {
-                    return new object();
-                }
-            }
+                    Configs = new QueryConfig[] { relatedQueryConfig },
+                    ExcutedQueryParams = newParams
+                };
 
-            return datas;
+                context.Childs.Add(subContext);
+            }
         }
     }
 }

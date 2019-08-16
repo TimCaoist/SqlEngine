@@ -10,6 +10,9 @@ namespace Tim.SqlEngine.ValueSetter
 {
     public interface IValueSetter
     {
+        object CreateInstance();
+
         IEnumerable<object> SetterDatas(QueryConfig queryConfig, MySqlDataReader dataReader, IEnumerable<string> columns);
+        void SetterField(string filed, object data);
     }
 }

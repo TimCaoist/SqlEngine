@@ -12,6 +12,14 @@ namespace Tim.SqlEngine.ValueSetter
 {
     public class DynamicValueSetter : IValueSetter
     {
+        private IDictionary<string, object> instance;
+
+        public object CreateInstance()
+        {
+            instance = new ExpandoObject();
+            return instance;
+        }
+
         public IEnumerable<object> SetterDatas(QueryConfig queryConfig, MySqlDataReader dataReader, IEnumerable<string> columns)
         {
             ICollection<object> datas = new List<object>();
@@ -31,6 +39,11 @@ namespace Tim.SqlEngine.ValueSetter
             }
 
             return datas;
+        }
+
+        public void SetterField(string filed, object data)
+        {
+            instance.Add(filed, data);
         }
     }
 }

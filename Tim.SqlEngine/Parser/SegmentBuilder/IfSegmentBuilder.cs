@@ -9,10 +9,11 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
 {
     public static class IfSegmentBuilder
     {
-        internal static string BuildSql(string oldSql, Segment segment, IDictionary<string, object> queryParams)
+        internal static string BuildSql(Context context, string oldSql, Segment segment)
         {
+            var queryParams = context.ExcutedQueryParams;
             var args = segment.Args;
-            var result = IsMatch(queryParams, args);
+            var result = IsMatch(context, args);
             if (!result)
             {
                 return string.Empty;
@@ -33,16 +34,16 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
                 var startIndex = seg.Start.Index - parentStatIndex;
                 var endIndex = seg.End.Index + seg.End.Length - parentStatIndex;
                 content = content.Remove(startIndex, endIndex - startIndex);
-                content = content.Insert(startIndex, SegmentUtil.BuildSql(oldSql, seg, queryParams));
+                content = content.Insert(startIndex, SegmentUtil.BuildSql(context, oldSql, seg));
             }
 
             return content;
         }
 
-        private static bool IsMatch(IDictionary<string, object> queryParams, IEnumerable<string> args)
+        private static bool IsMatch(Context context, IEnumerable<string> args)
         {
-            string params1 = ParamsUtil.GetParamData(queryParams, args.ElementAt(0)).Data.ToString();
-            string params2 = ParamsUtil.GetParamData(queryParams, args.ElementAt(2)).Data.ToString();
+            string params1 = ParamsUtil.GetParamData(context, args.ElementAt(0)).Data.ToString();
+            string params2 = ParamsUtil.GetParamData(context, args.ElementAt(2)).Data.ToString();
 
             switch (args.ElementAt(1))
             {

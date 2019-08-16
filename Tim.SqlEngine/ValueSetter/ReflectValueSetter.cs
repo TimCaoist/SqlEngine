@@ -1,11 +1,7 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.Parser;
 
@@ -16,10 +12,22 @@ namespace Tim.SqlEngine.ValueSetter
         private readonly string AssemblyString;
 
         private readonly string TypeStr;
+
+        private object instance;
+
+        private Type intanceType;
+
         public ReflectValueSetter(string assemblyString, string typeStr)
         {
             AssemblyString = assemblyString;
             TypeStr = typeStr;
+        }
+
+        public object CreateInstance()
+        {
+            instance = ReflectUtil.ReflectUtil.CreateInstance(AssemblyString, TypeStr);
+            intanceType = instance.GetType();
+            return instance;
         }
 
         public IEnumerable<object> SetterDatas(QueryConfig queryConfig, MySqlDataReader dataReader, IEnumerable<string> columns)
@@ -54,6 +62,22 @@ namespace Tim.SqlEngine.ValueSetter
             }
 
             return datas;
+        }
+
+        public void SetterField(string filed, object data)
+        {
+            var property = intanceType.GetProperty(filed);
+            if (property == null)
+            {
+                return;
+            }
+
+            if (property.PropertyType != data.GetType())
+            {
+                throw new ArgumentException(string.Concat(filed, "字段类型不匹配！"));
+            }
+
+            property.SetValue(instance, data);
         }
     }
 }

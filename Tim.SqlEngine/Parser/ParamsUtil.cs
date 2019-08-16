@@ -5,18 +5,19 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Tim.SqlEngine.Models;
+using Tim.SqlEngine.Parser.ParamHandler;
 using Tim.SqlEngine.PlugIn;
 
 namespace Tim.SqlEngine.Parser
 {
     public static class ParamsUtil
     {
-        public static IEnumerable<ParamInfo> GetParams(System.Text.RegularExpressions.MatchCollection matches, IDictionary<string, object> queryParams)
+        public static IEnumerable<ParamInfo> GetParams(Context context, System.Text.RegularExpressions.MatchCollection matches)
         {
             ICollection<ParamInfo> paramInfos = new List<ParamInfo>();
             foreach (Match match in matches)
             {
-                var paramInfo = GetParamData(queryParams, match.ToString().TrimEnd());
+                var paramInfo = GetParamData(context, match.ToString().TrimEnd());
                 paramInfo.Match = match;
                 paramInfos.Add(paramInfo);
             }
@@ -24,35 +25,10 @@ namespace Tim.SqlEngine.Parser
             return paramInfos;
         }
 
-        public static ParamInfo GetParamData(IDictionary<string, object> queryParams, string dataStr)
+        public static ParamInfo GetParamData(Context context, string dataStr)
         {
-            if (!dataStr.StartsWith(SqlKeyWorld.ParamStart))
-            {
-                return new ParamInfo
-                {
-                    Type = ParamType.Constant,
-                    Name = string.Empty,
-                    Data = dataStr
-                };
-            }
-
-            var key = dataStr.Replace(SqlKeyWorld.ParamStart, string.Empty);
-            if (key.StartsWith(SqlKeyWorld.GlobalStart, StringComparison.OrdinalIgnoreCase))
-            {
-                return GetGlobalParamData(queryParams, key);
-            }
-
-            object data;
-            if (queryParams.TryGetValue(key, out data)) {
-                return new ParamInfo
-                {
-                    Type = ParamType.Global,
-                    Name = key,
-                    Data = data
-                };
-            }
-
-            throw new ArgumentNullException(string.Concat("参数", key, "不存在!"));
+            var paramHandler = ParamHandlerFactory.Find(dataStr);
+            return paramHandler.GetParamInfo(context, dataStr);
         }
 
         internal static IDictionary<string, object> Convert(IEnumerable<ParamInfo> usedParams)

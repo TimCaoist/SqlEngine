@@ -19,7 +19,14 @@ namespace Tim.SqlEngine
                 throw new ArgumentNullException("handlerConfig.Configs");
             }
 
-            return queryHandler.Query(handlerConfig, queryParams);
+            var context = new Context
+            {
+                HandlerConfig = handlerConfig,
+                Configs = handlerConfig.Configs,
+                QueryParams = queryParams
+            };
+
+            return queryHandler.Query(context);
         }
 
         public static object Query(string name, IDictionary<string, object> queryParams = null)

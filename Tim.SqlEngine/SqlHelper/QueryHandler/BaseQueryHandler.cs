@@ -11,8 +11,6 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
     {
         public abstract int Type { get; }
 
-        public abstract object Query(HandlerConfig handlerConfig, IDictionary<string, object> queryParams);
-
-        public abstract object Query(HandlerConfig handlerConfig, QueryConfig config, IDictionary<string, object> queryParams);
+        public abstract object Query(Context context);
     }
 }

@@ -1,0 +1,22 @@
+﻿using Tim.SqlEngine.Models;
+
+namespace Tim.SqlEngine.Parser.ParamHandler
+{
+    public class ConstParamHandler : IParamHandler
+    {
+        public ParamInfo GetParamInfo(Context context, string dataStr)
+        {
+            return new ParamInfo
+            {
+                Type = ParamType.Constant,
+                Name = string.Empty,
+                Data = dataStr
+            };
+        }
+
+        public bool Match(string paramStr)
+        {
+            return !paramStr.StartsWith(SqlKeyWorld.ParamStart);
+        }
+    }
+}

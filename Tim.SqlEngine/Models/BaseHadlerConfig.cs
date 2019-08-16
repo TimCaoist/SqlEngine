@@ -14,6 +14,6 @@ namespace Tim.SqlEngine.Models
 
 
         [DataMember(Name = "query_type")]
-        public int QueryType { get; set; }
+        public int QueryType { get; set; } = 1;
     }
 }

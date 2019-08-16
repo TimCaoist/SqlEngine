@@ -24,8 +24,10 @@ namespace Tim.SqlEngine.Models
 
         public const string ParamStart = "@";
 
-        public const string GlobalStart = "g_";
+        public const string GlobalStart = "@g_";
 
         public const char Split = ':';
+
+        public const string ParnetKey = "parent";
     }
 }
