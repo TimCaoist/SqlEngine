@@ -12,6 +12,8 @@ namespace Tim.SqlEngine.Models
 
         public const string In = "in";
 
+        public const string Temp = "temp";
+
         public const string Less = "l";
 
         public const string LessEqulas = "l=";
@@ -33,6 +35,8 @@ namespace Tim.SqlEngine.Models
         public const string ParentObjectStart = "@v_parent.";
 
         public const char Split = ':';
+
+        public const char Split3 = ',';
 
         public const string Split1 = ",";
 

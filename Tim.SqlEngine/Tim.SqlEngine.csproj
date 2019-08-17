@@ -56,6 +56,7 @@
     <Compile Include="Models\ReleatedQuery.cs" />
     <Compile Include="Models\Segment.cs" />
     <Compile Include="Models\SqlKeyWorld.cs" />
+    <Compile Include="Models\Template.cs" />
     <Compile Include="Models\ValueInfo.cs" />
     <Compile Include="Parser\AlaisParser.cs" />
     <Compile Include="Parser\Grammar.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Parser\SegmentBuilder\IfSegmentBuilder.cs" />
     <Compile Include="Parser\SegmentBuilder\SegmentUtil.cs" />
     <Compile Include="Parser\SegmentBuilder\InSegmentBuilder.cs" />
+    <Compile Include="Parser\SegmentBuilder\TempSegmentBuilder.cs" />
     <Compile Include="Parser\SqlParser.cs" />
     <Compile Include="PlugIn\IGobalValue.cs" />
     <Compile Include="ReflectUtil\ReflectUtil.cs" />

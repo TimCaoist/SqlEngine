@@ -29,6 +29,11 @@ namespace Tim.SqlEngine.ValueSetter
 
         public static IEnumerable<object> GetFilterValues(Dictionary<string, string> matcherFields, object parent, IEnumerable<object> datas)
         {
+            if (!matcherFields.Any())
+            {
+                return datas;
+            }
+
             ICollection<object> notMatchDatas = new List<object>();
             foreach (var mf in matcherFields)
             {

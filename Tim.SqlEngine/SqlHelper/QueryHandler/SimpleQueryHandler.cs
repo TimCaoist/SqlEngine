@@ -61,25 +61,48 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
 
                 context.Childs.Add(subContext);
                 var obj = queryHandler.Query(subContext);
+                SetSubQueryValue(relatedQueryConfig, valueSetter, parents, (IEnumerable<object>)obj);
+            }
+        }
 
-                if (relatedQueryConfig.CompareFields == null || relatedQueryConfig.CompareFields.Any() == false)
+        private void SetSubQueryValue(ReleatedQuery config, IValueSetter valueSetter, IEnumerable<object> parents, IEnumerable<object> datas)
+        {
+            var compareFields = config.CompareFields ?? new string[] { };
+            Dictionary<string, string> mf = compareFields.Select(cf => cf.Split(SqlKeyWorld.Split)).ToDictionary(c => c[0], c => c[1]);
+            var isSingle = config.IsSingle;
+            var defaultValue = config.UsedFieldDefaultValue;
+            foreach (var parent in parents)
+            {
+                IEnumerable<object> matchDatas = ValueGetter.GetFilterValues(mf, parent, datas);
+                object matchData = matchDatas.FirstOrDefault();
+
+                if (string.IsNullOrEmpty(config.UsedField))
                 {
-                    var field = relatedQueryConfig.Filed;
-                    foreach (var parent in parents)
+                    if (isSingle)
                     {
-                        valueSetter.SetField(relatedQueryConfig, parent, obj, field);
+                        valueSetter.SetField(parent, matchData, config.Filed);
+                        continue;
                     }
 
+                    valueSetter.SetField(parent, matchDatas, config.Filed);
                     continue;
                 }
 
-                var mf = relatedQueryConfig.CompareFields.Select(cf => cf.Split(SqlKeyWorld.Split)).ToDictionary(c => c[0], c => c[1]);
-                var datas = (IEnumerable<object>)obj;
-                foreach (var parent in parents)
+                if (!isSingle)
                 {
-                    var matchDatas = ValueGetter.GetFilterValues(mf, parent, datas);
-                    valueSetter.SetField(relatedQueryConfig, parent, matchDatas, relatedQueryConfig.Filed);
+                    matchData = ValueGetter.GetValue(config.UsedField, matchDatas).Data;
                 }
+                else if (matchData != null)
+                {
+                    matchData = ValueGetter.GetValue(config.UsedField, matchData).Data ?? defaultValue;
+                }
+                else
+                {
+                    matchData = defaultValue;
+                }
+
+                valueSetter.SetField(parent, matchData, config.Filed);
+                continue;
             }
         }
     }

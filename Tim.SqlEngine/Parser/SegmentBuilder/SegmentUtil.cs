@@ -25,6 +25,8 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
                     return IfSegmentBuilder.BuildSql(context, oldSql, segment);
                 case SqlKeyWorld.In:
                     return InSegmentBuilder.BuildSql(context, oldSql, segment);
+                case SqlKeyWorld.Temp:
+                    return TempSegmentBuilder.BuildSql(context, oldSql, segment);
             }
 
             return string.Empty;

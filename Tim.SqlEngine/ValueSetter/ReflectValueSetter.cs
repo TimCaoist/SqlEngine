@@ -69,10 +69,9 @@ namespace Tim.SqlEngine.ValueSetter
             ReflectUtil.ReflectUtil.SetProperty(instance, field, data);
         }
 
-        public void SetField(ReleatedQuery queryConfig, object parent, object obj, string field)
+        public void SetField(object parent, object obj, string field)
         {
-            var fieldVal = ValueGetter.GetValue(queryConfig, obj);
-            ReflectUtil.ReflectUtil.SetProperty(parent, field, fieldVal);
+            ReflectUtil.ReflectUtil.SetProperty(parent, field, obj);
         }
     }
 }

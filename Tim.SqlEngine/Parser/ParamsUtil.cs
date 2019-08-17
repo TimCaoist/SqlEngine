@@ -36,6 +36,11 @@ namespace Tim.SqlEngine.Parser
             IDictionary<string, object> datas = new Dictionary<string, object>();
             foreach (var p in usedParams)
             {
+                if (datas.ContainsKey(p.Name))
+                {
+                    continue;
+                }
+
                 datas.Add(p.Name, p.Data);
             }
 
