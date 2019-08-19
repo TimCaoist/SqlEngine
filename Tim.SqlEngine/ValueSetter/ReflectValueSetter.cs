@@ -51,11 +51,13 @@ namespace Tim.SqlEngine.ValueSetter
                         continue;
                     }
 
-                    property.SetValue(data, dataReader[col]);
+                    if (dataReader[col].GetType() != typeof(System.DBNull))
+                    {
+                        property.SetValue(data, dataReader[col]);
+                    }
                 }
 
                 datas.Add(data);
-
                 if (queryConfig.OnlyOne) {
                     break;
                 }

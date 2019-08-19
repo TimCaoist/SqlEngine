@@ -34,6 +34,7 @@ namespace Tim.SqlEngine
         {
             if (connectionDict.ContainsKey(key))
             {
+                connectionDict[key] = connectionStr;
                 return;
             }
 

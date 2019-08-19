@@ -8,11 +8,25 @@ namespace Tim.SqlEngine.Models
 {
     public class SqlKeyWorld
     {
+        /// <summary>
+        /// If 片段
+        /// </summary>
         public const string If = "if";
 
+        /// <summary>
+        /// Where in 片段
+        /// </summary>
         public const string In = "in";
 
+        /// <summary>
+        /// 模板
+        /// </summary>
         public const string Temp = "temp";
+
+        /// <summary>
+        /// 切换
+        /// </summary>
+        public const string Switch = "sw";
 
         public const string Less = "l";
 

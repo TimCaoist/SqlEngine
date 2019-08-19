@@ -87,10 +87,12 @@
     <Compile Include="SqlHelper\QueryHandler\QueryHandlerFactory.cs" />
     <Compile Include="SqlHelper\QueryHandler\SimpleQueryHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\SingleFieldQueryHandler.cs" />
+    <Compile Include="SqlHelper\QueryHandler\SimpleRecordQueryHandler.cs" />
     <Compile Include="SqlHelper\SqlQueryExcuter.cs" />
     <Compile Include="ValueSetter\DynamicValueSetter.cs" />
     <Compile Include="ValueSetter\IValueSetter.cs" />
     <Compile Include="ValueSetter\ReflectValueSetter.cs" />
+    <Compile Include="ValueSetter\SimpleRecordQueryHandler.cs" />
     <Compile Include="ValueSetter\ValueGetter.cs" />
     <Compile Include="ValueSetter\ValueSetterCreater.cs" />
   </ItemGroup>

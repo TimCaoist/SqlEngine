@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Tim.SqlEngine.Parser;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.SqlHelper.QueryHandler;
-
 namespace Tim.SqlEngine
 {
     public static class SqlEnginer
@@ -53,6 +52,17 @@ namespace Tim.SqlEngine
         {
             var type = ReflectUtil.ReflectUtil.CreateType(assemblyString, typeStr);
             return Query(name, JsonParser.CreateInstance(data, type));
+        }
+
+        public static IEnumerable<TData> ToDatas<TData>(this object obj)
+        {
+            var datas = (IEnumerable<object>)obj;
+            return datas.Cast<TData>();
+        }
+
+        public static TData ToSingleData<TData>(this object obj)
+        {
+            return (TData)obj;
         }
     }
 }

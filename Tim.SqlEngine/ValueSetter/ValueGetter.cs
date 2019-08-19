@@ -16,8 +16,7 @@ namespace Tim.SqlEngine.ValueSetter
                 return data;
             }
 
-            var type = data.GetType();
-            var isArray = type.GetMethod("GetEnumerator") != null;
+            var isArray = ReflectUtil.ReflectUtil.IsArray(data);
             if (isArray)
             {
                 var datas = (IEnumerable<object>)data;
@@ -58,9 +57,7 @@ namespace Tim.SqlEngine.ValueSetter
 
         public static ValueInfo GetValue(string field, object data)
         {
-            var type = data.GetType();
-            var isArray = type.GetMethod("GetEnumerator") != null;
-            
+            var isArray = ReflectUtil.ReflectUtil.IsArray(data); ;
             if (!isArray)
             {
                 return new ValueInfo
@@ -100,12 +97,17 @@ namespace Tim.SqlEngine.ValueSetter
 
         public static string Builder(ValueInfo valueInfo)
         {
-            if (valueInfo.IsArray == false)
+            return Builder(valueInfo.Data, valueInfo.IsArray);
+        }
+
+        public static string Builder(object data, bool isArray)
+        {
+            if (isArray == false)
             {
-                return valueInfo.Data.ToString();
+                return data.ToString();
             }
 
-            var datas = (IEnumerable<object>)valueInfo.Data;
+            var datas = (IEnumerable<object>)data;
             if (datas.Any() == false)
             {
                 return string.Empty;

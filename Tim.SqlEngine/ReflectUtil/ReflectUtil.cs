@@ -1,15 +1,25 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Tim.SqlEngine.Parser;
 
 namespace Tim.SqlEngine.ReflectUtil
 {
     public static class ReflectUtil
     {
+        private readonly static string GetEnumerator = "GetEnumerator";
+
         private readonly static Dictionary<string, WeakReference<Assembly>> Assemblies = new Dictionary<string, WeakReference<Assembly>>();
+
+        public static bool IsArray(object data) {
+            var type = data.GetType();
+            return type.GetMethod(GetEnumerator) != null;
+        }
 
         private static Assembly GetAssembly(string assemblyString)
         {
@@ -82,12 +92,21 @@ namespace Tim.SqlEngine.ReflectUtil
                 return;
             }
 
-            if (property.PropertyType != fieldVal.GetType())
+            if (property.PropertyType == fieldVal.GetType())
             {
-                throw new ArgumentException(string.Concat(field, "字段类型不匹配！"));
+                property.SetValue(data, fieldVal);
+                return;
             }
 
-            property.SetValue(data, fieldVal);
+            var isArray = IsArray(fieldVal);
+            if (isArray == false)
+            {
+                throw new ArgumentException("类型不匹配!");
+            }
+
+            var str = JsonConvert.SerializeObject(fieldVal);
+            var newVal = JsonConvert.DeserializeObject(str, property.PropertyType);
+            property.SetValue(data, newVal);
         }
     }
 }

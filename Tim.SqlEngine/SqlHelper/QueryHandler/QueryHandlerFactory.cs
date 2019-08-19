@@ -18,6 +18,9 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
 
             var singleFieldQueryHandler = new SingleFieldQueryHandler();
             RegisertQueryHandler(singleFieldQueryHandler.Type, singleFieldQueryHandler);
+
+            var simpleRecordQueryHandler = new SimpleRecordQueryHandler();
+            RegisertQueryHandler(simpleRecordQueryHandler.Type, simpleRecordQueryHandler);
         }
 
         public static IQueryHandler GetQueryHandler(int type)
