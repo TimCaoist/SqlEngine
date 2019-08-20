@@ -98,15 +98,8 @@ namespace Tim.SqlEngine.ReflectUtil
                 return;
             }
 
-            var isArray = IsArray(fieldVal);
-            if (isArray == false)
-            {
-                throw new ArgumentException("类型不匹配!");
-            }
-
-            var str = JsonConvert.SerializeObject(fieldVal);
-            var newVal = JsonConvert.DeserializeObject(str, property.PropertyType);
-            property.SetValue(data, newVal);
+            IArrayReflect arrayReflect = ArrayReflectCreator.Create(fieldVal, property.PropertyType);
+            arrayReflect.SetFiled(data, (IEnumerable<object>)data, property);
         }
     }
 }

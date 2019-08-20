@@ -74,6 +74,10 @@
     <Compile Include="Parser\SegmentBuilder\TempSegmentBuilder.cs" />
     <Compile Include="Parser\SqlParser.cs" />
     <Compile Include="PlugIn\IGobalValue.cs" />
+    <Compile Include="ReflectUtil\ArrayReflect.cs" />
+    <Compile Include="ReflectUtil\ArrayReflectCreator.cs" />
+    <Compile Include="ReflectUtil\IArrayReflect.cs" />
+    <Compile Include="ReflectUtil\ListReflect.cs" />
     <Compile Include="ReflectUtil\ReflectUtil.cs" />
     <Compile Include="SqlEnginer.cs" />
     <Compile Include="Parser\JsonParser.cs" />

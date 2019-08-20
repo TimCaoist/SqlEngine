@@ -57,7 +57,7 @@ namespace Tim.SqlEngine.ValueSetter
 
         public static ValueInfo GetValue(string field, object data)
         {
-            var isArray = ReflectUtil.ReflectUtil.IsArray(data); ;
+            var isArray = ReflectUtil.ReflectUtil.IsArray(data);
             if (!isArray)
             {
                 return new ValueInfo
