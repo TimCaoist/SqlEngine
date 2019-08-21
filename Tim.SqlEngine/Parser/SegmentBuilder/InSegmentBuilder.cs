@@ -12,7 +12,7 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
 {
     public static class InSegmentBuilder
     {
-        internal static string BuildSql(Context context, string oldSql, Segment segment)
+        internal static string BuildSql(IContext context, string oldSql, Segment segment)
         {
             var data = ParamsUtil.GetParamData(context, segment.Args.ElementAt(0)).Data;
             var isArray = ReflectUtil.ReflectUtil.IsArray(data);

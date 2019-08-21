@@ -11,9 +11,9 @@ namespace Tim.SqlEngine.Parser.ParamHandler
 {
     public class ObjectParamHandler : IParamHandler
     {
-        protected virtual object GetObject(string objectKey, Context context)
+        protected virtual object GetObject(string objectKey, IContext context)
         {
-            var queryParams = context.QueryParams;
+            var queryParams = context.Params;
             object data;
             if (!queryParams.TryGetValue(objectKey, out data))
             {
@@ -23,13 +23,13 @@ namespace Tim.SqlEngine.Parser.ParamHandler
             return data;
         }
 
-        protected virtual IDictionary<string, object> GetQueryParams(Context context)
+        protected virtual IDictionary<string, object> GetQueryParams(IContext context)
         {
-            return context.QueryParams;
+            return context.Params;
         }
 
 
-        public ParamInfo GetParamInfo(Context context, string dataStr)
+        public ParamInfo GetParamInfo(IContext context, string dataStr)
         {
             var key = dataStr.Substring(1, dataStr.Length - 1);
             var keyArray = key.Split('_');

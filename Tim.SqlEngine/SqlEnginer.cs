@@ -8,7 +8,7 @@ using Tim.SqlEngine.Models;
 using Tim.SqlEngine.SqlHelper.QueryHandler;
 namespace Tim.SqlEngine
 {
-    public static class SqlEnginer
+    public static partial class SqlEnginer
     {
         public static object Query(HandlerConfig handlerConfig, IDictionary<string, object> queryParams = null)
         {
@@ -22,7 +22,7 @@ namespace Tim.SqlEngine
             {
                 HandlerConfig = handlerConfig,
                 Configs = handlerConfig.Configs,
-                QueryParams = queryParams
+                Params = queryParams
             };
 
             return queryHandler.Query(context);

@@ -12,12 +12,17 @@ namespace Tim.SqlEngine.Parser
 {
     public static class ParamsUtil
     {
-        public static IEnumerable<ParamInfo> GetParams(Context context, System.Text.RegularExpressions.MatchCollection matches)
+        public static IEnumerable<ParamInfo> GetParams(IContext context, System.Text.RegularExpressions.MatchCollection matches)
         {
             ICollection<ParamInfo> paramInfos = new List<ParamInfo>();
             foreach (Match match in matches)
             {
-                var paramInfo = GetParamData(context, match.ToString().TrimEnd(')', ' '));
+                var paramInfo = GetParamData(context, match.ToString().TrimEnd(')', '(' , ' ', ';'));
+                if (paramInfo == null)
+                {
+                    continue;
+                }
+
                 paramInfo.Match = match;
                 paramInfos.Add(paramInfo);
             }
@@ -25,7 +30,7 @@ namespace Tim.SqlEngine.Parser
             return paramInfos;
         }
 
-        public static ParamInfo GetParamData(Context context, string dataStr)
+        public static ParamInfo GetParamData(IContext context, string dataStr)
         {
             var paramHandler = ParamHandlerFactory.Find(dataStr);
             return paramHandler.GetParamInfo(context, dataStr);

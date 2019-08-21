@@ -21,7 +21,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
             }
 
             IValueSetter valueSetter = queryConfig.Create();
-            var datas = SqlQueryExcuter.ExcuteQuery(context, valueSetter);
+            var datas = SqlExcuter.ExcuteQuery(context, valueSetter);
             context.Data = datas;
             ExcuteSubQueries(context, queryConfig, valueSetter, datas);
             if (!queryConfig.OnlyOne)

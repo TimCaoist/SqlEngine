@@ -11,12 +11,12 @@ namespace Tim.SqlEngine.Parser.ParamHandler
             return paramStr.StartsWith(SqlKeyWorld.ParentObjectStart, StringComparison.OrdinalIgnoreCase);
         }
 
-        protected override object GetObject(string objectKey, Context context)
+        protected override object GetObject(string objectKey, IContext context)
         {
-            return context.Parent.Data;
+            return context.GetParent().Data;
         }
 
-        protected override IDictionary<string, object> GetQueryParams(Context context)
+        protected override IDictionary<string, object> GetQueryParams(IContext context)
         {
             return context.ContentQueryParams;
         }

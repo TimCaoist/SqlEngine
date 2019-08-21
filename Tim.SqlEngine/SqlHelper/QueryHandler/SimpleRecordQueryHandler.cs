@@ -22,7 +22,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
             }
 
             IValueSetter valueSetter = new ValueSetter.SimpleRecordQueryHandler();
-            var datas = SqlQueryExcuter.ExcuteQuery(context, valueSetter);
+            var datas = SqlExcuter.ExcuteQuery(context, valueSetter);
             context.Data = datas;
             return datas;
         }

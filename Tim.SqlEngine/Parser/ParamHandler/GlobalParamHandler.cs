@@ -10,7 +10,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
 {
     public class GlobalParamHandler : IParamHandler
     {
-        public ParamInfo GetParamInfo(Context context, string dataStr)
+        public ParamInfo GetParamInfo(IContext context, string dataStr)
         {
             var key = dataStr.Substring(1, dataStr.Length - 1);
             var keyArray = dataStr.Split('_');
@@ -22,7 +22,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
             }
 
             var gobalValue = data as IGobalValue;
-            var queryParams = context.QueryParams;
+            var queryParams = context.Params;
             if (gobalValue != null && !queryParams.TryGetValue(key, out data))
             {
                 data = gobalValue.GetValue(queryParams, realKey);

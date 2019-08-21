@@ -12,9 +12,6 @@ namespace Tim.SqlEngine.Models
     public class QueryConfig : BaseHadlerConfig
     {
 
-        [DataMember(Name = "sql")]
-        public string Sql { get; set; }
-
         [DataMember(Name = "one")]
         public bool OnlyOne { get; set; }
 

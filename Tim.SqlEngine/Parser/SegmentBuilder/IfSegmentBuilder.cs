@@ -9,9 +9,9 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
 {
     public static class IfSegmentBuilder
     {
-        internal static string BuildSql(Context context, string oldSql, Segment segment)
+        internal static string BuildSql(IContext context, string oldSql, Segment segment)
         {
-            var queryParams = context.QueryParams;
+            var queryParams = context.Params;
             var args = segment.Args;
             var result = IsMatch(context, args);
             if (!result)
@@ -41,7 +41,7 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
             return content;
         }
 
-        private static bool IsMatch(Context context, IEnumerable<string> args)
+        private static bool IsMatch(IContext context, IEnumerable<string> args)
         {
             string params1 = ParamsUtil.GetParamData(context, args.ElementAt(0)).Data.ToString();
             string params2 = ParamsUtil.GetParamData(context, args.ElementAt(2)).Data.ToString();

@@ -9,11 +9,18 @@ namespace Tim.SqlEngine.Parser.ParamHandler
 {
     public class NormalParamHandler : IParamHandler
     {
-        public ParamInfo GetParamInfo(Context context, string dataStr)
+        private readonly static string[] IngoresKeys = new string[] { "IDENTITY" };
+
+        public ParamInfo GetParamInfo(IContext context, string dataStr)
         {
             var key = dataStr.Replace(SqlKeyWorld.ParamStart, string.Empty);
+            if (IngoresKeys.Any(k => k.Equals(key, StringComparison.OrdinalIgnoreCase)))
+            {
+                return null;
+            }
+
             object data;
-            if (!context.QueryParams.TryGetValue(key, out data))
+            if (!context.Params.TryGetValue(key, out data))
             {
                 throw new ArgumentNullException(string.Concat("参数", key, "不存在!"));
             }

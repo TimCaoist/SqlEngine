@@ -17,7 +17,7 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
             return content;
         }
 
-        public static string BuildSql(Context context, string oldSql, Segment segment)
+        public static string BuildSql(IContext context, string oldSql, Segment segment)
         {
             switch (segment.Token.ToLower())
             {

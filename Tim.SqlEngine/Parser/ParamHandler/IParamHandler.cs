@@ -10,6 +10,6 @@ namespace Tim.SqlEngine.Parser.ParamHandler
     public interface IParamHandler
     {
         bool Match(string paramStr);
-        ParamInfo GetParamInfo(Context context, string dataStr);
+        ParamInfo GetParamInfo(IContext context, string dataStr);
     }
 }

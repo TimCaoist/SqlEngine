@@ -4,7 +4,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
 {
     public class ConstParamHandler : IParamHandler
     {
-        public ParamInfo GetParamInfo(Context context, string dataStr)
+        public ParamInfo GetParamInfo(IContext context, string dataStr)
         {
             return new ParamInfo
             {

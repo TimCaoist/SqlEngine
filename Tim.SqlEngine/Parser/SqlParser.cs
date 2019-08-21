@@ -13,7 +13,7 @@ namespace Tim.SqlEngine.Parser
     {
         private readonly static string SegmentStr = "<.*?>";
 
-        public static Tuple<string, IDictionary<string, object>> Convert(Context context, string sql)
+        public static Tuple<string, IDictionary<string, object>> Convert(IContext context, string sql)
         {
             sql = sql.Insert(sql.Length, " ");
             var matches = Regex.Matches(sql, SegmentStr);
@@ -26,14 +26,13 @@ namespace Tim.SqlEngine.Parser
                     sql = ApplyGramar(context, sql, segments);
                 }
             }
-
-            matches = Regex.Matches(sql, string.Intern("@.*? "));
+            matches = Regex.Matches(sql, string.Intern("@.*? |@.*,"));
             var usedParams = ParamsUtil.GetParams(context, matches);
             sql = ParamsUtil.ApplyParams(sql, usedParams);
             return Tuple.Create(sql, ParamsUtil.Convert(usedParams));
         }
 
-        public static string ApplyGramar(Context contex, string sql, IEnumerable<Segment> segments)
+        public static string ApplyGramar(IContext contex, string sql, IEnumerable<Segment> segments)
         {
             var oldSql = sql.Clone().ToString();
             var total = segments.Count();

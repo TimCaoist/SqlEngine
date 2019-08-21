@@ -17,7 +17,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
                 queryConfig.Connection = handlerConfig.Connection;
             }
 
-            return SqlQueryExcuter.ExcuteScalar(context);
+            return SqlExcuter.ExcuteScalar(context);
         }
     }
 }

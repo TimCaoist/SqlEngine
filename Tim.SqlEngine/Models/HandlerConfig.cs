@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Tim.SqlEngine.Models
 {
     [DataContract]
-    public class HandlerConfig : BaseHadlerConfig
+    public class HandlerConfig : BaseHadlerConfig, IHandlerConfig
     {
         /// <summary>
         /// 配置名称
