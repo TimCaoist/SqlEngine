@@ -18,6 +18,11 @@ namespace Tim.SqlEngine.ReflectUtil
 
         public static bool IsArray(object data) {
             var type = data.GetType();
+            if (type == typeof(string))
+            {
+                return false;
+            }
+
             return type.GetMethod(GetEnumerator) != null;
         }
 
@@ -60,9 +65,7 @@ namespace Tim.SqlEngine.ReflectUtil
 
         public static object GetProperty(object data, string field)
         {
-            var itemType = data.GetType();
             IDictionary<string, object> dictObj = data as IDictionary<string, object>;
-            
             if (dictObj != null)
             {
                 object val;
@@ -74,6 +77,7 @@ namespace Tim.SqlEngine.ReflectUtil
                 return val;
             }
 
+            var itemType = data.GetType();
             var ps = itemType.GetProperty(field);
             if (ps == null)
             {

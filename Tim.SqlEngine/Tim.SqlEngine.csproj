@@ -39,6 +39,7 @@
       <HintPath>..\..\..\..\..\..\git代码\sd.plamclass.com.v2\sd.plamclass.com\libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -67,6 +68,7 @@
     <Compile Include="Parser\AlaisParser.cs" />
     <Compile Include="Parser\Grammar.cs" />
     <Compile Include="Parser\ParamHandler\ConstParamHandler.cs" />
+    <Compile Include="Parser\ParamHandler\ContentParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\GlobalParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\IParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\NormalParamHandler.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Parser\ParamHandler\ParentParamHandler.cs" />
     <Compile Include="Parser\ParamsUtil.cs" />
     <Compile Include="Parser\SegmentBuilder\IfSegmentBuilder.cs" />
+    <Compile Include="Parser\SegmentBuilder\JoinSegmentBuilder.cs" />
     <Compile Include="Parser\SegmentBuilder\SegmentUtil.cs" />
     <Compile Include="Parser\SegmentBuilder\InSegmentBuilder.cs" />
     <Compile Include="Parser\SegmentBuilder\TempSegmentBuilder.cs" />
@@ -95,6 +98,11 @@
     <Compile Include="SqlHelper\QueryHandler\IQueryHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\MutilQueryHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\QueryHandlerFactory.cs" />
+    <Compile Include="SqlHelper\QueryHandler\ReleatedFillHandler\ArrayFillHandler.cs" />
+    <Compile Include="SqlHelper\QueryHandler\ReleatedFillHandler\FieldsFillHandler.cs" />
+    <Compile Include="SqlHelper\QueryHandler\ReleatedFillHandler\IFillHandler.cs" />
+    <Compile Include="SqlHelper\QueryHandler\ReleatedFillHandler\ReleatedFillHandlerFactory.cs" />
+    <Compile Include="SqlHelper\QueryHandler\ReleatedFillHandler\SingleRecodFillHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\SimpleQueryHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\SingleFieldQueryHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\SimpleRecordQueryHandler.cs" />

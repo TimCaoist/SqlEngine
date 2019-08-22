@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace Tim.SqlEngine
         private readonly static Dictionary<string, object> globalDatas = new Dictionary<string, object>();
 
         private static string configFolder;
+
+        private static readonly string dataSource = "Data Source=";
 
         public static string ConfigFolder {
             get {
@@ -70,6 +73,19 @@ namespace Tim.SqlEngine
             }
 
             return null;
+        }
+
+        public static void RegiserConnectionByConfigurationManager()
+        {
+            foreach (ConnectionStringSettings item in ConfigurationManager.ConnectionStrings)
+            {
+                if (!item.ConnectionString.StartsWith(dataSource, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                SqlEnginerConfig.RegisterConnection(item.Name, item.ConnectionString);
+            }
         }
     }
 }

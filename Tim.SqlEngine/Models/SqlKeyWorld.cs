@@ -24,6 +24,11 @@ namespace Tim.SqlEngine.Models
         public const string Temp = "temp";
 
         /// <summary>
+        /// 拼接
+        /// </summary>
+        public const string Join = "join";
+
+        /// <summary>
         /// 切换
         /// </summary>
         public const string Switch = "sw";
@@ -48,9 +53,13 @@ namespace Tim.SqlEngine.Models
 
         public const string ParentObjectStart = "@v_parent.";
 
+        public const string ContentObjectStart = "@v_content.";
+
         public const char Split = ':';
 
         public const char Split3 = ',';
+
+        public const char Split4 = '$';
 
         public const string Split1 = ",";
 

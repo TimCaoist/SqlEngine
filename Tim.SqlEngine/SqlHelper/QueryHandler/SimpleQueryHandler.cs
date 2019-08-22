@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using Tim.SqlEngine.Models;
+using Tim.SqlEngine.SqlHelper.QueryHandler.ReleatedFillHandler;
 using Tim.SqlEngine.ValueSetter;
 
 namespace Tim.SqlEngine.SqlHelper.QueryHandler
@@ -40,7 +42,8 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
         public void ExcuteSubQueries(Context context, QueryConfig queryConfig, IValueSetter valueSetter, IEnumerable<object> parents)
         {
             if (queryConfig.Config == null || 
-                queryConfig.Config["related_queries"] == null)
+                queryConfig.Config["related_queries"] == null ||
+                parents.Any() == false)
             {
                 return;
             }
@@ -51,58 +54,40 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
                 return;
             }
 
+            IDictionary<string, object> contentData = new ExpandoObject();
             foreach (var relatedQueryConfig in relatedQueryConfigs)
             {
                 IQueryHandler queryHandler = QueryHandlerFactory.GetQueryHandler(relatedQueryConfig.QueryType);
                 var subContext = new Context(context)
                 {
+                    Data = contentData,
                     Configs = new QueryConfig[] { relatedQueryConfig }
                 };
 
                 context.Childs.Add(subContext);
                 var obj = queryHandler.Query(subContext);
-                SetSubQueryValue(relatedQueryConfig, valueSetter, parents, (IEnumerable<object>)obj);
+                SetSubQueryValue(contentData, relatedQueryConfig, valueSetter, parents, (IEnumerable<object>)obj);
             }
         }
 
-        private void SetSubQueryValue(ReleatedQuery config, IValueSetter valueSetter, IEnumerable<object> parents, IEnumerable<object> datas)
+        private void SetSubQueryValue(IDictionary<string, object> contentData, ReleatedQuery config, IValueSetter valueSetter, IEnumerable<object> parents, IEnumerable<object> datas)
         {
             var compareFields = config.CompareFields ?? new string[] { };
             Dictionary<string, string> mf = compareFields.Select(cf => cf.Split(SqlKeyWorld.Split)).ToDictionary(c => c[0], c => c[1]);
-            var isSingle = config.IsSingle;
-            var defaultValue = config.UsedFieldDefaultValue;
+            var matchOneTime = config.MatchOneTime;
             foreach (var parent in parents)
             {
                 IEnumerable<object> matchDatas = ValueGetter.GetFilterValues(mf, parent, datas);
-                object matchData = matchDatas.FirstOrDefault();
+                var handler = ReleatedFillHandlerFactory.Create(config);
+                var data = handler.Fill(config, parent, matchDatas, valueSetter);
+                contentData.Add(config.Filed, data);
 
-                if (string.IsNullOrEmpty(config.UsedField))
+                if (matchOneTime == false)
                 {
-                    if (isSingle)
-                    {
-                        valueSetter.SetField(parent, matchData, config.Filed);
-                        continue;
-                    }
-
-                    valueSetter.SetField(parent, matchDatas, config.Filed);
                     continue;
                 }
 
-                if (!isSingle)
-                {
-                    matchData = ValueGetter.GetValue(config.UsedField, matchDatas).Data;
-                }
-                else if (matchData != null)
-                {
-                    matchData = ValueGetter.GetValue(config.UsedField, matchData).Data ?? defaultValue;
-                }
-                else
-                {
-                    matchData = defaultValue;
-                }
-
-                valueSetter.SetField(parent, matchData, config.Filed);
-                continue;
+                datas = datas.Except(matchDatas).ToArray();
             }
         }
     }

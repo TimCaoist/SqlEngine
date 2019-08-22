@@ -9,23 +9,6 @@ namespace Tim.SqlEngine.ValueSetter
 {
     public static class ValueGetter
     {
-        public static object GetValue(ReleatedQuery queryConfig, object data)
-        {
-            if (!queryConfig.IsSingle)
-            {
-                return data;
-            }
-
-            var isArray = ReflectUtil.ReflectUtil.IsArray(data);
-            if (isArray)
-            {
-                var datas = (IEnumerable<object>)data;
-                return datas.FirstOrDefault();
-            }
-
-            return data;
-        }
-
         public static IEnumerable<object> GetFilterValues(Dictionary<string, string> matcherFields, object parent, IEnumerable<object> datas)
         {
             if (!matcherFields.Any())
@@ -33,26 +16,48 @@ namespace Tim.SqlEngine.ValueSetter
                 return datas;
             }
 
-            ICollection<object> notMatchDatas = new List<object>();
-            foreach (var mf in matcherFields)
+            ICollection<object> matchDatas = new List<object>();
+            if (matcherFields.Count() == 1)
             {
+                var mf = matcherFields.First();
                 var parentValue = ReflectUtil.ReflectUtil.GetProperty(parent, mf.Key);
                 foreach (var data in datas)
                 {
-                    if (notMatchDatas.Contains(data))
+                    var childValue = ReflectUtil.ReflectUtil.GetProperty(data, mf.Value);
+                    if (childValue.Equals(parentValue))
+                    {
+                        matchDatas.Add(data);
+                    }
+                }
+
+                return matchDatas;
+            }
+
+            foreach (var data in datas)
+            {
+                var isMatch = true;
+                foreach (var mf in matcherFields)
+                {
+                    var parentValue = ReflectUtil.ReflectUtil.GetProperty(parent, mf.Key);
+                    var childValue = ReflectUtil.ReflectUtil.GetProperty(data, mf.Value);
+                    if (childValue.Equals(parentValue))
                     {
                         continue;
                     }
 
-                    var childValue = ReflectUtil.ReflectUtil.GetProperty(data, mf.Value);
-                    if (!childValue.Equals(parentValue))
-                    {
-                        notMatchDatas.Add(data);
-                    }
+                    isMatch = false;
+                    break;
                 }
+
+                if (!isMatch)
+                {
+                    continue;
+                }
+
+                matchDatas.Add(data);
             }
 
-            return datas.Except(notMatchDatas).ToArray();
+            return matchDatas;
         }
 
         public static ValueInfo GetValue(string field, object data)
@@ -60,11 +65,13 @@ namespace Tim.SqlEngine.ValueSetter
             var isArray = ReflectUtil.ReflectUtil.IsArray(data);
             if (!isArray)
             {
-                return new ValueInfo
+                var valueInfo = new ValueInfo
                 {
-                    Data = ReflectUtil.ReflectUtil.GetProperty(data, field),
-                    IsArray = false
+                    Data = ReflectUtil.ReflectUtil.GetProperty(data, field)
                 };
+
+                valueInfo.IsArray = ReflectUtil.ReflectUtil.IsArray(valueInfo.Data);
+                return valueInfo;
             }
 
             ICollection<object> outDatas = new List<object>();
@@ -116,10 +123,10 @@ namespace Tim.SqlEngine.ValueSetter
             var sourceType = datas.First().GetType();
             if (typeof(string) == sourceType || typeof(char) == sourceType)
             {
-                return string.Join(SqlKeyWorld.Split1, datas.Select(d => string.Concat(SqlKeyWorld.Split2, d, SqlKeyWorld.Split2)));
+                return string.Join(SqlKeyWorld.Split1, datas.Distinct().Select(d => string.Concat(SqlKeyWorld.Split2, d, SqlKeyWorld.Split2)));
             }
 
-            return string.Join(SqlKeyWorld.Split1, datas);
+            return string.Join(SqlKeyWorld.Split1, datas.Distinct());
         }
     }
 }

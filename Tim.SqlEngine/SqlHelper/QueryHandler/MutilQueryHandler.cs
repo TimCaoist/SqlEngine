@@ -19,19 +19,30 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
             var queryConfigs = context.Configs;
             var queryParam = context.Params;
             IValueSetter valueSetter = handlerConfig.Create();
+
             object outData = valueSetter.CreateInstance();
             context.Data = outData;
+
+            IDictionary<string, object> contentData = new ExpandoObject();
 
             foreach (var queryConfig in queryConfigs)
             {
                 IQueryHandler queryHandler = QueryHandlerFactory.GetQueryHandler(queryConfig.QueryType);
                 var subContext = new Context(context)
                 {
+                    Data = contentData,
                     Configs = new QueryConfig[] { queryConfig }
                 };
 
                 context.Childs.Add(subContext);
                 var data = queryHandler.Query(subContext);
+                contentData.Add(queryConfig.Filed, data);
+
+                if (queryConfig.IngoreFill == true)
+                {
+                    continue;
+                }
+
                 valueSetter.SetField(queryConfig.Filed, data);
             }
 

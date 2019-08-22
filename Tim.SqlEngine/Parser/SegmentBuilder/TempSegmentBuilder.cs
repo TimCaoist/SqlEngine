@@ -13,7 +13,8 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
         {
             var template = context.GetHandlerConfig().Templates.FirstOrDefault(t => string.Equals(t.Name, segment.Args.ElementAt(2).Trim(), StringComparison.OrdinalIgnoreCase));
             var content = SegmentUtil.GetContent(oldSql, segment);
-            var paramStrs = content.Trim().Split(SqlKeyWorld.Split3);
+            content = SegmentUtil.BuildContent(context, oldSql, content, segment);
+            var paramStrs = content.Trim().Split(SqlKeyWorld.Split4);
             return string.Format(template.Value, paramStrs);
         }
     }

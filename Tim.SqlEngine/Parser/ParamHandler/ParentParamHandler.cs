@@ -18,7 +18,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
 
         protected override IDictionary<string, object> GetQueryParams(IContext context)
         {
-            return context.ContentQueryParams;
+            return context.ContentParams;
         }
     }
 }

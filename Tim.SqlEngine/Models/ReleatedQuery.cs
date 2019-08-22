@@ -17,21 +17,30 @@ namespace Tim.SqlEngine.Models
         public string[] CompareFields { get; set; }
 
         /// <summary>
-        /// 是否只使用查询到的首条记录
+        /// 填充的字段
         /// </summary>
-        [DataMember(Name = "is_single")]
-        public bool IsSingle { get; set; }
+        [DataMember(Name = "fill_fields")]
+        public string[] FillFields { get; set; }
 
         /// <summary>
-        /// 只使用查询到的某个字段
+        /// 填充字段默认值
         /// </summary>
-        [DataMember(Name = "used_field")]
-        public string UsedField { get; set; }
+        [DataMember(Name = "default_values")]
+        public object[] DefaultValues { get; set; } = new object[] { };
 
         /// <summary>
-        /// 只使用查询到的某个字段的缺省值
+        /// 字段赋值方式
+        /// 0（默认）以数组形式赋值
+        /// 1 单个对象赋值
+        /// 2 多个字段赋值
         /// </summary>
-        [DataMember(Name = "used_field_default_value")]
-        public object UsedFieldDefaultValue { get; set; }
+        [DataMember(Name = "fill_type")]
+        public int FillType { get; set; }
+
+        /// <summary>
+        /// 值默认为true 当为true的时候匹配过一次的数据将被移除
+        /// </summary>
+        [DataMember(Name = "match_one_time")]
+        public bool MatchOneTime { get; set; } = true;
     }
 }
