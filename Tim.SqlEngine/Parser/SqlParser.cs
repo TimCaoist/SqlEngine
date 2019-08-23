@@ -11,28 +11,40 @@ namespace Tim.SqlEngine.Parser
 {
     public static class SqlParser
     {
-        private readonly static string SegmentStr = "<.*?>";
+        private readonly static string WhiteSpace = " ";
+
+        private readonly static string LessEqulas = "<=";
+
+        private readonly static string Less = "< ";
 
         public static Tuple<string, IDictionary<string, object>> Convert(IContext context, string sql)
         {
-            sql = sql.Insert(sql.Length, " ");
-            var matches = Regex.Matches(sql, SegmentStr);
-            if (matches.Count > 0)
+            sql = sql.Insert(sql.Length, WhiteSpace);
+            var matches = SegmentUtil.GetMatch(sql);
+            if (matches.Count == 0)
             {
-                var grammar = new Grammar(matches, sql);
-                IEnumerable<Segment> segments = grammar.Parser();
-                if (segments.Any())
-                {
-                    sql = ApplyGramar(context, sql, segments);
-                }
+                return GetApplyParamRuleSql(context, sql);
             }
-            matches = Regex.Matches(sql, string.Intern("@.*? |@.*,"));
+
+            var grammar = new Grammar(matches, sql);
+            IEnumerable<Segment> segments = grammar.Parser();
+            if (segments.Any())
+            {
+                sql = GetApplyGramarRuleSql(context, sql, segments);
+            }
+
+            return GetApplyParamRuleSql(context, sql);
+        }
+
+        public static Tuple<string, IDictionary<string, object>> GetApplyParamRuleSql(IContext context, string sql)
+        {
+            var matches = Regex.Matches(sql, string.Intern("@.*? |@.*,"));
             var usedParams = ParamsUtil.GetParams(context, matches);
             sql = ParamsUtil.ApplyParams(sql, usedParams);
             return Tuple.Create(sql, ParamsUtil.Convert(usedParams));
         }
 
-        public static string ApplyGramar(IContext contex, string sql, IEnumerable<Segment> segments)
+        public static string GetApplyGramarRuleSql(IContext contex, string sql, IEnumerable<Segment> segments)
         {
             var oldSql = sql.Clone().ToString();
             var total = segments.Count();

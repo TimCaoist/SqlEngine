@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Tim.SqlEngine.Models;
 
@@ -9,6 +10,14 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
 {
     public static class SegmentUtil
     {
+        private readonly static string SegmentStr = "<in.*?>|<if.*?>|<temp.*?>|<join.*?>|</>";
+
+        public static MatchCollection GetMatch(string sql)
+        {
+            var matches = Regex.Matches(sql, SegmentStr, RegexOptions.IgnoreCase);
+            return matches;
+        }
+
         public static string GetContent(string sql, Segment segment)
         {
             var parentStatIndex = segment.Start.Index + segment.Start.Length;

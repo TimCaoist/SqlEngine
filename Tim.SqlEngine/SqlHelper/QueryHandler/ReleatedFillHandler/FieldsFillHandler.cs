@@ -15,7 +15,6 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler.ReleatedFillHandler
             var fieldCount = config.FillFields.Count();
             var dValueCount = config.DefaultValues.Count();
 
-            IDictionary<string, object> returnData = new Dictionary<string, object>();
             if (data == null)
             {
                 for (var i = 0; i < fieldCount; i++)
@@ -28,10 +27,9 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler.ReleatedFillHandler
 
                     var val = config.DefaultValues.ElementAt(i);
                     valueSetter.SetField(parent, val, field);
-                    returnData.Add(field, val);
                 }
 
-                return returnData;
+                return null;
             }
 
             for (var i = 0; i < fieldCount; i++)
@@ -39,10 +37,9 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler.ReleatedFillHandler
                 var field = config.FillFields.ElementAt(i);
                 var val = ValueGetter.GetValue(field, data).Data;
                 valueSetter.SetField(parent, val, field);
-                returnData.Add(field, val);
             }
 
-            return returnData;
+            return null;
         }
     }
 }

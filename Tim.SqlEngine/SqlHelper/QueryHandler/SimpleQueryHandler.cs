@@ -66,22 +66,26 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
 
                 context.Childs.Add(subContext);
                 var obj = queryHandler.Query(subContext);
-                SetSubQueryValue(contentData, relatedQueryConfig, valueSetter, parents, (IEnumerable<object>)obj);
+                if (!string.IsNullOrEmpty(relatedQueryConfig.Filed))
+                {
+                    contentData.Add(relatedQueryConfig.Filed, obj);
+                }
+                
+                SetSubQueryValue(relatedQueryConfig, valueSetter, parents, (IEnumerable<object>)obj);
             }
         }
 
-        private void SetSubQueryValue(IDictionary<string, object> contentData, ReleatedQuery config, IValueSetter valueSetter, IEnumerable<object> parents, IEnumerable<object> datas)
+        private void SetSubQueryValue(ReleatedQuery config, IValueSetter valueSetter, IEnumerable<object> parents, IEnumerable<object> datas)
         {
             var compareFields = config.CompareFields ?? new string[] { };
             Dictionary<string, string> mf = compareFields.Select(cf => cf.Split(SqlKeyWorld.Split)).ToDictionary(c => c[0], c => c[1]);
             var matchOneTime = config.MatchOneTime;
+
             foreach (var parent in parents)
             {
                 IEnumerable<object> matchDatas = ValueGetter.GetFilterValues(mf, parent, datas);
                 var handler = ReleatedFillHandlerFactory.Create(config);
                 var data = handler.Fill(config, parent, matchDatas, valueSetter);
-                contentData.Add(config.Filed, data);
-
                 if (matchOneTime == false)
                 {
                     continue;
