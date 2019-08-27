@@ -83,6 +83,8 @@
     <Compile Include="Parser\SegmentBuilder\TempSegmentBuilder.cs" />
     <Compile Include="Parser\SqlParser.cs" />
     <Compile Include="PlugIn\IGobalValue.cs" />
+    <Compile Include="PlugIn\IQueryEnd.cs" />
+    <Compile Include="PlugIn\SqlEventHelper.cs" />
     <Compile Include="ReflectUtil\ArrayReflect.cs" />
     <Compile Include="ReflectUtil\ArrayReflectCreator.cs" />
     <Compile Include="ReflectUtil\IArrayReflect.cs" />

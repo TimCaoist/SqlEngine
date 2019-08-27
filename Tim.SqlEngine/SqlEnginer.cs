@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using Tim.SqlEngine.Parser;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.SqlHelper.QueryHandler;
+using Tim.SqlEngine.PlugIn;
+
 namespace Tim.SqlEngine
 {
     public static partial class SqlEnginer
     {
+        
         public static object Query(HandlerConfig handlerConfig, IDictionary<string, object> queryParams = null)
         {
             IQueryHandler queryHandler = QueryHandlerFactory.GetQueryHandler(handlerConfig.QueryType);
@@ -25,7 +28,8 @@ namespace Tim.SqlEngine
                 Params = queryParams
             };
 
-            return queryHandler.Query(context);
+            var returnData = queryHandler.Query(context);
+            return handlerConfig.OnQueryEnd(returnData, queryParams);
         }
 
         public static object Query(string name, IDictionary<string, object> queryParams = null)

@@ -10,13 +10,17 @@ namespace Tim.SqlEngine.Parser
 {
     internal class Grammar
     {
-        private readonly MatchCollection matches;
+        private readonly List<Match> matches = new List<Match>();
 
         private readonly string sql;
 
         public Grammar(MatchCollection matches, string sql)
         {
-            this.matches = matches;
+            foreach (Match item in matches)
+            {
+                this.matches.Add(item);
+            }
+            
             this.sql = sql;
         }
 
@@ -29,13 +33,13 @@ namespace Tim.SqlEngine.Parser
                 throw new ArgumentException("开始结束语法不匹配!");
             }
 
-            var totalCount = mCount / 2;
-            var segment = Calculation(mCount, 0);
-            segments.Add(segment);
-            while (totalCount > (segment.Number + 1))
+            Segment segment = null;
+            while (matches.Any())
             {
-                segment = Calculation(mCount, segment.Number + 1);
+                segment = Calculation(segment != null ? (segment.Number + 1) : 0);
                 SetParent(segment, segments);
+                matches.Remove(segment.Start);
+                matches.Remove(segment.End);
             }
 
             return segments;
@@ -53,11 +57,12 @@ namespace Tim.SqlEngine.Parser
             SetParent(segment, seg.Segments);
         }
 
-        private Segment Calculation(int mCount, int start)
+        private Segment Calculation(int number)
         {
             var c = 0;
             Segment segment = null;
-            for (var i = start; i < mCount; i++)
+            var mCount = matches.Count;
+            for (var i = 0; i < mCount; i++)
             {
                 var match = matches[i];
                 var text = match.ToString();
@@ -66,7 +71,7 @@ namespace Tim.SqlEngine.Parser
                     if (segment == null)
                     {
                         var strs = text.Replace(string.Intern("<"), string.Empty).Replace(string.Intern(">"), string.Empty).Split(new char[] { ' ', ':'});
-                        segment = new Segment(start)
+                        segment = new Segment(number)
                         {
                             Start = match,
                             Token = strs[0],
