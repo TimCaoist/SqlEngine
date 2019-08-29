@@ -11,7 +11,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
     {
         public override int Type => 3;
 
-        public override string BuilderSql(UpdateConfig config, IDictionary<string, string> cols)
+        public override string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
         {
             var sql = new StringBuilder();
             sql.Append($"delete from {config.Table} where ");

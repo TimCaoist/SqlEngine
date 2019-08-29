@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Tim.SqlEngine.Models;
+using Tim.SqlEngine.ValueSetter;
 
 namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 {
@@ -8,9 +9,10 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
     {
         public override int Type => 1;
 
-        public override string BuilderSql(UpdateConfig config, IDictionary<string, string> cols)
+        public override string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
         {
             config.ReturnId = true;
+            UpdateTrigger.TriggeDefaultValues(updateContext, config, cols);
             return $"insert into {config.Table} ({string.Join(SqlKeyWorld.Split1, cols.Keys)}) values ({string.Join(SqlKeyWorld.Split1, cols.Values.Select(v => string.Concat("@", v, " ")))})";
         }
     }

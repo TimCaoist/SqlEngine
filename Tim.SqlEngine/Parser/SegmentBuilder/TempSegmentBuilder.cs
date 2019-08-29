@@ -20,7 +20,7 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
             }
             else {
                 var config = templateName.Substring(0, index);
-                HandlerConfig handlerConfig = JsonParser.ReadHandlerConfig(config);
+                HandlerConfig handlerConfig = JsonParser.ReadHandlerConfig<HandlerConfig>(config);
                 templateName = templateName.Substring(index + 1);
                 template = handlerConfig.Templates.FirstOrDefault(t => string.Equals(t.Name, templateName, StringComparison.OrdinalIgnoreCase));
             }

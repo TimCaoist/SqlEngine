@@ -10,7 +10,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
     {
         public override int Type => 2;
 
-        public override string BuilderSql(UpdateConfig config, IDictionary<string, string> cols)
+        public override string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
         {
             var sql = new StringBuilder();
             sql.Append($"update {config.Table} set ");

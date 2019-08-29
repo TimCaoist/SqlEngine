@@ -34,7 +34,7 @@ namespace Tim.SqlEngine
 
         public static object Query(string name, IDictionary<string, object> queryParams = null)
         {
-            HandlerConfig handlerConfig = JsonParser.ReadHandlerConfig(name);
+            HandlerConfig handlerConfig = JsonParser.ReadHandlerConfig<HandlerConfig>(name);
             return Query(handlerConfig, queryParams);
         }
 
@@ -48,7 +48,7 @@ namespace Tim.SqlEngine
                 queryParams.Add(p.Name, val);
             }
 
-            HandlerConfig handlerConfig = JsonParser.ReadHandlerConfig(name);
+            HandlerConfig handlerConfig = JsonParser.ReadHandlerConfig<HandlerConfig>(name);
             return Query(handlerConfig, queryParams);
         }
 

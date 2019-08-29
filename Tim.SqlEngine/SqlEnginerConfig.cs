@@ -9,7 +9,7 @@ using Tim.SqlEngine.SqlHelper.QueryHandler;
 
 namespace Tim.SqlEngine
 {
-    public static class SqlEnginerConfig
+    public static partial class SqlEnginerConfig
     {
         private readonly static Dictionary<string, string> connectionDict = new Dictionary<string, string>();
 
@@ -30,6 +30,7 @@ namespace Tim.SqlEngine
                 }
 
                 configFolder = value;
+                UpdateRules();
             }
         }
 

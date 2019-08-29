@@ -50,7 +50,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 cols.Add(fArray[0], fArray[1]);
             }
 
-            config.Sql = BuilderSql(config, cols);
+            config.Sql = BuilderSql(context, config, cols);
             if (config.InTran == false)
             {
                 return SqlExcuter.Excute(context);
@@ -59,6 +59,6 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             return SqlExcuter.ExcuteTrann(context);
         }
 
-        public abstract string BuilderSql(UpdateConfig config, IDictionary<string, string> cols);
+        public abstract string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols);
     }
 }

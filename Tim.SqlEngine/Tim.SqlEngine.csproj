@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Models\BaseContext.cs" />
     <Compile Include="Models\BaseHadlerConfig.cs" />
+    <Compile Include="Models\ColumnRule.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\IHandlerConfig.cs" />
     <Compile Include="Models\IContext.cs" />
@@ -64,6 +65,8 @@
     <Compile Include="Models\UpdateConfig.cs" />
     <Compile Include="Models\UpdateContext.cs" />
     <Compile Include="Models\UpdateHandlerConfig.cs" />
+    <Compile Include="Models\UpdateRule.cs" />
+    <Compile Include="Models\UpdateType.cs" />
     <Compile Include="Models\ValueInfo.cs" />
     <Compile Include="Parser\AlaisParser.cs" />
     <Compile Include="Parser\Grammar.cs" />
@@ -84,6 +87,7 @@
     <Compile Include="Parser\SqlParser.cs" />
     <Compile Include="PlugIn\IGobalValue.cs" />
     <Compile Include="PlugIn\IQueryEnd.cs" />
+    <Compile Include="PlugIn\IUpdateValueGetter.cs" />
     <Compile Include="PlugIn\SqlEventHelper.cs" />
     <Compile Include="ReflectUtil\ArrayReflect.cs" />
     <Compile Include="ReflectUtil\ArrayReflectCreator.cs" />
@@ -96,6 +100,7 @@
     <Compile Include="Models\QueryConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlEnginerConfig.cs" />
+    <Compile Include="SqlEnginerUpdateConfig.cs" />
     <Compile Include="SqlHelper\QueryHandler\BaseQueryHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\IQueryHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\MutilQueryHandler.cs" />
@@ -123,6 +128,7 @@
     <Compile Include="ValueSetter\IValueSetter.cs" />
     <Compile Include="ValueSetter\ReflectValueSetter.cs" />
     <Compile Include="ValueSetter\SimpleRecordQueryHandler.cs" />
+    <Compile Include="ValueSetter\UpdateTrigger.cs" />
     <Compile Include="ValueSetter\ValueGetter.cs" />
     <Compile Include="ValueSetter\ValueSetterCreater.cs" />
   </ItemGroup>

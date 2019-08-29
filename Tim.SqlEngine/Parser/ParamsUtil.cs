@@ -67,11 +67,14 @@ namespace Tim.SqlEngine.Parser
                 throw new ArgumentNullException(string.Concat("不存在", realKey , "全局对象!"));
             }
 
-            var gobalValue = data as IGobalValue;
-            if (gobalValue != null && !queryParams.TryGetValue(key, out data))
+            if (!queryParams.TryGetValue(key, out data))
             {
-                data = gobalValue.GetValue(queryParams, realKey);
-                queryParams.Add(key, data);
+                var convertData = CovnertParam(data, queryParams, realKey);
+                if (convertData != data)
+                {
+                    queryParams.Add(key, convertData);
+                    data = convertData;
+                }
             }
 
             return new ParamInfo
@@ -80,6 +83,23 @@ namespace Tim.SqlEngine.Parser
                 Name = key,
                 Data = data
             };
+        }
+
+        public static object CovnertParam(object data, IDictionary<string, object> queryParams, string key)
+        {
+            var gobalValue = data as IGobalValue;
+            if (gobalValue != null)
+            {
+                return gobalValue.GetValue(queryParams, key);
+            }
+
+            var func = data as Func<IDictionary<string, object>, string, object>;
+            if (func != null)
+            {
+                return func.Invoke(queryParams, key);
+            }
+
+            return data;
         }
     }
 }

@@ -21,12 +21,15 @@ namespace Tim.SqlEngine.Parser.ParamHandler
                 throw new ArgumentNullException(string.Concat("不存在", realKey, "全局对象!"));
             }
 
-            var gobalValue = data as IGobalValue;
             var queryParams = context.Params;
-            if (gobalValue != null && !queryParams.TryGetValue(key, out data))
+            if (!queryParams.TryGetValue(key, out data))
             {
-                data = gobalValue.GetValue(queryParams, realKey);
-                queryParams.Add(key, data);
+                var convertData = ParamsUtil.CovnertParam(data, queryParams, realKey);
+                if (convertData != data)
+                {
+                    queryParams.Add(key, convertData);
+                    data = convertData;
+                }
             }
 
             return new ParamInfo

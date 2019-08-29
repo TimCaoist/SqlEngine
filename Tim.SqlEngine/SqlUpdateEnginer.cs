@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tim.SqlEngine.Models;
+using Tim.SqlEngine.Parser;
 using Tim.SqlEngine.SqlHelper;
 using Tim.SqlEngine.SqlHelper.UpdateHandler;
 
@@ -28,6 +29,12 @@ namespace Tim.SqlEngine
             }
 
             return result;
+        }
+
+        public static object Update(string name, IDictionary<string, object> queryParams = null)
+        {
+            UpdateHandlerConfig handlerConfig = JsonParser.ReadHandlerConfig<UpdateHandlerConfig>(name);
+            return Update(handlerConfig, queryParams);
         }
     }
 }
