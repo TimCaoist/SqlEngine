@@ -12,6 +12,8 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
     {
         protected readonly static string Id = "Id";
 
+        protected readonly static string LowerId = Id.ToLower();
+
         public override object Update(UpdateContext context)
         {
             var config = context.Config;

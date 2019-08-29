@@ -15,5 +15,22 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             UpdateTrigger.TriggeDefaultValues(updateContext, config, cols);
             return $"insert into {config.Table} ({string.Join(SqlKeyWorld.Split1, cols.Keys)}) values ({string.Join(SqlKeyWorld.Split1, cols.Values.Select(v => string.Concat("@", v, " ")))})";
         }
+
+        public override object Update(UpdateContext context)
+        {
+            var result = base.Update(context);
+            if (result.ToString() != "0")
+            {
+                return result;
+            }
+
+            object val;
+            if (context.Params.TryGetValue(Id, out val))
+            {
+                return val;
+            }
+
+            return result;
+        }
     }
 }

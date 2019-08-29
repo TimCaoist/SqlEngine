@@ -22,7 +22,8 @@ namespace Tim.SqlEngine.Parser.ParamHandler
             }
 
             var queryParams = context.Params;
-            if (!queryParams.TryGetValue(key, out data))
+            object outData;
+            if (!queryParams.TryGetValue(key, out outData))
             {
                 var convertData = ParamsUtil.CovnertParam(data, queryParams, realKey);
                 if (convertData != data)
@@ -30,6 +31,9 @@ namespace Tim.SqlEngine.Parser.ParamHandler
                     queryParams.Add(key, convertData);
                     data = convertData;
                 }
+            }
+            else {
+                data = outData;
             }
 
             return new ParamInfo

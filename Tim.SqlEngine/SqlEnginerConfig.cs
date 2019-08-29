@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tim.SqlEngine.Models;
+using Tim.SqlEngine.Parser;
 using Tim.SqlEngine.SqlHelper.QueryHandler;
 
 namespace Tim.SqlEngine
@@ -14,6 +15,8 @@ namespace Tim.SqlEngine
         private readonly static Dictionary<string, string> connectionDict = new Dictionary<string, string>();
 
         private readonly static Dictionary<string, object> globalDatas = new Dictionary<string, object>();
+
+        private readonly static Dictionary<string, string> mapConnections = new Dictionary<string, string>();
 
         private static string configFolder;
 
@@ -30,7 +33,32 @@ namespace Tim.SqlEngine
                 }
 
                 configFolder = value;
-                UpdateRules();
+                LoadUpdateRules();
+                LoadMapConnections();
+            }
+        }
+
+        private static void LoadMapConnections()
+        {
+            mapConnections.Clear();
+            var mapconfig = string.Concat(SqlEnginerConfig.ConfigFolder, !SqlEnginerConfig.ConfigFolder.EndsWith("\\") ? "\\" : string.Empty, "configs\\map.json");
+            if (!System.IO.File.Exists(mapconfig))
+            {
+                return;
+            }
+
+            var maps = JsonParser.ReadHandlerConfig<IEnumerable<Template>>(mapconfig);
+            foreach (var map in maps)
+            {
+                mapConnections.Add(map.Name, map.Value);
+                string val = string.Empty;
+                if (!connectionDict.TryGetValue(map.Name, out val))
+                {
+                    continue;
+                }
+
+                connectionDict.Remove(map.Name);
+                connectionDict.Add(map.Value, val);
             }
         }
 
@@ -82,6 +110,13 @@ namespace Tim.SqlEngine
             {
                 if (!item.ConnectionString.StartsWith(dataSource, StringComparison.OrdinalIgnoreCase))
                 {
+                    continue;
+                }
+
+                string alias = string.Empty;
+                if (mapConnections.TryGetValue(item.Name, out alias))
+                {
+                    SqlEnginerConfig.RegisterConnection(alias, item.ConnectionString);
                     continue;
                 }
 

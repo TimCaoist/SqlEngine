@@ -17,7 +17,7 @@ namespace Tim.SqlEngine.Parser
             ICollection<ParamInfo> paramInfos = new List<ParamInfo>();
             foreach (Match match in matches)
             {
-                var paramInfo = GetParamData(context, match.ToString().TrimEnd(')', '(' , ' ', ';'));
+                var paramInfo = GetParamData(context, match.ToString().TrimEnd(')', '(' , ' ', SqlKeyWorld.Split, SqlKeyWorld.Split3));
                 if (paramInfo == null)
                 {
                     continue;
@@ -67,7 +67,8 @@ namespace Tim.SqlEngine.Parser
                 throw new ArgumentNullException(string.Concat("不存在", realKey , "全局对象!"));
             }
 
-            if (!queryParams.TryGetValue(key, out data))
+            object outData = null;
+            if (!queryParams.TryGetValue(key, out outData))
             {
                 var convertData = CovnertParam(data, queryParams, realKey);
                 if (convertData != data)
@@ -75,6 +76,9 @@ namespace Tim.SqlEngine.Parser
                     queryParams.Add(key, convertData);
                     data = convertData;
                 }
+            }
+            else {
+                data = outData;
             }
 
             return new ParamInfo

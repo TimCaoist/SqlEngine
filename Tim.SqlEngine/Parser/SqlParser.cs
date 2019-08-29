@@ -13,10 +13,6 @@ namespace Tim.SqlEngine.Parser
     {
         private readonly static string WhiteSpace = " ";
 
-        private readonly static string LessEqulas = "<=";
-
-        private readonly static string Less = "< ";
-
         public static Tuple<string, IDictionary<string, object>> Convert(IContext context, string sql)
         {
             sql = sql.Insert(sql.Length, WhiteSpace);
@@ -38,7 +34,7 @@ namespace Tim.SqlEngine.Parser
 
         public static Tuple<string, IDictionary<string, object>> GetApplyParamRuleSql(IContext context, string sql)
         {
-            var matches = Regex.Matches(sql, string.Intern("@.*? |@.*,"));
+            var matches = Regex.Matches(sql, string.Intern("@.*?[, ]"));
             var usedParams = ParamsUtil.GetParams(context, matches);
             sql = ParamsUtil.ApplyParams(sql, usedParams);
             return Tuple.Create(sql, ParamsUtil.Convert(usedParams));

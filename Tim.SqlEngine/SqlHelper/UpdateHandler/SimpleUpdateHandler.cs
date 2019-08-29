@@ -10,6 +10,10 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
     {
         public override int Type => 2;
 
+        private readonly static string Where = " where ";
+
+        private readonly static string Equla = "=@";
+
         public override string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
         {
             var sql = new StringBuilder();
@@ -19,12 +23,12 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             for (var i = 0; i < cCount; i++)
             {
                 var col = cols.ElementAt(i);
-                if (col.Key.Equals("id", StringComparison.OrdinalIgnoreCase))
+                if (col.Key.Equals(Id, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                sql.Append($" {col.Key}=@{col.Value}");
+                sql.Append($" {col.Key}{Equla}{col.Value}");
                 if (i != cCount - 1)
                 {
                     sql.Append(SqlKeyWorld.Split3);
@@ -33,21 +37,22 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
             if (!string.IsNullOrEmpty(config.Filter))
             {
-                sql.Append(string.Concat(" where ", config.Filter));
+                sql.Append(string.Concat(Where, config.Filter));
                 return sql.ToString();
             }
 
-            if (cols.ContainsKey(Id))
+            var updateParams = updateContext.Params;
+            if (updateParams.ContainsKey(Id))
             {
-                sql.Append(string.Concat(" where ", Id, " = @", cols[Id]));
+                sql.Append(string.Concat(Where, Id, Equla, Id));
             }
-            else if (cols.ContainsKey("id"))
+            else if (cols.ContainsKey(Id))
             {
-                sql.Append(string.Concat(" where ", Id, " = @", cols["id"]));
+                sql.Append(string.Concat(Where, Id, Equla, cols[Id]));
             }
             else
             {
-                sql.Append(string.Concat(" where ", Id, " = @id"));
+                sql.Append(string.Concat(Where, Id, Equla, LowerId));
             }
 
             return sql.ToString();
