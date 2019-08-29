@@ -129,12 +129,21 @@
     <Compile Include="ValueSetter\ReflectValueSetter.cs" />
     <Compile Include="ValueSetter\SimpleRecordQueryHandler.cs" />
     <Compile Include="ValueSetter\UpdateTrigger.cs" />
+    <Compile Include="ValueSetter\ValueChecked\EvalValueChecked.cs" />
+    <Compile Include="ValueSetter\ValueChecked\IsInValueChecked.cs" />
+    <Compile Include="ValueSetter\ValueChecked\IValueChecked.cs" />
+    <Compile Include="ValueSetter\ValueChecked\ValueCheckedFactory.cs" />
     <Compile Include="ValueSetter\ValueGetter.cs" />
     <Compile Include="ValueSetter\ValueSetterCreater.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\LambdaEngine\Tim.LambdaEngine.csproj">
+      <Project>{576c32ca-f50e-4f17-86cf-f37bd522c927}</Project>
+      <Name>Tim.LambdaEngine</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

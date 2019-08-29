@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tim.SqlEngine.Models;
+using Tim.SqlEngine.ValueSetter;
 
 namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 {
@@ -16,6 +17,8 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         public override string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
         {
+            UpdateTrigger.TriggeValuesChecked(updateContext, config, cols, ActionType.Insert);
+
             var sql = new StringBuilder();
             sql.Append($"update {config.Table} set ");
 

@@ -18,5 +18,11 @@ namespace Tim.SqlEngine.Models
 
         [DataMember(Name = "value")]
         public object Value { get; set; }
+
+        /// <summary>
+        /// 当检查出错时候提示
+        /// </summary>
+        [DataMember(Name = "error")]
+        public string Error { get; internal set; }
     }
 }

@@ -52,11 +52,6 @@ namespace Tim.SqlEngine.Parser
             return datas;
         }
 
-        internal static string ApplyParams(string sql, IEnumerable<ParamInfo> usedParams)
-        {
-            return sql;
-        }
-
         public static ParamInfo GetGlobalParamData(IDictionary<string, object> queryParams, string key)
         {
             var keyArray = key.Split('_');

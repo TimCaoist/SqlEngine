@@ -10,6 +10,9 @@ namespace Tim.SqlEngine.Models
     [DataContract]
     public class UpdateRule
     {
+        [DataMember(Name = "action_type")]
+        public ActionType ActionType { get; set; }
+
         [DataMember(Name = "update_type")]
         public UpdateType UpdateType { get; set; }
 

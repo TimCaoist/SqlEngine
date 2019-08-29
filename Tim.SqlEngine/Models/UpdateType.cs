@@ -6,12 +6,32 @@ using System.Threading.Tasks;
 
 namespace Tim.SqlEngine.Models
 {
+    public enum ActionType {
+
+        Insert = 0,
+
+        Update = 1,
+
+        Delete = 2,
+
+        BothInsertAndUpdate = 3,
+
+        All = 4
+    }
+    /// <summary>
+    /// 类型
+    /// </summary>
     public enum UpdateType
     {
         /// <summary>
         /// 插入默认值
         /// </summary>
         DefaultValue = 0,
+
+        /// <summary>
+        /// 检查值
+        /// </summary>
+        CheckValue = 1,
     }
 
     /// <summary>
@@ -35,6 +55,9 @@ namespace Tim.SqlEngine.Models
         All = 2
     }
 
+    /// <summary>
+    /// 列类型
+    /// </summary>
     public enum ColumnValueType
     {
         /// <summary>
@@ -51,6 +74,21 @@ namespace Tim.SqlEngine.Models
         /// Func
         /// </summary>
         Func = 2,
+
+        /// <summary>
+        /// 使用公式
+        /// </summary>
+        Eval = 11,
+
+        /// <summary>
+        /// 在数组里面
+        /// </summary>
+        IsIn = 12,
+
+        /// <summary>
+        /// 等于
+        /// </summary>
+        Equlas = 13
     }
 
 }

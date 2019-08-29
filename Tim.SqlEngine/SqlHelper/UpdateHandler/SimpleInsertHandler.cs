@@ -13,6 +13,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
         {
             config.ReturnId = true;
             UpdateTrigger.TriggeDefaultValues(updateContext, config, cols);
+            UpdateTrigger.TriggeValuesChecked(updateContext, config, cols, ActionType.Insert);
             return $"insert into {config.Table} ({string.Join(SqlKeyWorld.Split1, cols.Keys)}) values ({string.Join(SqlKeyWorld.Split1, cols.Values.Select(v => string.Concat("@", v, " ")))})";
         }
 

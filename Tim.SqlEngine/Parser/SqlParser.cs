@@ -36,7 +36,6 @@ namespace Tim.SqlEngine.Parser
         {
             var matches = Regex.Matches(sql, string.Intern("@.*?[, ]"));
             var usedParams = ParamsUtil.GetParams(context, matches);
-            sql = ParamsUtil.ApplyParams(sql, usedParams);
             return Tuple.Create(sql, ParamsUtil.Convert(usedParams));
         }
 
