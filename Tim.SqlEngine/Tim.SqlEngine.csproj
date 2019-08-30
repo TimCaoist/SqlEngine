@@ -51,9 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DataConvert.cs" />
+    <Compile Include="Common\DBHelper.cs" />
     <Compile Include="Common\DictHelper.cs" />
     <Compile Include="Models\BaseContext.cs" />
     <Compile Include="Models\BaseHadlerConfig.cs" />
+    <Compile Include="Models\Column.cs" />
     <Compile Include="Models\ColumnRule.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\IHandlerConfig.cs" />

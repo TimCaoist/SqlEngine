@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,12 +11,7 @@ namespace Tim.SqlEngine.Common
     {
         public static TData ToSingleData<TData>(this object obj)
         {
-            if (obj == null)
-            {
-                return default(TData);
-            }
-
-            return (TData)obj;
+            return ToSingleData<TData>(obj, default(TData));
         }
 
         public static TData ToSingleData<TData>(this object obj, TData defaultData)
@@ -23,6 +19,12 @@ namespace Tim.SqlEngine.Common
             if (obj == null)
             {
                 return defaultData;
+            }
+
+            JValue val = obj as JValue;
+            if (val != null)
+            {
+                return val.ToObject<TData>();
             }
 
             return (TData)obj;

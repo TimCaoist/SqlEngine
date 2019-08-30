@@ -30,15 +30,35 @@ namespace Tim.SqlEngine.SqlHelper
             return conn;
         }
 
+        public static void AddCmd(this UpdateContext updateContext, MySqlCommand cmd)
+        {
+            if (updateContext.Cmds == null)
+            {
+                updateContext.Cmds = new List<MySqlCommand>();
+            }
+
+            updateContext.Cmds.Add(cmd);
+        }
+
         public static void RollBack(this UpdateContext updateContext)
         {
-             if (updateContext.Conns == null || updateContext.Conns.Any() == false)
+            if (updateContext.Conns == null || updateContext.Conns.Any() == false)
             {
                 return;
             }
 
             try
             {
+                if (updateContext.Cmds != null)
+                {
+                    foreach (var item in updateContext.Cmds)
+                    {
+                        item.Dispose();
+                    }
+
+                    updateContext.Cmds.Clear();
+                }
+               
                 foreach (var item in updateContext.Conns)
                 {
                     var val = item.Value;
@@ -85,6 +105,16 @@ namespace Tim.SqlEngine.SqlHelper
                     trann.Dispose();
                     conn.Close();
                     conn.Dispose();
+                }
+
+                if (updateContext.Cmds != null)
+                {
+                    foreach (var item in updateContext.Cmds)
+                    {
+                        item.Dispose();
+                    }
+
+                    updateContext.Cmds.Clear();
                 }
             }
             finally

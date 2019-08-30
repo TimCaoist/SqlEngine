@@ -14,7 +14,7 @@ namespace Tim.SqlEngine.ValueSetter
 {
     public static class UpdateTrigger
     {
-        public static void TriggeValuesChecked(UpdateContext updateContext, object data, UpdateConfig config, IDictionary<string, string> cols, ActionType actionType, IValueSetter valueSetter)
+        public static void TriggeValuesChecked(UpdateContext updateContext, object data, UpdateConfig config, IDictionary<string, string> cols, ActionType actionType, IValueSetter valueSetter, IEnumerable<string> keys)
         {
             var rules = SqlEnginerConfig.GetMatchRules(config.Connection, config.Table, actionType, UpdateType.CheckValue).OrderBy(r => r.RangeType).ToArray();
             if (rules.Any() == false)
@@ -23,7 +23,6 @@ namespace Tim.SqlEngine.ValueSetter
             }
 
             var columns = rules.SelectMany(r => r.Columns).ToArray();
-            var keys = valueSetter.GetFields(data);
             foreach (var key in keys)
             {
                 if (!cols.Any(c => c.Value == key))
@@ -63,9 +62,9 @@ namespace Tim.SqlEngine.ValueSetter
             }
         }
 
-        public static void TriggeDefaultValues(UpdateContext updateContext, object data, UpdateConfig config, IDictionary<string, string> cols, IValueSetter valueSetter)
+        public static void TriggeDefaultValues(UpdateContext updateContext, object data, UpdateConfig config, IDictionary<string, string> cols, IValueSetter valueSetter, IEnumerable<string> keys = null)
         {
-            var valueKeys = valueSetter.GetFields(data);
+            var valueKeys = keys;
             ICollection<string> exceptKeys = new List<string>();
             foreach (var col in cols)
             {

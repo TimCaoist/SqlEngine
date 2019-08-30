@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.Parser.SegmentBuilder;
 
@@ -12,6 +10,33 @@ namespace Tim.SqlEngine.Parser
     public static class SqlParser
     {
         private readonly static string WhiteSpace = " ";
+
+        private readonly static Dictionary<long, WeakReference<string>> Sqls = new Dictionary<long, WeakReference<string>>();
+
+        private static string GetFormatSql(string sql, Func<string, string> getFormatSql)
+        {
+            WeakReference<string> weakReference;
+            string formatSql = string.Empty;
+            if (Sqls.TryGetValue(sql.GetHashCode(), out weakReference))
+            {
+                weakReference.TryGetTarget(out formatSql);
+                if (!string.IsNullOrEmpty(formatSql))
+                {
+                    return formatSql;
+                }
+
+                formatSql = getFormatSql(sql);
+                weakReference.SetTarget(formatSql);
+            }
+            else
+            {
+                formatSql = getFormatSql(sql);
+                weakReference = new WeakReference<string>(formatSql);
+                Sqls.Add(sql.GetHashCode(), weakReference);
+            }
+
+            return formatSql;
+        }
 
         public static Tuple<string, IDictionary<string, object>> Convert(IContext context, string sql)
         {
@@ -22,14 +47,20 @@ namespace Tim.SqlEngine.Parser
                 return GetApplyParamRuleSql(context, sql);
             }
 
-            var grammar = new Grammar(matches, sql);
-            IEnumerable<Segment> segments = grammar.Parser();
-            if (segments.Any())
+            Func<string, string> getFormatSql = (argSql) =>
             {
-                sql = GetApplyGramarRuleSql(context, sql, segments);
-            }
+                var grammar = new Grammar(matches, argSql);
+                IEnumerable<Segment> segments = grammar.Parser();
+                if (segments.Any())
+                {
+                    argSql = GetApplyGramarRuleSql(context, argSql, segments);
+                }
 
-            return GetApplyParamRuleSql(context, sql);
+                return argSql;
+            };
+
+            var newSql = GetFormatSql(sql, getFormatSql);
+            return GetApplyParamRuleSql(context, newSql);
         }
 
         public static Tuple<string, IDictionary<string, object>> GetApplyParamRuleSql(IContext context, string sql)

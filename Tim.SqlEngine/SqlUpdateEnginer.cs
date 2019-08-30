@@ -39,8 +39,13 @@ namespace Tim.SqlEngine
 
         public static object Update(string name, IDictionary<string, object> queryParams = null)
         {
+            return Update(name, null, queryParams);
+        }
+
+        public static object Update(string name, object complexData, IDictionary<string, object> queryParams = null)
+        {
             UpdateHandlerConfig handlerConfig = JsonParser.ReadHandlerConfig<UpdateHandlerConfig>(name);
-            return Update(handlerConfig, queryParams);
+            return Update(handlerConfig, complexData, queryParams);
         }
     }
 }

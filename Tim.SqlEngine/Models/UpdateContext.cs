@@ -10,6 +10,13 @@ namespace Tim.SqlEngine.Models
 {
     public class UpdateContext : BaseContext<UpdateContext, UpdateHandlerConfig, UpdateConfig>, IContext
     {
+        public UpdateContext() : base(null)
+        {
+        }
+
+        public UpdateContext(UpdateContext parent) : base(parent)
+        {
+        }
 
         private IDictionary<string, Tuple<MySqlConnection, MySqlTransaction>> _conns;
 
@@ -33,6 +40,31 @@ namespace Tim.SqlEngine.Models
                 }
 
                 _conns = value;
+            }
+        }
+
+        private ICollection<MySqlCommand> _cmds;
+
+        public ICollection<MySqlCommand> Cmds
+        {
+            get
+            {
+                if (Parent != null)
+                {
+                    return Parent.Cmds;
+                }
+
+                return _cmds;
+            }
+            set
+            {
+                if (Parent != null)
+                {
+                    Parent.Cmds = value;
+                    return;
+                }
+
+                _cmds = value;
             }
         }
 

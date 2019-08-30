@@ -51,7 +51,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
         {
             var uParams = updateContext.Params;
             IValueSetter valueSetter = ValueSetterCreater.Create(uParams);
-            UpdateTrigger.TriggeValuesChecked(updateContext, uParams, config, cols, ActionType.Update, valueSetter);
+            UpdateTrigger.TriggeValuesChecked(updateContext, uParams, config, cols, ActionType.Update, valueSetter, uParams.Keys);
         }
     }
 }

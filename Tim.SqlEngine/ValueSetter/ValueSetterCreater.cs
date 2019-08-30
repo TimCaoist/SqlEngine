@@ -10,7 +10,7 @@ namespace Tim.SqlEngine.ValueSetter
 {
     public static class ValueSetterCreater
     {
-        private const string TypeStr = "type_str";
+        internal const string TypeStr = "type_str";
 
         public static IValueSetter Create(this BaseHadlerConfig queryConfig)
         {

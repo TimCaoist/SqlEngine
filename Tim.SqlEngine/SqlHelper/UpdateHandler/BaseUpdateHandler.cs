@@ -34,6 +34,12 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 return LowerId;
             }
 
+            var keyColumn = TableColumnQueryHandler.QueryColumns(config).FirstOrDefault(c => c.IsKey);
+            if (keyColumn != null)
+            {
+                return keyColumn.ColName;
+            }
+
             return string.Empty;
         }
 
@@ -43,7 +49,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             var fields = config.Fields;
             if (config.Fields == null)
             {
-                fields = TableColumnQueryHandler.QueryColumns(config);
+                fields = TableColumnQueryHandler.QueryColumns(config).Select(c => c.ColName).ToArray();
             }
 
             foreach (var field in fields)

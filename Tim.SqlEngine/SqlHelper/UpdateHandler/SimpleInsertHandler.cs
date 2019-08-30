@@ -18,8 +18,9 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
         {
             var cParams = updateContext.Params;
             IValueSetter valueSetter = ValueSetterCreater.Create(cParams);
-            UpdateTrigger.TriggeDefaultValues(updateContext, cParams, config, cols, valueSetter);
-            UpdateTrigger.TriggeValuesChecked(updateContext, cParams, config, cols, ActionType.Insert, valueSetter);
+            var keys = cParams.Keys;
+            UpdateTrigger.TriggeDefaultValues(updateContext, cParams, config, cols, valueSetter, keys);
+            UpdateTrigger.TriggeValuesChecked(updateContext, cParams, config, cols, ActionType.Insert, valueSetter, keys);
             config.ReturnId = true;
 
             var key = GetKeyName(config, cols);

@@ -114,27 +114,27 @@ namespace Tim.SqlEngine.SqlHelper
             var trann = conn.Item2;
 
             var realSql = SqlParser.Convert(context, config.Sql);
-            using (var cmd = connection.CreateCommand())
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = realSql.Item1;
+            cmd.Transaction = trann;
+            try
             {
-                cmd.CommandText = realSql.Item1;
-                cmd.Transaction = trann;
-                try
+                if (realSql.Item2 != null && realSql.Item2.Any())
                 {
-                    if (realSql.Item2 != null && realSql.Item2.Any())
+                    foreach (var ps in realSql.Item2)
                     {
-                        foreach (var ps in realSql.Item2)
-                        {
-                            cmd.Parameters.AddWithValue(ps.Key, ps.Value);
-                        }
+                        cmd.Parameters.AddWithValue(ps.Key, ps.Value);
                     }
+                }
 
-                    var result = cmd.ExecuteNonQuery();
-                    return GetResult(context, cmd, result);
-                }
-                catch(Exception ex) {
-                    context.RollBack();
-                    throw;
-                }
+                var result = cmd.ExecuteNonQuery();
+                context.AddCmd(cmd);
+                return GetResult(context, cmd, result);
+            }
+            catch (Exception ex)
+            {
+                context.RollBack();
+                throw;
             }
         }
     }
