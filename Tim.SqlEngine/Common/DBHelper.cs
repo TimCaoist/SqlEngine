@@ -23,7 +23,7 @@ namespace Tim.SqlEngine.Common
 
         public static bool SpecailColumn(Column column)
         {
-            return true;
+            return false;
         }
     }
 }
