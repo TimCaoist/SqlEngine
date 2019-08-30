@@ -66,5 +66,14 @@ namespace Tim.SqlEngine.Models
         public const char Split2 = '\'';
 
         public const string ParnetKey = "parent";
+
+        public const string ComplexData = "complex_data";
+
+        public readonly static string Id = "Id";
+
+        public readonly static string ReturnKey = "ReturnKey";
+
+        public const string ComplexDataObjectStart = "@v_cd.";
+
     }
 }

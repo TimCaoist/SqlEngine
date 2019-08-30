@@ -16,20 +16,19 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             var sql = new StringBuilder();
             sql.Append($"delete from {config.Table} where ");
 
-            if (cols.ContainsKey(Id))
+            if (!string.IsNullOrEmpty(config.Filter))
             {
-                sql.Append(string.Concat(Id, " = @", cols[Id]));
-            }
-            else if (cols.ContainsKey("id"))
-            {
-                sql.Append(string.Concat(Id, " = @", cols["id"]));
-            }
-            else
-            {
-                sql.Append(string.Concat(Id, " = @id"));
+                sql.Append(config.Filter);
+                return sql.ToString();
             }
 
+            var key = GetKeyName(config, cols);
+            sql.Append(string.Concat(SqlKeyWorld.Id, " = @", cols[key]));
             return sql.ToString();
+        }
+
+        protected override void ApplyRules(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
+        {
         }
     }
 }

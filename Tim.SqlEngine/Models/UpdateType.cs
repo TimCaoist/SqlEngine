@@ -76,7 +76,7 @@ namespace Tim.SqlEngine.Models
         Func = 2,
 
         /// <summary>
-        /// 使用公式
+        /// 使用公式(推荐)
         /// </summary>
         Eval = 11,
 
@@ -88,7 +88,17 @@ namespace Tim.SqlEngine.Models
         /// <summary>
         /// 等于
         /// </summary>
-        Equlas = 13
+        Equlas = 13,
+
+        /// <summary>
+        /// 长度限制格式为 1.[maxlen] 2.[minlen],[maxlen]
+        /// </summary>
+        LenChecked = 14,
+
+        /// <summary>
+        ///  范围限制格式为 1.[maxValue] 2.[minValue],[maxValue]
+        /// </summary>
+        MinMaxChecked = 15
     }
 
 }

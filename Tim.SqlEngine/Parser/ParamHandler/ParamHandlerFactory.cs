@@ -10,6 +10,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
             new GlobalParamHandler(),
             new ParentParamHandler(),
             new ContentParamHandler(),
+            new ComplexDataParamHandler(),
             new ObjectParamHandler(),
             new NormalParamHandler()
         };

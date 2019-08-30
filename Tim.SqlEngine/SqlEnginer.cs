@@ -7,6 +7,7 @@ using Tim.SqlEngine.Parser;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.SqlHelper.QueryHandler;
 using Tim.SqlEngine.PlugIn;
+using Tim.SqlEngine.Common;
 
 namespace Tim.SqlEngine
 {
@@ -60,13 +61,8 @@ namespace Tim.SqlEngine
 
         public static IEnumerable<TData> ToDatas<TData>(this object obj)
         {
-            var datas = (IEnumerable<object>)obj;
-            return datas.Cast<TData>();
+            return DataConvert.ToDatas<TData>(obj);
         }
 
-        public static TData ToSingleData<TData>(this object obj)
-        {
-            return (TData)obj;
-        }
     }
 }

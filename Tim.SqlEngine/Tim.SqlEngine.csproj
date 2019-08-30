@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DataConvert.cs" />
+    <Compile Include="Common\DictHelper.cs" />
     <Compile Include="Models\BaseContext.cs" />
     <Compile Include="Models\BaseHadlerConfig.cs" />
     <Compile Include="Models\ColumnRule.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="Models\ValueInfo.cs" />
     <Compile Include="Parser\AlaisParser.cs" />
     <Compile Include="Parser\Grammar.cs" />
+    <Compile Include="Parser\ParamHandler\ComplexDataParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\ConstParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\ContentParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\GlobalParamHandler.cs" />
@@ -118,6 +121,7 @@
     <Compile Include="SqlHelper\TranHelper.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BaseSimpleUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BaseUpdateHandler.cs" />
+    <Compile Include="SqlHelper\UpdateHandler\BatchInsertHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\IUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\SimpleDeleteHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\SimpleInsertHandler.cs" />
@@ -129,9 +133,12 @@
     <Compile Include="ValueSetter\ReflectValueSetter.cs" />
     <Compile Include="ValueSetter\SimpleRecordQueryHandler.cs" />
     <Compile Include="ValueSetter\UpdateTrigger.cs" />
+    <Compile Include="ValueSetter\ValueChecked\EqualValueChecked.cs" />
     <Compile Include="ValueSetter\ValueChecked\EvalValueChecked.cs" />
     <Compile Include="ValueSetter\ValueChecked\IsInValueChecked.cs" />
     <Compile Include="ValueSetter\ValueChecked\IValueChecked.cs" />
+    <Compile Include="ValueSetter\ValueChecked\LengthValueChecked.cs" />
+    <Compile Include="ValueSetter\ValueChecked\MinMaxValueChecked.cs" />
     <Compile Include="ValueSetter\ValueChecked\ValueCheckedFactory.cs" />
     <Compile Include="ValueSetter\ValueGetter.cs" />
     <Compile Include="ValueSetter\ValueSetterCreater.cs" />

@@ -20,6 +20,9 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
             var deleteHandler = new SimpleDeleteHandler();
             RegisertUpdateHandler(deleteHandler.Type, deleteHandler);
+
+            var batchInsertHandler = new BatchInsertHandler();
+            RegisertUpdateHandler(batchInsertHandler.Type, batchInsertHandler);
         }
 
         internal static IUpdateHandler GetUpdateHandler(int type)

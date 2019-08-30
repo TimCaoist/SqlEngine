@@ -73,15 +73,32 @@ namespace Tim.SqlEngine.SqlHelper
         {
             return Excute(context, (cmd) =>
             {
-                var queryConfig = context.Config;
                 var result = cmd.ExecuteNonQuery();
-                if (queryConfig.ReturnId)
-                {
-                    return cmd.LastInsertedId;
-                }
-
-                return result;
+                return GetResult(context, cmd, result);
             });
+        }
+
+        private static object GetResult(UpdateContext context, MySqlCommand cmd, object result)
+        {
+            var queryConfig = context.Config;
+            if (queryConfig.ReturnId == false)
+            {
+                return result;
+            }
+
+            var id = cmd.LastInsertedId;
+            if (id != 0)
+            {
+                return id;
+            }
+
+            object data;
+            if (context.ContentParams.TryGetValue(SqlKeyWorld.ReturnKey, out data))
+            {
+                return data;
+            }
+
+            return result;
         }
 
         public static object ExcuteTrann(UpdateContext context)
@@ -91,12 +108,12 @@ namespace Tim.SqlEngine.SqlHelper
                 return false;
             }
 
-            var queryConfig = context.Config;
-            var conn = context.OpenTran(queryConfig.Connection);
+            var config = context.Config;
+            var conn = context.OpenTran(config.Connection);
             var connection = conn.Item1; 
             var trann = conn.Item2;
 
-            var realSql = SqlParser.Convert(context, queryConfig.Sql);
+            var realSql = SqlParser.Convert(context, config.Sql);
             using (var cmd = connection.CreateCommand())
             {
                 cmd.CommandText = realSql.Item1;
@@ -112,12 +129,7 @@ namespace Tim.SqlEngine.SqlHelper
                     }
 
                     var result = cmd.ExecuteNonQuery();
-                    if (queryConfig.ReturnId)
-                    {
-                        return cmd.LastInsertedId;
-                    }
-
-                    return result;
+                    return GetResult(context, cmd, result);
                 }
                 catch(Exception ex) {
                     context.RollBack();

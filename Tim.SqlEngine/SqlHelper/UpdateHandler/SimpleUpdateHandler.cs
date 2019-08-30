@@ -17,8 +17,6 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         public override string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
         {
-            UpdateTrigger.TriggeValuesChecked(updateContext, config, cols, ActionType.Insert);
-
             var sql = new StringBuilder();
             sql.Append($"update {config.Table} set ");
 
@@ -26,7 +24,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             for (var i = 0; i < cCount; i++)
             {
                 var col = cols.ElementAt(i);
-                if (col.Key.Equals(Id, StringComparison.OrdinalIgnoreCase))
+                if (col.Key.Equals(SqlKeyWorld.Id, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
@@ -44,21 +42,16 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 return sql.ToString();
             }
 
-            var updateParams = updateContext.Params;
-            if (updateParams.ContainsKey(Id))
-            {
-                sql.Append(string.Concat(Where, Id, Equla, Id));
-            }
-            else if (cols.ContainsKey(Id))
-            {
-                sql.Append(string.Concat(Where, Id, Equla, cols[Id]));
-            }
-            else
-            {
-                sql.Append(string.Concat(Where, Id, Equla, LowerId));
-            }
-
+            var key = GetKeyName(config, cols);
+            sql.Append(string.Concat(Where, SqlKeyWorld.Id, Equla, cols[SqlKeyWorld.Id]));
             return sql.ToString();
+        }
+
+        protected override void ApplyRules(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
+        {
+            var uParams = updateContext.Params;
+            IValueSetter valueSetter = ValueSetterCreater.Create(uParams);
+            UpdateTrigger.TriggeValuesChecked(updateContext, uParams, config, cols, ActionType.Update, valueSetter);
         }
     }
 }

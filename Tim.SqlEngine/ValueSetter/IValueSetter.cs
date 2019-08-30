@@ -17,5 +17,8 @@ namespace Tim.SqlEngine.ValueSetter
         void SetField(string filed, object data);
 
         void SetField(object parent, object obj, string field);
+
+        IEnumerable<string> GetFields(object data);
+        object GetValue(object data, string key);
     }
 }

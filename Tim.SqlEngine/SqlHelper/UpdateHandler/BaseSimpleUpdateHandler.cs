@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.SqlHelper.QueryHandler;
 
@@ -10,9 +7,8 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 {
     public abstract class BaseSimpleUpdateHandler : BaseUpdateHandler
     {
-        protected readonly static string Id = "Id";
+        protected abstract void ApplyRules(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols);
 
-        protected readonly static string LowerId = Id.ToLower();
 
         public override object Update(UpdateContext context)
         {
@@ -22,6 +18,8 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 config.Connection = context.HandlerConfig.Connection;
             }
 
+            var cols = GetCols(config);
+            ApplyRules(context, config, cols);
             var sql = config.Sql;
             if (!string.IsNullOrEmpty(sql))
             {
@@ -33,32 +31,17 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 throw new ArgumentException("config.Table");
             }
 
-            IDictionary<string, string> cols = new Dictionary<string, string>();
-            var fields = config.Fields;
-            if (config.Fields == null)
-            {
-                fields = TableColumnQueryHandler.QueryColumns(config);
-            }
-
-            foreach (var field in fields)
-            {
-                if (field.IndexOf(SqlKeyWorld.Split) <= 0)
-                {
-                    cols.Add(field, field);
-                    continue;
-                }
-
-                var fArray = field.Split(SqlKeyWorld.Split);
-                cols.Add(fArray[0], fArray[1]);
-            }
-
             config.Sql = BuilderSql(context, config, cols);
+            object result;
             if (config.InTran == false)
             {
-                return SqlExcuter.Excute(context);
+                result = SqlExcuter.Excute(context);
+            }
+            else {
+                result = SqlExcuter.ExcuteTrann(context);
             }
 
-            return SqlExcuter.ExcuteTrann(context);
+            return result;
         }
 
         public abstract string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols);

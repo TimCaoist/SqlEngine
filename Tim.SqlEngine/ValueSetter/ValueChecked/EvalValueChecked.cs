@@ -13,7 +13,7 @@ namespace Tim.SqlEngine.ValueSetter.ValueChecked
     {
         public readonly static EvalValueChecked Instance = new EvalValueChecked();
 
-        public bool Checked(UpdateContext updateContext, ColumnRule mc, KeyValuePair<string, object> param, string realKey)
+        public bool Checked(UpdateContext updateContext, ColumnRule mc, object data, string key, string realKey)
         {
             var eval = mc.Value.ToString();
             var usedParams = SqlParser.GetApplyParamRuleSql(updateContext, eval).Item2;

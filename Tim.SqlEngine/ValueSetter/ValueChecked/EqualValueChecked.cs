@@ -11,9 +11,9 @@ namespace Tim.SqlEngine.ValueSetter.ValueChecked
     {
         public readonly static EqualValueChecked Instance = new EqualValueChecked();
 
-        public bool Checked(UpdateContext updateContext, ColumnRule mc, KeyValuePair<string, object> param, string realKey)
+        public bool Checked(UpdateContext updateContext, ColumnRule mc, object data, string key, string realKey)
         {
-            return mc.Value.ToString() == param.Value.ToString();
+            return mc.Value.ToString() == data.ToString();
         }
     }
 }

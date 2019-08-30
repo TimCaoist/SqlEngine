@@ -15,6 +15,16 @@ namespace Tim.SqlEngine.ValueSetter
             throw new NotImplementedException();
         }
 
+        public IEnumerable<string> GetFields(object data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetValue(object data, string key)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetField(string filed, object data)
         {
             throw new NotImplementedException();

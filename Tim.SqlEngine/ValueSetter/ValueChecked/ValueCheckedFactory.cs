@@ -19,6 +19,10 @@ namespace Tim.SqlEngine.ValueSetter.ValueChecked
                     return IsInValueChecked.Instance;
                 case ColumnValueType.Equlas:
                     return EqualValueChecked.Instance;
+                case ColumnValueType.LenChecked:
+                    return LengthValueChecked.Instance;
+                case ColumnValueType.MinMaxChecked:
+                    return MinMaxValueChecked.Instance;
             }
 
             return null;

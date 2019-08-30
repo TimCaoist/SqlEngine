@@ -11,10 +11,10 @@ namespace Tim.SqlEngine.ValueSetter.ValueChecked
     {
         public readonly static IsInValueChecked Instance = new IsInValueChecked();
 
-        public bool Checked(UpdateContext updateContext, ColumnRule mc, KeyValuePair<string, object> param, string realKey)
+        public bool Checked(UpdateContext updateContext, ColumnRule mc, object data, string key, string realKey)
         {
             IEnumerable<object> array = (IEnumerable<object>)mc.Value;
-            return array.Any(a => a.ToString() == param.Value.ToString());
+            return array.Any(a => a.ToString() == data.ToString());
         }
     }
 }

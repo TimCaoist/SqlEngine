@@ -23,6 +23,10 @@ namespace Tim.SqlEngine.ValueSetter
             TypeStr = typeStr;
         }
 
+        public ReflectValueSetter()
+        {
+        }
+
         public object CreateInstance()
         {
             instance = ReflectUtil.ReflectUtil.CreateInstance(AssemblyString, TypeStr);
@@ -74,6 +78,23 @@ namespace Tim.SqlEngine.ValueSetter
         public void SetField(object parent, object obj, string field)
         {
             ReflectUtil.ReflectUtil.SetProperty(parent, field, obj);
+        }
+
+        public IEnumerable<string> GetFields(object data)
+        {
+            return data.GetType().GetProperties().Select(d => d.Name).ToArray();
+        }
+
+        public object GetValue(object data, string key)
+        {
+            var itemType = data.GetType();
+            var ps = itemType.GetProperty(key);
+            if (ps == null)
+            {
+                throw new ArgumentException(string.Concat(key, "不存在"));
+            }
+
+            return ps.GetValue(data);
         }
     }
 }

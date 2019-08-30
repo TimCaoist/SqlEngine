@@ -24,5 +24,8 @@ namespace Tim.SqlEngine.Models
 
         [DataMember(Name = "return_id")]
         public bool ReturnId { get; set; }
+
+        [DataMember(Name = "key")]
+        public string Key { get; internal set; }
     }
 }

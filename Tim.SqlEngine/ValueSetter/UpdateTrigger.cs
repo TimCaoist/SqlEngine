@@ -14,9 +14,8 @@ namespace Tim.SqlEngine.ValueSetter
 {
     public static class UpdateTrigger
     {
-        public static void TriggeValuesChecked(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols, ActionType actionType)
+        public static void TriggeValuesChecked(UpdateContext updateContext, object data, UpdateConfig config, IDictionary<string, string> cols, ActionType actionType, IValueSetter valueSetter)
         {
-            var updateParams = updateContext.Params;
             var rules = SqlEnginerConfig.GetMatchRules(config.Connection, config.Table, actionType, UpdateType.CheckValue).OrderBy(r => r.RangeType).ToArray();
             if (rules.Any() == false)
             {
@@ -24,9 +23,15 @@ namespace Tim.SqlEngine.ValueSetter
             }
 
             var columns = rules.SelectMany(r => r.Columns).ToArray();
-            foreach (var param in updateParams)
+            var keys = valueSetter.GetFields(data);
+            foreach (var key in keys)
             {
-                var realKey = cols.First(col => col.Value == param.Key).Key;
+                if (!cols.Any(c => c.Value == key))
+                {
+                    continue;
+                }
+
+                var realKey = cols.First(c => c.Value == key).Key;
                 var matchColumns = columns.Where(c => c.Name == realKey).ToArray();
                 if (matchColumns.Any() == false)
                 {
@@ -41,18 +46,26 @@ namespace Tim.SqlEngine.ValueSetter
                         continue;
                     }
 
-                    if (!valueChecked.Checked(updateContext, mc, param, realKey))
+                    var value = valueSetter.GetValue(data, key);
+                    if (valueChecked.Checked(updateContext, mc, value, key, realKey))
                     {
-                        throw new ArgumentException(string.Concat(mc.Name, mc.Error));
+                        continue;
                     }
+
+                    var msg = mc.Name;
+                    if (!string.IsNullOrEmpty(mc.Error))
+                    {
+                        msg = mc.Error;
+                    }
+
+                    throw new ArgumentException(msg);
                 }
             }
         }
 
-        public static void TriggeDefaultValues(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
+        public static void TriggeDefaultValues(UpdateContext updateContext, object data, UpdateConfig config, IDictionary<string, string> cols, IValueSetter valueSetter)
         {
-            var updateParams = updateContext.Params;
-            var valueKeys = updateParams.Keys;
+            var valueKeys = valueSetter.GetFields(data);
             ICollection<string> exceptKeys = new List<string>();
             foreach (var col in cols)
             {
@@ -69,7 +82,7 @@ namespace Tim.SqlEngine.ValueSetter
                 return;
             }
 
-            var rules =  SqlEnginerConfig.GetMatchRules(config.Connection, config.Table, ActionType.Insert).OrderBy(r => r.RangeType).ToArray();
+            var rules = SqlEnginerConfig.GetMatchRules(config.Connection, config.Table, ActionType.Insert).OrderBy(r => r.RangeType).ToArray();
             foreach (var key in exceptKeys)
             {
                 foreach (var rule in rules)
@@ -80,7 +93,8 @@ namespace Tim.SqlEngine.ValueSetter
                         continue;
                     }
 
-                    updateParams.Add(cols[key], GetColumnValue(config.Connection, config.Table, column, updateParams));
+                    var colValue = GetColumnValue(config.Connection, config.Table, column, data);
+                    valueSetter.SetField(cols[key], colValue);
                     break;
                 }
             }

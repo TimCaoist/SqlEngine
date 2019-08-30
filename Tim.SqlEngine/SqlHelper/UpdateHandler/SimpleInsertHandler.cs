@@ -11,27 +11,25 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         public override string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
         {
-            config.ReturnId = true;
-            UpdateTrigger.TriggeDefaultValues(updateContext, config, cols);
-            UpdateTrigger.TriggeValuesChecked(updateContext, config, cols, ActionType.Insert);
             return $"insert into {config.Table} ({string.Join(SqlKeyWorld.Split1, cols.Keys)}) values ({string.Join(SqlKeyWorld.Split1, cols.Values.Select(v => string.Concat("@", v, " ")))})";
         }
 
-        public override object Update(UpdateContext context)
+        protected override void ApplyRules(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
         {
-            var result = base.Update(context);
-            if (result.ToString() != "0")
+            var cParams = updateContext.Params;
+            IValueSetter valueSetter = ValueSetterCreater.Create(cParams);
+            UpdateTrigger.TriggeDefaultValues(updateContext, cParams, config, cols, valueSetter);
+            UpdateTrigger.TriggeValuesChecked(updateContext, cParams, config, cols, ActionType.Insert, valueSetter);
+            config.ReturnId = true;
+
+            var key = GetKeyName(config, cols);
+            object id;
+            if (updateContext.Params.TryGetValue(key, out id) == false)
             {
-                return result;
+                return;
             }
 
-            object val;
-            if (context.Params.TryGetValue(Id, out val))
-            {
-                return val;
-            }
-
-            return result;
+            updateContext.ContentParams.Add(SqlKeyWorld.ReturnKey, id);
         }
     }
 }

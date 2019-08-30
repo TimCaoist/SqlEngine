@@ -19,6 +19,11 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
 
         public static IEnumerable<string> QueryColumns(UpdateConfig config)
         {
+            if (string.IsNullOrEmpty(config.Table))
+            {
+                return Enumerable.Empty<string>();
+            }
+
             var queryHandler = QueryHandlerFactory.GetQueryHandler(5);
             var queryConfig = new QueryConfig
             {

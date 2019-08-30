@@ -89,6 +89,23 @@ namespace Tim.SqlEngine.Models
             get; set;
         } = new Dictionary<string, object>();
 
+        public object _complexData;
+
+        public object ComplexData
+        {
+            get {
+                if (_complexData == null)
+                {
+                    return Parent.ComplexData;
+                }
+
+                return _complexData;
+            }
+            set {
+                _complexData = value;
+            }
+        }
+
         public BaseHadlerConfig GetConfig() {
             return Config;
         }

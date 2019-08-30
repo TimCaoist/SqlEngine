@@ -9,6 +9,6 @@ namespace Tim.SqlEngine.ValueSetter.ValueChecked
 {
     public interface IValueChecked
     {
-        bool Checked(UpdateContext updateContext, ColumnRule mc, KeyValuePair<string, object> param, string realKey);
+        bool Checked(UpdateContext updateContext, ColumnRule mc, object data, string key, string realKey);
     }
 }

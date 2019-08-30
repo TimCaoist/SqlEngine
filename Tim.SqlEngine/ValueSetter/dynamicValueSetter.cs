@@ -50,5 +50,15 @@ namespace Tim.SqlEngine.ValueSetter
         {
             ((IDictionary<string, object>)parent).Add(field, obj);
         }
+
+        public IEnumerable<string> GetFields(object data)
+        {
+            return ((IDictionary<string, object>)data).Keys;
+        }
+
+        public object GetValue(object data, string key)
+        {
+            return ((IDictionary<string, object>)data)[key];
+        }
     }
 }
