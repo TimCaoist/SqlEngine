@@ -121,9 +121,11 @@
     <Compile Include="SqlHelper\QueryHandler\TableColumnQueryHandler.cs" />
     <Compile Include="SqlHelper\SqlExcuter.cs" />
     <Compile Include="SqlHelper\TranHelper.cs" />
+    <Compile Include="SqlHelper\UpdateHandler\BaseBatchUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BaseSimpleUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BaseUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BatchInsertHandler.cs" />
+    <Compile Include="SqlHelper\UpdateHandler\BatchUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\IUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\SimpleDeleteHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\SimpleInsertHandler.cs" />

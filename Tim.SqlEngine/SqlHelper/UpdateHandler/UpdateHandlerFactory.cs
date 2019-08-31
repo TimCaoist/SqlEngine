@@ -12,17 +12,12 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         static UpdateHandlerFactory()
         {
-            var simpleHandler = new SimpleInsertHandler();
-            RegisertUpdateHandler(simpleHandler.Type, simpleHandler);
-
-            var updateHandler = new SimpleUpdateHandler();
-            RegisertUpdateHandler(updateHandler.Type, updateHandler);
-
-            var deleteHandler = new SimpleDeleteHandler();
-            RegisertUpdateHandler(deleteHandler.Type, deleteHandler);
-
-            var batchInsertHandler = new BatchInsertHandler();
-            RegisertUpdateHandler(batchInsertHandler.Type, batchInsertHandler);
+            var types = ReflectUtil.ReflectUtil.GetSubTypes(typeof(BaseUpdateHandler));
+            foreach (var type in types)
+            {
+                BaseUpdateHandler updateHandler = (BaseUpdateHandler)Activator.CreateInstance(type);
+                RegisertUpdateHandler(updateHandler.Type, updateHandler);
+            }
         }
 
         internal static IUpdateHandler GetUpdateHandler(int type)
@@ -38,11 +33,6 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         public static void RegisertUpdateHandler(int type, IUpdateHandler queryHandler)
         {
-            if (updateHandlers.ContainsKey(type))
-            {
-                return;
-            }
-
             updateHandlers.Add(type, queryHandler);
         }
     }

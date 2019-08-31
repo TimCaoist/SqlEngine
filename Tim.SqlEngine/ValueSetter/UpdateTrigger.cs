@@ -25,7 +25,7 @@ namespace Tim.SqlEngine.ValueSetter
             var columns = rules.SelectMany(r => r.Columns).ToArray();
             foreach (var key in keys)
             {
-                if (!cols.Any(c => c.Value == key))
+                if (!cols.Any(c => c.Value == key) || key.StartsWith(SqlKeyWorld.ParamStart))
                 {
                     continue;
                 }
@@ -84,6 +84,11 @@ namespace Tim.SqlEngine.ValueSetter
             var rules = SqlEnginerConfig.GetMatchRules(config.Connection, config.Table, ActionType.Insert).OrderBy(r => r.RangeType).ToArray();
             foreach (var key in exceptKeys)
             {
+                if (key.StartsWith(SqlKeyWorld.ParamStart))
+                {
+                    continue;
+                }
+
                 foreach (var rule in rules)
                 {
                     var column = rule.Columns.FirstOrDefault(c => c.Name.Equals(key, StringComparison.OrdinalIgnoreCase));

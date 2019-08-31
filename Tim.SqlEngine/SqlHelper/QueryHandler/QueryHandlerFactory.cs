@@ -10,21 +10,12 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
 
         static QueryHandlerFactory()
         {
-            var simpleHandler = new SimpleQueryHandler();
-            RegisertQueryHandler(simpleHandler.Type, simpleHandler);
-
-            var mutilQueryHandler = new MutilQueryHandler();
-            RegisertQueryHandler(mutilQueryHandler.Type, mutilQueryHandler);
-
-            var singleFieldQueryHandler = new SingleFieldQueryHandler();
-            RegisertQueryHandler(singleFieldQueryHandler.Type, singleFieldQueryHandler);
-
-            var simpleRecordQueryHandler = new SimpleRecordQueryHandler();
-            RegisertQueryHandler(simpleRecordQueryHandler.Type, simpleRecordQueryHandler);
-
-            //5
-            var tableColumnQueryHandler = new TableColumnQueryHandler();
-            RegisertQueryHandler(tableColumnQueryHandler.Type, tableColumnQueryHandler);
+            var types = ReflectUtil.ReflectUtil.GetSubTypes(typeof(BaseQueryHandler));
+            foreach (var type in types)
+            {
+                BaseQueryHandler queryHandler = (BaseQueryHandler)Activator.CreateInstance(type);
+                RegisertQueryHandler(queryHandler.Type, queryHandler);
+            }
         }
 
         public static IQueryHandler GetQueryHandler(int type)
@@ -40,11 +31,6 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
 
         public static void RegisertQueryHandler(int type, IQueryHandler queryHandler)
         {
-            if (queryHandlers.ContainsKey(type))
-            {
-                return;
-            }
-
             queryHandlers.Add(type, queryHandler);
         }
     }

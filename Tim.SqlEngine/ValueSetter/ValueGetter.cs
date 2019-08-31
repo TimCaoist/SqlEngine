@@ -74,6 +74,19 @@ namespace Tim.SqlEngine.ValueSetter
                 return valueInfo;
             }
 
+            IDictionary<string, object> dictData = data as IDictionary<string, object>;
+            if (dictData != null)
+            {
+                var findData = dictData[field];
+                var valueInfo = new ValueInfo
+                {
+                    Data = findData
+                };
+
+                valueInfo.IsArray = ReflectUtil.ReflectUtil.IsArray(findData);
+                return valueInfo;
+            }
+
             ICollection<object> outDatas = new List<object>();
             var datas = (IEnumerable<object>)data;
             foreach (var item in datas)

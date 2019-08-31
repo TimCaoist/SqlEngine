@@ -9,8 +9,6 @@ namespace Tim.SqlEngine.Parser
 {
     public static class SqlParser
     {
-        private readonly static string WhiteSpace = " ";
-
         private readonly static Dictionary<long, WeakReference<string>> Sqls = new Dictionary<long, WeakReference<string>>();
 
         private static string GetFormatSql(string sql, Func<string, string> getFormatSql)
@@ -40,7 +38,7 @@ namespace Tim.SqlEngine.Parser
 
         public static Tuple<string, IDictionary<string, object>> Convert(IContext context, string sql)
         {
-            sql = sql.Insert(sql.Length, WhiteSpace);
+            sql = sql.Insert(sql.Length, SqlKeyWorld.WhiteSpace);
             var matches = SegmentUtil.GetMatch(sql);
             if (matches.Count == 0)
             {

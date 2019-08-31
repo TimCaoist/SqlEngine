@@ -105,5 +105,22 @@ namespace Tim.SqlEngine.ReflectUtil
             IArrayReflect arrayReflect = ArrayReflectCreator.Create(fieldVal, property.PropertyType);
             arrayReflect.SetFiled(data, (IEnumerable<object>)data, property);
         }
+
+        public static IEnumerable<Type> GetSubTypes(Type type)
+        {
+            var types = type.Assembly.GetTypes();
+            ICollection<Type> returnTypes = new List<Type>();
+            foreach (var item in types)
+            {
+                if (!item.IsSubclassOf(type) || item.IsAbstract)
+                {
+                    continue;
+                }
+
+                returnTypes.Add(item);
+            }
+
+            return returnTypes;
+        }
     }
 }

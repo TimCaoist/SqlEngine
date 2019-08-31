@@ -69,11 +69,14 @@ namespace Tim.SqlEngine.Models
 
         public const string ComplexData = "complex_data";
 
+        public const string ShortComplexData = "cd";
+
         public readonly static string Id = "Id";
 
         public readonly static string ReturnKey = "ReturnKey";
 
         public const string ComplexDataObjectStart = "@v_cd.";
 
+        public static readonly string WhiteSpace = " ";
     }
 }

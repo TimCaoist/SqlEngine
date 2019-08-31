@@ -28,7 +28,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
             if (string.IsNullOrEmpty(config.Table))
             {
-                throw new ArgumentException("config.Table");
+                throw new ArgumentException(nameof(config.Table));
             }
 
             config.Sql = BuilderSql(context, config, cols);

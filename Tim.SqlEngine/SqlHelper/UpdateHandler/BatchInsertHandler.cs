@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Tim.SqlEngine.Models;
-using Tim.SqlEngine.ValueSetter;
 using Tim.SqlEngine.Common;
+using Tim.SqlEngine.Models;
 using Tim.SqlEngine.SqlHelper.QueryHandler;
-using Newtonsoft.Json;
+using Tim.SqlEngine.ValueSetter;
 
 namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 {
-    public class BatchInsertHandler : BaseUpdateHandler
+    public class BatchInsertHandler : BaseBatchUpdateHandler
     {
         public override int Type => 4;
-
-        private const string BatchFieldPath = "batch_field";
 
         /// <summary>
         /// 忽略设置Key
         /// </summary>
         private const string IngoreKey = "ingore_key";
-
-        private const string RelatedInserts = "sub_updates";
 
         public override object Update(UpdateContext context)
         {
@@ -32,21 +25,15 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 config.Connection = context.HandlerConfig.Connection;
             }
 
-            var field = config.Config[BatchFieldPath].ToString();
-            var inputData = ValueSetter.ValueGetter.GetValue(field, context.ComplexData);
-            IEnumerable<object> datas;
-            if (inputData.IsArray)
+            var complexData = context.ComplexData;
+            IEnumerable<object> datas = GetDatas(context, config, complexData);
+            if (datas.Any() == false)
             {
-                datas = (IEnumerable<object>)inputData.Data;
-                if (datas.Any() == false)
-                {
-                    return 0;
-                }
+                return 0;
             }
-            else {
-                datas = new object[] { inputData.Data };
-            }
-            
+
+            SetContentData(context, config, complexData);
+
             var sql = config.Sql;
             var ingoreKey = config.Config[IngoreKey].ToSingleData<bool>();
             var cols = GetCols(config);
@@ -59,16 +46,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             {
                 if (string.IsNullOrEmpty(sql))
                 {
-                    var colStrs = cols.Values.Select(v => {
-                        if (v.StartsWith(SqlKeyWorld.ParamStart))
-                        {
-                            return v;
-                        }
-
-                        return string.Concat("@v_cd.", v, " ");
-                    });
-
-                    config.Sql = $"insert into {config.Table} ({string.Join(SqlKeyWorld.Split1, cols.Keys)}) values ({string.Join(SqlKeyWorld.Split1, colStrs)})";
+                    config.Sql = DBHelper.BuildInsertSql(cols, config.Table);
                 }
                 
                 config.ReturnId = true;
@@ -81,7 +59,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                     UpdateTrigger.TriggeValuesChecked(context, data, config, cols, ActionType.Insert, valueSetter, keys);
                     var id = (long)SqlExcuter.ExcuteTrann(context);
                     valueSetter.SetField(data, id, key);
-                    ExcuteSubInsert(context, config, data);
+                    ExcuteSubUpdate(context, config, data);
                 }
 
                 return datas.Count();
@@ -105,17 +83,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 UpdateTrigger.TriggeValuesChecked(context, data, config, cols, ActionType.Insert, valueSetter, keys);
 
                 sb.AppendLine(string.Intern("("));
-                var colVals = cols.Select(c => {
-                    var v = c.Value;
-                    if (v.StartsWith(SqlKeyWorld.ParamStart))
-                    {
-                        return v;
-                    }
-
-                    var val = valueSetter.GetValue(data, v);
-                    return DBHelper.GetDBValue(val, columnInfos);
-                });
-
+                var colVals = cols.Select(c => DBHelper.BuildColVal(c, valueSetter, data, columnInfos));
                 sb.Append(string.Join(SqlKeyWorld.Split1, colVals));
                 sb.Append(string.Intern(")"));
                 if (i != len - 1)
@@ -128,45 +96,10 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             object result = SqlExcuter.ExcuteTrann(context);
             foreach (var data in datas)
             {
-                ExcuteSubInsert(context, config, data);
+                ExcuteSubUpdate(context, config, data);
             }
 
             return result;
-        }
-
-        public void ExcuteSubInsert(UpdateContext context, UpdateConfig updateConfig, object parent)
-        {
-            var config = updateConfig.Config;
-            if (config == null)
-            {
-                return;
-            }
-
-            var subConfigs = config[RelatedInserts];
-            if (subConfigs == null)
-            {
-                return;
-            }
-
-            var relatedConfigs = subConfigs.ToObject<IEnumerable<UpdateConfig>>();
-            if (relatedConfigs.Any() == false)
-            {
-                return;
-            }
-
-            foreach (var relatedConfig in relatedConfigs)
-            {
-                relatedConfig.InTran = true;
-                IUpdateHandler queryHandler = UpdateHandlerFactory.GetUpdateHandler(relatedConfig.QueryType);
-                var subContext = new UpdateContext(context)
-                {
-                    ComplexData = parent,
-                    Data = parent,
-                    Configs = new UpdateConfig[] { relatedConfig }
-                };
-
-                queryHandler.Update(subContext);
-            }
         }
     }
 }
