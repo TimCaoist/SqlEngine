@@ -32,7 +32,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 return 0;
             }
 
-            SetContentData(context, config, complexData);
+            SetContentData(context, complexData);
 
             var sql = config.Sql;
             var cols = GetCols(config);

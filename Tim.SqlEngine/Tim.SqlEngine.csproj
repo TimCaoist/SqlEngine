@@ -127,6 +127,7 @@
     <Compile Include="SqlHelper\UpdateHandler\BatchInsertHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BatchUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\IUpdateHandler.cs" />
+    <Compile Include="SqlHelper\UpdateHandler\MutilUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\SimpleDeleteHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\SimpleInsertHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\SimpleUpdateHandler.cs" />
