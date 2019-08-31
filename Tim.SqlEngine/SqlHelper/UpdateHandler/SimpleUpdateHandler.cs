@@ -15,7 +15,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
         public override string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
         {
             var key = GetKeyName(config, cols);
-            var sql = DBHelper.BuildUpdateSql(cols, config, key);
+            var sql = DBHelper.BuildUpdateSql(cols, config, key, SqlKeyWorld.ParamStart);
             return sql.ToString();
         }
 

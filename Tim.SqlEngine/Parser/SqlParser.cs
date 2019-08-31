@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.Parser.SegmentBuilder;
+using Tim.SqlEngine.Common;
 
 namespace Tim.SqlEngine.Parser
 {
@@ -42,7 +43,7 @@ namespace Tim.SqlEngine.Parser
             var matches = SegmentUtil.GetMatch(sql);
             if (matches.Count == 0)
             {
-                return GetApplyParamRuleSql(context, sql);
+                return Tuple.Create(sql, GetParams(context, sql).ParamsToDictionary());
             }
 
             Func<string, string> getFormatSql = (argSql) =>
@@ -58,14 +59,14 @@ namespace Tim.SqlEngine.Parser
             };
 
             var newSql = GetFormatSql(sql, getFormatSql);
-            return GetApplyParamRuleSql(context, newSql);
+            return Tuple.Create(newSql, GetParams(context, newSql).ParamsToDictionary());
         }
 
-        public static Tuple<string, IDictionary<string, object>> GetApplyParamRuleSql(IContext context, string sql)
+        public static IEnumerable<ParamInfo> GetParams(IContext context, string sql)
         {
             var matches = Regex.Matches(sql, string.Intern("@.*?[, ]"));
             var usedParams = ParamsUtil.GetParams(context, matches);
-            return Tuple.Create(sql, ParamsUtil.Convert(usedParams));
+            return usedParams;
         }
 
         public static string GetApplyGramarRuleSql(IContext contex, string sql, IEnumerable<Segment> segments)

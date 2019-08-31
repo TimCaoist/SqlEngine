@@ -17,6 +17,7 @@ namespace Tim.SqlEngine.Models
         IHandlerConfig GetHandlerConfig();
 
         object Data { get; set; }
+        object ComplexData { get; set; }
 
         IContext GetParent();
     }

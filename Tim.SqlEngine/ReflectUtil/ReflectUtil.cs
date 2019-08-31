@@ -112,9 +112,23 @@ namespace Tim.SqlEngine.ReflectUtil
             ICollection<Type> returnTypes = new List<Type>();
             foreach (var item in types)
             {
-                if (!item.IsSubclassOf(type) || item.IsAbstract)
+                if (item.IsAbstract)
                 {
                     continue;
+                }
+
+                if (type.IsAbstract && type.IsInterface == false)
+                {
+                    if (!item.IsSubclassOf(type))
+                    {
+                        continue;
+                    }
+                }
+                else {
+                    if (item.GetInterface(type.FullName) == null)
+                    {
+                        continue;
+                    }
                 }
 
                 returnTypes.Add(item);

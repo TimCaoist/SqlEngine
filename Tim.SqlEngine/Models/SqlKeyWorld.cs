@@ -77,6 +77,12 @@ namespace Tim.SqlEngine.Models
 
         public const string ComplexDataObjectStart = "@v_cd.";
 
+        public const string RootComplexDataObjectStart = "@v_rootCd.";
+
         public static readonly string WhiteSpace = " ";
+
+        public static readonly string Spot = ".";
+
+        public static readonly string Underline = "_";
     }
 }

@@ -7,7 +7,7 @@ using Tim.SqlEngine.Models;
 
 namespace Tim.SqlEngine.Parser.ParamHandler
 {
-    public class ContentParamHandler : ParentParamHandler
+    internal class ContentParamHandler : ParentParamHandler
     {
         public override bool Match(string paramStr)
         {

@@ -53,6 +53,7 @@
     <Compile Include="Common\DataConvert.cs" />
     <Compile Include="Common\DBHelper.cs" />
     <Compile Include="Common\DictHelper.cs" />
+    <Compile Include="Common\EvalHelper.cs" />
     <Compile Include="Models\BaseContext.cs" />
     <Compile Include="Models\BaseHadlerConfig.cs" />
     <Compile Include="Models\Column.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Parser\ParamHandler\ObjectParamHandler.cs" />
     <Compile Include="Parser\ParamHandler\ParamHandlerFactory.cs" />
     <Compile Include="Parser\ParamHandler\ParentParamHandler.cs" />
+    <Compile Include="Parser\ParamHandler\RootComplexDataParamHandler.cs" />
     <Compile Include="Parser\ParamsUtil.cs" />
     <Compile Include="Parser\SegmentBuilder\IfSegmentBuilder.cs" />
     <Compile Include="Parser\SegmentBuilder\JoinSegmentBuilder.cs" />
@@ -124,10 +126,12 @@
     <Compile Include="SqlHelper\UpdateHandler\BaseBatchUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BaseSimpleUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BaseUpdateHandler.cs" />
+    <Compile Include="SqlHelper\UpdateHandler\BatchDeleteHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BatchInsertHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BatchUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\IUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\MutilUpdateHandler.cs" />
+    <Compile Include="SqlHelper\UpdateHandler\QuerySupportUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\SimpleDeleteHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\SimpleInsertHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\SimpleUpdateHandler.cs" />

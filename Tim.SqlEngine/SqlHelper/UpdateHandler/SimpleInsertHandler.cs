@@ -12,7 +12,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         public override string BuilderSql(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)
         {
-            return DBHelper.BuildInsertSql(cols, config.Table);
+            return DBHelper.BuildInsertSql(cols, config.Table, SqlKeyWorld.ParamStart);
         }
 
         protected override void ApplyRules(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols)

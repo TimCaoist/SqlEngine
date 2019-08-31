@@ -36,22 +36,6 @@ namespace Tim.SqlEngine.Parser
             return paramHandler.GetParamInfo(context, dataStr);
         }
 
-        internal static IDictionary<string, object> Convert(IEnumerable<ParamInfo> usedParams)
-        {
-            IDictionary<string, object> datas = new Dictionary<string, object>();
-            foreach (var p in usedParams)
-            {
-                if (datas.ContainsKey(p.Name))
-                {
-                    continue;
-                }
-
-                datas.Add(p.Name, p.Data);
-            }
-
-            return datas;
-        }
-
         public static ParamInfo GetGlobalParamData(IDictionary<string, object> queryParams, string key)
         {
             var keyArray = key.Split('_');

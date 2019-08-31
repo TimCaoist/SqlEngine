@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tim.SqlEngine.Parser;
-using Tim.SqlEngine.Models;
-using Tim.SqlEngine.SqlHelper.QueryHandler;
-using Tim.SqlEngine.PlugIn;
 using Tim.SqlEngine.Common;
+using Tim.SqlEngine.Models;
+using Tim.SqlEngine.Parser;
+using Tim.SqlEngine.PlugIn;
+using Tim.SqlEngine.SqlHelper.QueryHandler;
 
 namespace Tim.SqlEngine
 {
@@ -15,6 +13,11 @@ namespace Tim.SqlEngine
     {
         
         public static object Query(HandlerConfig handlerConfig, IDictionary<string, object> queryParams = null)
+        {
+            return Query(handlerConfig, null, queryParams);
+        }
+
+        public static object Query(HandlerConfig handlerConfig, object complexData, IDictionary<string, object> queryParams = null)
         {
             IQueryHandler queryHandler = QueryHandlerFactory.GetQueryHandler(handlerConfig.QueryType);
             if (handlerConfig.Configs == null || handlerConfig.Configs.Any() == false)
@@ -26,17 +29,23 @@ namespace Tim.SqlEngine
             {
                 HandlerConfig = handlerConfig,
                 Configs = handlerConfig.Configs,
-                Params = queryParams
+                Params = queryParams,
+                ComplexData = complexData,
             };
 
             var returnData = queryHandler.Query(context);
             return handlerConfig.OnQueryEnd(returnData, queryParams);
         }
 
-        public static object Query(string name, IDictionary<string, object> queryParams = null)
+        public static object Query(string name, object complexData, IDictionary<string, object> queryParams = null)
         {
             HandlerConfig handlerConfig = JsonParser.ReadHandlerConfig<HandlerConfig>(name);
-            return Query(handlerConfig, queryParams);
+            return Query(handlerConfig, complexData, queryParams);
+        }
+
+        public static object Query(string name, IDictionary<string, object> queryParams = null)
+        {
+            return Query(name, null, queryParams);
         }
 
         public static object Query(string name, object param)
@@ -50,7 +59,7 @@ namespace Tim.SqlEngine
             }
 
             HandlerConfig handlerConfig = JsonParser.ReadHandlerConfig<HandlerConfig>(name);
-            return Query(handlerConfig, queryParams);
+            return Query(handlerConfig, null, queryParams);
         }
 
         public static object Query(string name, string data, string assemblyString, string typeStr)

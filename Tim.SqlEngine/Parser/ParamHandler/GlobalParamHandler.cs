@@ -8,7 +8,7 @@ using Tim.SqlEngine.PlugIn;
 
 namespace Tim.SqlEngine.Parser.ParamHandler
 {
-    public class GlobalParamHandler : IParamHandler
+    internal class GlobalParamHandler : IParamHandler
     {
         public ParamInfo GetParamInfo(IContext context, string dataStr)
         {

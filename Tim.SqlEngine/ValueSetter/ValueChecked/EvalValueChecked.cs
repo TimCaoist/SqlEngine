@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tim.LambdaEngine;
+using Tim.SqlEngine.Common;
 using Tim.SqlEngine.Models;
-using Tim.SqlEngine.Parser;
 
 namespace Tim.SqlEngine.ValueSetter.ValueChecked
 {
@@ -13,12 +8,15 @@ namespace Tim.SqlEngine.ValueSetter.ValueChecked
     {
         public readonly static EvalValueChecked Instance = new EvalValueChecked();
 
-        public bool Checked(UpdateContext updateContext, ColumnRule mc, object data, string key, string realKey)
+        public bool Checked(UpdateContext context, ColumnRule mc, object data, string key, string realKey)
         {
             var eval = mc.Value.ToString();
-            var usedParams = SqlParser.GetApplyParamRuleSql(updateContext, eval).Item2;
-            var right = (bool)LambdaEnginer.Eval(eval, usedParams);
-            return right;
+            var action = context.ContentParams.CreateOrGet<string, object, Delegate>(eval, expression =>
+            {
+                return EvalHelper.GetDelegate(context, expression, data);
+            });
+
+            return (bool)action.DynamicInvoke(data);
         }
     }
 }

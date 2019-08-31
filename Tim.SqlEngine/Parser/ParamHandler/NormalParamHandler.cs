@@ -7,7 +7,7 @@ using Tim.SqlEngine.Models;
 
 namespace Tim.SqlEngine.Parser.ParamHandler
 {
-    public class NormalParamHandler : IParamHandler
+    internal class NormalParamHandler : IParamHandler
     {
         private readonly static string[] IngoresKeys = new string[] { "IDENTITY" };
 

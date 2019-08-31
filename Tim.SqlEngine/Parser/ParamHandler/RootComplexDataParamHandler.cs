@@ -7,22 +7,17 @@ using Tim.SqlEngine.Models;
 
 namespace Tim.SqlEngine.Parser.ParamHandler
 {
-    internal sealed class ComplexDataParamHandler : ObjectParamHandler
+    public class RootComplexDataParamHandler : ObjectParamHandler
     {
         public override bool Match(string paramStr)
         {
-            return paramStr.StartsWith(SqlKeyWorld.ComplexDataObjectStart, StringComparison.OrdinalIgnoreCase);
+            return paramStr.StartsWith(SqlKeyWorld.RootComplexDataObjectStart, StringComparison.OrdinalIgnoreCase);
         }
 
         protected override object GetObject(string objectKey, IContext context)
         {
-            var complexData = context.ContentParams[SqlKeyWorld.ComplexData];
+            var complexData = context.ComplexData;
             return complexData;
-        }
-
-        protected override object GetDataFromCache(IDictionary<string, object> queryParams, string realKey)
-        {
-            return null;
         }
 
         protected override IDictionary<string, object> GetQueryParams(IContext context)

@@ -17,23 +17,8 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
         /// </summary>
         private const string IngoreKey = "ingore_key";
 
-        public override object Update(UpdateContext context)
+        protected override object DoUpdate(UpdateContext context, UpdateConfig config, IEnumerable<object> datas, object complexData)
         {
-            var config = context.Config;
-            if (string.IsNullOrEmpty(config.Connection))
-            {
-                config.Connection = context.HandlerConfig.Connection;
-            }
-
-            var complexData = context.ComplexData;
-            IEnumerable<object> datas = GetDatas(context, config, complexData);
-            if (datas.Any() == false)
-            {
-                return 0;
-            }
-
-            SetContentData(context, complexData);
-
             var sql = config.Sql;
             var ingoreKey = config.Config[IngoreKey].ToSingleData<bool>();
             var cols = GetCols(config);
@@ -46,14 +31,13 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             {
                 if (string.IsNullOrEmpty(sql))
                 {
-                    config.Sql = DBHelper.BuildInsertSql(cols, config.Table);
+                    config.Sql = DBHelper.BuildInsertSql(cols, config.Table, SqlKeyWorld.ComplexDataObjectStart);
                 }
                 
                 config.ReturnId = true;
                 var keys = valueSetter.GetFields(datas.First());
                 foreach (var data in datas)
                 {
-                    context.ContentParams.Clear();
                     context.ContentParams.ReplaceOrInsert(SqlKeyWorld.ComplexData, data);
                     UpdateTrigger.TriggeDefaultValues(context, data, config, cols, valueSetter, keys);
                     UpdateTrigger.TriggeValuesChecked(context, data, config, cols, ActionType.Insert, valueSetter, keys);
@@ -65,10 +49,10 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 return datas.Count();
             }
 
-            return InsertOnOneTimes(context, config, cols, datas, valueSetter);
+            return InsertOnOneTime(context, config, cols, datas, valueSetter);
         }
 
-        private object InsertOnOneTimes(UpdateContext context, UpdateConfig config, IDictionary<string, string> cols, IEnumerable<object> datas, IValueSetter valueSetter)
+        private object InsertOnOneTime(UpdateContext context, UpdateConfig config, IDictionary<string, string> cols, IEnumerable<object> datas, IValueSetter valueSetter)
         {
             StringBuilder sb = new StringBuilder();
             var columnInfos = TableColumnQueryHandler.QueryColumns(config).Where(c => cols.Keys.Contains(c.ColName) && DBHelper.SpecailColumn(c)).ToArray();

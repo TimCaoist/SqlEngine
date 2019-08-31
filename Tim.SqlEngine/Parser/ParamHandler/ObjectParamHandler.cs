@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tim.SqlEngine.Common;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.ValueSetter;
 
@@ -46,28 +47,29 @@ namespace Tim.SqlEngine.Parser.ParamHandler
 
             var queryParams = GetQueryParams(context);
 
-            object outData;
-            if (queryParams.TryGetValue(realKey, out outData))
-            {
-                return new ParamInfo
-                {
-                    Type = ParamType.Object,
-                    Name = key,
-                    Data = outData
-                };
-            }
-
+            object outData = GetDataFromCache(queryParams, realKey);
             var data = GetObject(objectKey, context);
             var valueInfo = ValueGetter.GetValue(fields, data);
             outData = ValueGetter.Builder(valueInfo);
-            queryParams.Add(realKey, outData);
+            queryParams.ReplaceOrInsert(realKey, outData);
 
             return new ParamInfo
             {
+                OriginalData = valueInfo.Data,
                 Type = ParamType.Object,
                 Name = key,
                 Data = outData
             };
+        }
+
+        protected virtual object GetDataFromCache(IDictionary<string, object> queryParams, string realKey) {
+            object outData;
+            if (queryParams.TryGetValue(realKey, out outData))
+            {
+                return outData;
+            }
+
+            return null;
         }
 
         public virtual bool Match(string paramStr)

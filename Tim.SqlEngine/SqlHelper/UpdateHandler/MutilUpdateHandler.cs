@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tim.SqlEngine.Models;
 
 namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 {
+    /// <summary>
+    /// 主要用来组装更新操作
+    /// </summary>
     public class MutilUpdateHandler : BaseBatchUpdateHandler
     {
         public override int Type => 7;
@@ -23,9 +23,21 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 IUpdateHandler queryHandler = UpdateHandlerFactory.GetUpdateHandler(config.QueryType);
                 context.Configs = new UpdateConfig[] { config };
                 var data = queryHandler.Update(context);
+                if (string.IsNullOrEmpty(config.Filed))
+                {
+                    continue;
+                }
+
+                //主要是争对查询结果储存，可能后面更改会用到
+                dictDatas.Add(config.Filed, data);
             }
 
             return true;
+        }
+
+        protected override object DoUpdate(UpdateContext context, UpdateConfig config, IEnumerable<object> datas, object complexData)
+        {
+            throw new NotImplementedException();
         }
     }
 }

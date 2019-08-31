@@ -17,23 +17,8 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         private const string End = "END";
 
-        public override object Update(UpdateContext context)
+        protected override object DoUpdate(UpdateContext context, UpdateConfig config, IEnumerable<object> datas, object complexData)
         {
-            var config = context.Config;
-            if (string.IsNullOrEmpty(config.Connection))
-            {
-                config.Connection = context.HandlerConfig.Connection;
-            }
-
-            var complexData = context.ComplexData;
-            IEnumerable<object> datas = GetDatas(context, config, complexData);
-            if (datas.Any() == false)
-            {
-                return 0;
-            }
-
-            SetContentData(context, complexData);
-
             var sql = config.Sql;
             var cols = GetCols(config);
             var key = GetKeyName(config, cols);
@@ -44,14 +29,13 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             {
                 if (string.IsNullOrEmpty(sql))
                 {
-                    config.Sql = DBHelper.BuildUpdateSql(cols, config, key);
+                    config.Sql = DBHelper.BuildUpdateSql(cols, config, key, SqlKeyWorld.ComplexDataObjectStart);
                 }
 
                 config.ReturnId = true;
                 var keys = valueSetter.GetFields(datas.First());
                 foreach (var data in datas)
                 {
-                    context.ContentParams.Clear();
                     context.ContentParams.ReplaceOrInsert(SqlKeyWorld.ComplexData, data);
                     UpdateTrigger.TriggeValuesChecked(context, data, config, cols, ActionType.Update, valueSetter, keys);
                     SqlExcuter.ExcuteTrann(context);
@@ -61,10 +45,10 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 return datas.Count();
             }
 
-            return UpdateOnOneTimes(context, config, cols, datas, valueSetter, key);
+            return UpdateOnOneTime(context, config, cols, datas, valueSetter, key);
         }
 
-        private object UpdateOnOneTimes(UpdateContext context, UpdateConfig config, IDictionary<string, string> cols, IEnumerable<object> datas, IValueSetter valueSetter, string key)
+        private object UpdateOnOneTime(UpdateContext context, UpdateConfig config, IDictionary<string, string> cols, IEnumerable<object> datas, IValueSetter valueSetter, string key)
         {
             var columnInfos = TableColumnQueryHandler.QueryColumns(config).Where(c => cols.Keys.Contains(c.ColName) && DBHelper.SpecailColumn(c)).ToArray();
 

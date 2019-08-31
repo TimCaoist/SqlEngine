@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tim.SqlEngine.Common;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.ValueSetter;
@@ -14,6 +12,29 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
         protected const string BatchFieldPath = "batch_field";
 
         private const string RelatedUpdates = "sub_updates";
+
+        private const string FilterEval = "filter_eval";
+
+        public override object Update(UpdateContext context)
+        {
+            var config = context.Config;
+            if (string.IsNullOrEmpty(config.Connection))
+            {
+                config.Connection = context.HandlerConfig.Connection;
+            }
+
+            var complexData = context.ComplexData;
+            IEnumerable<object> datas = GetDatas(context, config, complexData);
+            if (datas.Any() == false)
+            {
+                return 0;
+            }
+
+            SetContentData(context, complexData);
+            return DoUpdate(context, config, datas, complexData);
+        }
+
+        protected abstract object DoUpdate(UpdateContext context, UpdateConfig config, IEnumerable<object> datas, object complexData);
 
         protected static IEnumerable<object> GetDatas(UpdateContext context, UpdateConfig config, object complexData)
         {
@@ -34,12 +55,27 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                 inputData = valueInfo.Data;
             }
 
+            IEnumerable<object> results;
             if (!isArray)
             {
-                return new object[] { inputData };
+                results = new object[] { inputData };
             }
 
-            return (IEnumerable<object>)inputData;
+            results = (IEnumerable<object>)inputData;
+
+            var filterEval = config.Config[FilterEval].ToSingleData<string>(string.Empty);
+            if (string.IsNullOrEmpty(filterEval) || results.Any() == false)
+            {
+                return results;
+            }
+
+            var action = context.ContentParams.CreateOrGet<string, object, Delegate>(filterEval, eval =>
+            {
+                return EvalHelper.GetDelegate(context, filterEval, results.First());
+            });
+            
+            results = results.Where(r => (bool)action.DynamicInvoke(r)).ToArray();
+            return results;
         }
 
         protected static IDictionary<string, object> SetContentData(UpdateContext context, object complexData)

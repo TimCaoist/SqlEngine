@@ -9,6 +9,18 @@ namespace Tim.SqlEngine.Models
 {
     public class ParamInfo
     {
+        private object _originalData;
+
+        public object OriginalData  
+        {
+            get{
+                return _originalData ?? Data;
+            }
+            set {
+                _originalData = value;
+            }
+         }
+
         public ParamType Type { get; set; }
 
         public string Name { get; set; }
