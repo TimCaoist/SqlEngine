@@ -13,7 +13,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
     {
         public override int Type => 1;
 
-        public override object Query(Context context)
+        protected override object DoQuery(Context context)
         {
             var queryConfig = context.Config;
             var handlerConfig = context.HandlerConfig;

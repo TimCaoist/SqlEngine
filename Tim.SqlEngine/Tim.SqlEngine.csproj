@@ -92,6 +92,7 @@
     <Compile Include="Parser\SegmentBuilder\InSegmentBuilder.cs" />
     <Compile Include="Parser\SegmentBuilder\TempSegmentBuilder.cs" />
     <Compile Include="Parser\SqlParser.cs" />
+    <Compile Include="PlugIn\CacheNameCreator.cs" />
     <Compile Include="PlugIn\IGobalValue.cs" />
     <Compile Include="PlugIn\IQueryEnd.cs" />
     <Compile Include="PlugIn\IUpdateValueGetter.cs" />
@@ -159,6 +160,10 @@
     <ProjectReference Include="..\..\LambdaEngine\Tim.LambdaEngine.csproj">
       <Project>{576c32ca-f50e-4f17-86cf-f37bd522c927}</Project>
       <Name>Tim.LambdaEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tim.CacheUtil\Tim.CacheUtil\Tim.CacheUtil.csproj">
+      <Project>{91bd3166-3f70-4ae6-8bcb-ad4c7bdc9057}</Project>
+      <Name>Tim.CacheUtil</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

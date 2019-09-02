@@ -15,7 +15,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         private const string FilterEval = "filter_eval";
 
-        public override object Update(UpdateContext context)
+        protected override object DoUpdate(UpdateContext context)
         {
             var config = context.Config;
             if (string.IsNullOrEmpty(config.Connection))

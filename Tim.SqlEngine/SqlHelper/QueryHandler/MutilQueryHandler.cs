@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
+using Tim.CacheUtil.Models;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.ValueSetter;
 
@@ -9,7 +10,12 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
     {
         public override int Type => 2;
 
-        public override object Query(Context context)
+        protected override CacheConfig GetCacheConfig(Context context)
+        {
+            return context.HandlerConfig.CacheConfig;
+        }
+
+        protected override object DoQuery(Context context)
         {
             var handlerConfig = context.HandlerConfig;
             var queryConfigs = context.Configs;

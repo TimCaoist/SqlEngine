@@ -10,7 +10,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
         protected abstract void ApplyRules(UpdateContext updateContext, UpdateConfig config, IDictionary<string, string> cols);
 
 
-        public override object Update(UpdateContext context)
+        protected override object DoUpdate(UpdateContext context)
         {
             var config = context.Config;
             if (string.IsNullOrEmpty(config.Connection))

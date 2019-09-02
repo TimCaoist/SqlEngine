@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Tim.CacheUtil.Models;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.Parser;
-using Tim.SqlEngine.SqlHelper.QueryHandler;
+using Tim.SqlEngine.PlugIn;
 
 namespace Tim.SqlEngine
 {
@@ -22,6 +20,11 @@ namespace Tim.SqlEngine
 
         private static readonly string dataSource = "Data Source=";
 
+        static SqlEnginerConfig()
+        {
+            CacheUtil.CacheUtil.UseCacheKeyCreator(new CacheNameCreator());
+        }
+
         public static string ConfigFolder {
             get {
                 return configFolder;
@@ -35,7 +38,20 @@ namespace Tim.SqlEngine
                 configFolder = value;
                 LoadUpdateRules();
                 LoadMapConnections();
+                LoadCacheConfig();
             }
+        }
+
+        private static void LoadCacheConfig()
+        {
+            var cacheConfig = string.Concat(SqlEnginerConfig.ConfigFolder, !SqlEnginerConfig.ConfigFolder.EndsWith("\\") ? "\\" : string.Empty, "configs\\cache.json");
+            if (!System.IO.File.Exists(cacheConfig))
+            {
+                return;
+            }
+
+            var cache = JsonParser.ReadHandlerConfig<CacheCommonConfig>(cacheConfig);
+            CacheUtil.CacheUtil.ApplyConfig(cache);
         }
 
         private static void LoadMapConnections()

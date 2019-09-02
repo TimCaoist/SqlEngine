@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
+using Tim.CacheUtil.Models;
 
 namespace Tim.SqlEngine.Models
 {
@@ -17,5 +18,9 @@ namespace Tim.SqlEngine.Models
 
         [DataMember(Name = "sql")]
         public string Sql { get; set; }
+
+        [DataMember(Name = "cache")]
+        public CacheConfig CacheConfig { get; set; }
+
     }
 }

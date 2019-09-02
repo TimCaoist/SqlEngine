@@ -11,7 +11,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
     {
         public override int Type => 7;
 
-        public override object Update(UpdateContext context)
+        public override object DoUpdate(UpdateContext context)
         {
             var handlerConfig = context.HandlerConfig;
             var configs = context.Configs;
@@ -22,7 +22,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             {
                 IUpdateHandler queryHandler = UpdateHandlerFactory.GetUpdateHandler(config.QueryType);
                 context.Configs = new UpdateConfig[] { config };
-                var data = queryHandler.Update(context);
+                var data = queryHandler.DoUpdate(context);
                 if (string.IsNullOrEmpty(config.Filed))
                 {
                     continue;

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.Parser.ParamHandler;
 using Tim.SqlEngine.PlugIn;
@@ -14,10 +12,15 @@ namespace Tim.SqlEngine.Parser
     {
         public static IEnumerable<ParamInfo> GetParams(IContext context, System.Text.RegularExpressions.MatchCollection matches)
         {
+            if (matches.Count == 0)
+            {
+                return Enumerable.Empty<ParamInfo>();
+            }
+
             ICollection<ParamInfo> paramInfos = new List<ParamInfo>();
             foreach (Match match in matches)
             {
-                var paramInfo = GetParamData(context, match.ToString().TrimEnd(')', '(' , ' ', SqlKeyWorld.Split, SqlKeyWorld.Split3));
+                var paramInfo = GetParamData(context, match.ToString().TrimEnd('_', ')', '(' , ' ', SqlKeyWorld.Split, SqlKeyWorld.Split3));
                 if (paramInfo == null)
                 {
                     continue;

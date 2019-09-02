@@ -25,7 +25,7 @@ namespace Tim.SqlEngine
                 ComplexData = complexData
             };
 
-            var result = updateHandler.Update(context);
+            var result = updateHandler.DoUpdate(context);
             if (context.Conns != null && context.Conns.Any())
             {
                 context.Submit();

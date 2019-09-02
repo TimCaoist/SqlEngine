@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tim.SqlEngine.Common;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.ValueSetter;
 
@@ -13,11 +10,11 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
     {
         public override int Type => 5;
 
-        private readonly static IDictionary<string, IEnumerable<Column>> Columns = new Dictionary<string, IEnumerable<Column>>();
+        private readonly static string DBFormatter = "sql_engine_db_{0}_columns";
 
-        private readonly static object sync = new object();
+        private readonly static string DBName = "db_name";
 
-        private readonly static string tableName = "tableName";
+        private readonly static string Catalog = "Catalog=";
 
         private readonly static string columnType = "Tim.SqlEngine,Tim.SqlEngine.Models.Column";
 
@@ -35,7 +32,16 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
                 Connection = config.Connection
             };
 
-            queryConfig.Config[tableName] = config.Table;
+            var connStr = SqlEnginerConfig.GetConnection(queryConfig.Connection);
+            var startIndex = connStr.IndexOf(Catalog, StringComparison.OrdinalIgnoreCase);
+            var endIndex = connStr.IndexOf(";" , startIndex);
+            var dbName = connStr.Substring(startIndex + 8, endIndex - startIndex - 8);
+            queryConfig.CacheConfig = new CacheUtil.Models.CacheConfig
+            {
+                Key = string.Format(DBFormatter, dbName)
+            }; 
+
+            queryConfig.Config[DBName] = dbName;
             queryConfig.Config[ValueSetterCreater.TypeStr] = columnType;
             var columns = queryHandler.Query(new Context
             {
@@ -44,42 +50,19 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
                     Connection = config.Connection,
                 },
                 Configs = new QueryConfig[] {
-                     queryConfig,
+                    queryConfig,
                 }
-            }).ToDatas<Column>().ToArray();
+            }).ToDatas<Column>().Where(c => c.TableName == config.Table).ToArray();
 
             return columns;
         }
 
-        public override object Query(Context context)
+        protected override object DoQuery(Context context)
         {
             var queryConfig = context.Config;
-            var connStr = SqlEnginerConfig.GetConnection(queryConfig.Connection);
-            var startIndex = connStr.IndexOf("Catalog=", StringComparison.OrdinalIgnoreCase);
-            var endIndex = connStr.IndexOf(";", startIndex);
-            var dbName = connStr.Substring(startIndex + 8, endIndex - startIndex - 8);
-            var key = string.Concat(dbName);
-            var table = queryConfig.Config[tableName].ToString();
-            IEnumerable<Column> columns;
-            if (Columns.TryGetValue(key, out columns))
-            {
-                return columns.Where(c => c.TableName == table).ToArray();
-            }
-
+            var dbName = queryConfig.Config[DBName].ToString();
             context.Config.Sql = $"SELECT TABLE_SCHEMA as DBName, TABLE_NAME as TableName, COLUMN_NAME as ColName, COLUMN_TYPE as DataType, IS_NULLABLE as AllowNull, COLUMN_COMMENT as Comment, COLUMN_DEFAULT as DefaultValue, Extra, Column_key as \'Key\' FROM information_schema.columns where table_schema = '{dbName}'";
-            columns = base.Query(context).ToDatas<Column>();
-            if (!Columns.ContainsKey(key))
-            {
-                lock (sync)
-                {
-                    if (!Columns.ContainsKey(key))
-                    {
-                        Columns.Add(key, columns);
-                    }
-                }
-            }
-
-            return columns.Where(c => c.TableName == table).ToArray();
+            return base.Query(context);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Tim.CacheUtil.Models;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.SqlHelper.QueryHandler;
 
@@ -9,7 +10,26 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
     {
         public abstract int Type { get; }
 
-        public abstract object Update(UpdateContext context);
+        protected abstract object DoUpdate(UpdateContext context);
+
+        protected virtual CacheConfig GetCacheConfig(UpdateContext context)
+        {
+            var queryConfig = context.Config;
+            return queryConfig.CacheConfig;
+        }
+
+        public virtual object Update(UpdateContext context)
+        {
+            var result = DoUpdate(context);
+            var cacheConfig = GetCacheConfig(context);
+            if (cacheConfig != null)
+            {
+                var cacheProxy = CacheUtil.CacheUtil.Create();
+                cacheProxy.Remove(cacheConfig, context);
+            }
+
+            return result;
+        }
 
         protected readonly static string LowerId = SqlKeyWorld.Id.ToLower();
              
