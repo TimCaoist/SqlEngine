@@ -13,8 +13,7 @@ namespace Tim.SqlEngine.Common
 
         public static Delegate GetDelegate(IContext context, string eval, object data)
         {
-            var matches = Regex.Matches(eval, string.Intern("@.*?[, ]"));
-            var usedParams = ParamsUtil.GetParams(context, matches).ParamsToDictionary(true);
+            var usedParams = ParamsUtil.GetParams(context, eval).Item1.ParamsToDictionary(true);
             var count = usedParams.Count;
             if (count > 0)
             {

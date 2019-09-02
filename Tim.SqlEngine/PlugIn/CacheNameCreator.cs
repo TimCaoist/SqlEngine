@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
-using Tim.CacheUtil.Models;
+﻿using Tim.CacheUtil.Models;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.Parser;
 
@@ -23,9 +21,8 @@ namespace Tim.SqlEngine.PlugIn
                 return string.Empty;
             }
 
-            var matches = Regex.Matches(str, string.Intern("@.*?[, ]"));
-            var usedParams = ParamsUtil.GetParams(context, matches);
-            return ParamsUtil.ApplyParams(str, usedParams, matches);
+            var paramInfos = ParamsUtil.GetParams(context, str);
+            return ParamsUtil.ApplyParams(str, paramInfos.Item1, paramInfos.Item2);
         }
     }
 }

@@ -10,11 +10,14 @@ namespace Tim.SqlEngine.Parser
 {
     public static class ParamsUtil
     {
-        public static IEnumerable<ParamInfo> GetParams(IContext context, System.Text.RegularExpressions.MatchCollection matches)
+        private const string ParamStr = "@.*?[,]";
+
+        public static Tuple<IEnumerable<ParamInfo>, MatchCollection> GetParams(IContext context, string eval)
         {
+            var matches = Regex.Matches(eval, string.Intern("@.*?[, ]"));
             if (matches.Count == 0)
             {
-                return Enumerable.Empty<ParamInfo>();
+                return Tuple.Create(Enumerable.Empty<ParamInfo>(), matches);
             }
 
             ICollection<ParamInfo> paramInfos = new List<ParamInfo>();
@@ -30,7 +33,7 @@ namespace Tim.SqlEngine.Parser
                 paramInfos.Add(paramInfo);
             }
 
-            return paramInfos;
+            return Tuple.Create<IEnumerable<ParamInfo>, MatchCollection>(paramInfos, matches);
         }
 
         public static string ApplyParams(string str, IEnumerable<ParamInfo> paramInfos, System.Text.RegularExpressions.MatchCollection matches)

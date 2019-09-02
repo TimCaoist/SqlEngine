@@ -43,7 +43,7 @@ namespace Tim.SqlEngine.Parser
             var matches = SegmentUtil.GetMatch(sql);
             if (matches.Count == 0)
             {
-                return Tuple.Create(sql, GetParams(context, sql).ParamsToDictionary());
+                return Tuple.Create(sql, ParamsUtil.GetParams(context, sql).Item1.ParamsToDictionary());
             }
 
             Func<string, string> getFormatSql = (argSql) =>
@@ -59,14 +59,7 @@ namespace Tim.SqlEngine.Parser
             };
 
             var newSql = GetFormatSql(sql, getFormatSql);
-            return Tuple.Create(newSql, GetParams(context, newSql).ParamsToDictionary());
-        }
-
-        public static IEnumerable<ParamInfo> GetParams(IContext context, string sql)
-        {
-            var matches = Regex.Matches(sql, string.Intern("@.*?[, ]"));
-            var usedParams = ParamsUtil.GetParams(context, matches);
-            return usedParams;
+            return Tuple.Create(newSql, ParamsUtil.GetParams(context, newSql).Item1.ParamsToDictionary());
         }
 
         public static string GetApplyGramarRuleSql(IContext contex, string sql, IEnumerable<Segment> segments)
