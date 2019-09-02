@@ -12,7 +12,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         private const string QueryName = "query_name";
 
-        public override object DoUpdate(UpdateContext context)
+        protected override object DoUpdate(UpdateContext context)
         {
             var config = context.Config;
             return SqlEnginer.Query(config.Config[QueryName].ToSingleData<string>(), context.ComplexData, context.Params);

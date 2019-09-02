@@ -27,7 +27,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
             return cacheProxy.GetAndAddData(cacheConfig, () =>
             {
                 return DoQuery(context);
-            });
+            }, context);
         }
     }
 }

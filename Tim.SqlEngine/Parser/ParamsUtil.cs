@@ -33,6 +33,26 @@ namespace Tim.SqlEngine.Parser
             return paramInfos;
         }
 
+        public static string ApplyParams(string str, IEnumerable<ParamInfo> paramInfos, System.Text.RegularExpressions.MatchCollection matches)
+        {
+            if (matches.Count == 0)
+            {
+                return str;
+            }
+
+            var total = matches.Count;
+            for (var i = total - 1; i >= 0; i--)
+            {
+                var seg = matches[i];
+                var startIndex = seg.Index;
+                var endIndex = seg.Index + seg.Length;
+                str = str.Remove(startIndex, endIndex - startIndex);
+                str = str.Insert(startIndex, paramInfos.ElementAt(i).Data.ToString());
+            }
+
+            return str;
+        }
+
         public static ParamInfo GetParamData(IContext context, string dataStr)
         {
             var paramHandler = ParamHandlerFactory.Find(dataStr);

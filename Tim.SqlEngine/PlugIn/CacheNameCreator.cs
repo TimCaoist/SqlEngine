@@ -25,7 +25,7 @@ namespace Tim.SqlEngine.PlugIn
 
             var matches = Regex.Matches(str, string.Intern("@.*?[, ]"));
             var usedParams = ParamsUtil.GetParams(context, matches);
-            return string.Format(str, usedParams.Select(u => u.Data).ToArray());
+            return ParamsUtil.ApplyParams(str, usedParams, matches);
         }
     }
 }
