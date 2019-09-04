@@ -98,7 +98,7 @@ namespace Tim.SqlEngine.ValueSetter
                     }
 
                     var colValue = GetColumnValue(config.Connection, config.Table, column, data);
-                    valueSetter.SetField(cols[key], colValue);
+                    valueSetter.SetField(data, colValue, cols[key]);
                     break;
                 }
             }

@@ -62,7 +62,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
             var queryConfig = context.Config;
             var dbName = queryConfig.Config[DBName].ToString();
             context.Config.Sql = $"SELECT TABLE_SCHEMA as DBName, TABLE_NAME as TableName, COLUMN_NAME as ColName, COLUMN_TYPE as DataType, IS_NULLABLE as AllowNull, COLUMN_COMMENT as Comment, COLUMN_DEFAULT as DefaultValue, Extra, Column_key as \'Key\' FROM information_schema.columns where table_schema = '{dbName}'";
-            return base.Query(context);
+            return base.DoQuery(context);
         }
     }
 }

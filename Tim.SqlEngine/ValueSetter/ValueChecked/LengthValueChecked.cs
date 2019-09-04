@@ -13,7 +13,7 @@ namespace Tim.SqlEngine.ValueSetter.ValueChecked
 
         public bool Checked(UpdateContext updateContext, ColumnRule mc, object data, string key, string realKey)
         {
-            var lenStrs = mc.ToString().Split(SqlKeyWorld.Split3);
+            var lenStrs = mc.Value.ToString().Split(SqlKeyWorld.Split3);
             bool result;
             if (lenStrs.Length == 1)
             {
@@ -27,7 +27,7 @@ namespace Tim.SqlEngine.ValueSetter.ValueChecked
                 return false;
             }
 
-            result = DoCheckMin(decimal.Parse(lenStrs[1]), data);
+            result = DoCheckMin(decimal.Parse(lenStrs[0]), data);
             return result;
         }
 

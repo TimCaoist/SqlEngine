@@ -92,7 +92,14 @@ namespace Tim.SqlEngine.Common
                 return sql.ToString();
             }
 
-            sql.Append(string.Concat(Where, key, Equlas, cols[key]));
+            if (cols.ContainsKey(key))
+            {
+                sql.Append(string.Concat(Where, key, Equlas, SqlKeyWorld.ParamStart, cols[key]));
+            }
+            else {
+                sql.Append(string.Concat(Where, key, Equlas, SqlKeyWorld.ParamStart, key));
+            }
+
             return sql.ToString();
         }
 

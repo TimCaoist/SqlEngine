@@ -10,11 +10,11 @@ namespace Tim.SqlEngine.Parser
 {
     public static class ParamsUtil
     {
-        private const string ParamStr = "@.*?[,]";
+        private const string ParamStr = "@.*?[, ]";
 
         public static Tuple<IEnumerable<ParamInfo>, MatchCollection> GetParams(IContext context, string eval)
         {
-            var matches = Regex.Matches(eval, string.Intern("@.*?[, ]"));
+            var matches = Regex.Matches(eval, ParamStr);
             if (matches.Count == 0)
             {
                 return Tuple.Create(Enumerable.Empty<ParamInfo>(), matches);
