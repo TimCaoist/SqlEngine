@@ -32,10 +32,23 @@ namespace Tim.SqlEngine.Common
                 }
             }
 
-            var paramTypes = new Dictionary<string, Type>();
-            paramTypes.Add(Data, data.GetType());
-            Delegate @delegate = LambdaEngine.ExpressionBuilder.Build(eval, usedParams, paramTypes);
+            Delegate @delegate;
+            if (data != null)
+            {
+                var paramTypes = new Dictionary<string, Type>();
+                paramTypes.Add(Data, data.GetType());
+                @delegate = LambdaEngine.ExpressionBuilder.Build(eval, usedParams, paramTypes);
+            }
+            else {
+                @delegate = LambdaEngine.ExpressionBuilder.Build(eval, usedParams);
+            }
+
             return @delegate;
+        }
+
+        public static Delegate GetDelegate(IContext context, string eval)
+        {
+            return GetDelegate(context, eval, null);
         }
     }
 }

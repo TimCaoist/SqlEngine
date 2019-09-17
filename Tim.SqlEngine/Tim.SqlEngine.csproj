@@ -58,6 +58,7 @@
     <Compile Include="Models\BaseHadlerConfig.cs" />
     <Compile Include="Models\Column.cs" />
     <Compile Include="Models\ColumnRule.cs" />
+    <Compile Include="Models\ConditionModel.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\IHandlerConfig.cs" />
     <Compile Include="Models\IContext.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Parser\ParamsUtil.cs" />
     <Compile Include="Parser\SegmentBuilder\IfSegmentBuilder.cs" />
     <Compile Include="Parser\SegmentBuilder\JoinSegmentBuilder.cs" />
+    <Compile Include="Parser\SegmentBuilder\LimitSegmentBuilder.cs" />
     <Compile Include="Parser\SegmentBuilder\SegmentUtil.cs" />
     <Compile Include="Parser\SegmentBuilder\InSegmentBuilder.cs" />
     <Compile Include="Parser\SegmentBuilder\TempSegmentBuilder.cs" />
@@ -110,6 +112,8 @@
     <Compile Include="SqlEnginerConfig.cs" />
     <Compile Include="SqlEnginerUpdateConfig.cs" />
     <Compile Include="SqlHelper\QueryHandler\BaseQueryHandler.cs" />
+    <Compile Include="SqlHelper\QueryHandler\ConditionQueryHandler.cs" />
+    <Compile Include="SqlHelper\QueryHandler\IConditionQueryHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\IQueryHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\MutilQueryHandler.cs" />
     <Compile Include="SqlHelper\QueryHandler\QueryHandlerFactory.cs" />

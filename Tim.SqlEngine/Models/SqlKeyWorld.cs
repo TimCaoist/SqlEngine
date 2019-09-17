@@ -33,6 +33,8 @@ namespace Tim.SqlEngine.Models
         /// </summary>
         public const string Switch = "sw";
 
+        public const string Limit = "lit";
+
         public const string Less = "l";
 
         public const string LessEqulas = "l=";

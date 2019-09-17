@@ -18,7 +18,7 @@ namespace Tim.SqlEngine.Parser.ParamHandler
             object data;
             if (!queryParams.TryGetValue(objectKey, out data))
             {
-                throw new ArgumentNullException(string.Concat("参数", objectKey, "不存在!"));
+                return string.Empty;
             }
 
             return data;

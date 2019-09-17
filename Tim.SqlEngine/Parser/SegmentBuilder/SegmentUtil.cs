@@ -10,7 +10,7 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
 {
     public static class SegmentUtil
     {
-        private readonly static string SegmentStr = "<in.*?>|<if.*?>|<temp.*?>|<join.*?>|</>";
+        private readonly static string SegmentStr = "<in.*?>|<if.*?>|<temp.*?>|<join.*?>|<lit.*?>|</>";
 
         public static MatchCollection GetMatch(string sql)
         {
@@ -40,6 +40,8 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
                     return TempSegmentBuilder.BuildSql(context, oldSql, segment);
                 case SqlKeyWorld.Join:
                     return JoinSegmentBuilder.BuildSql(context, oldSql, segment);
+                case SqlKeyWorld.Limit:
+                    return LimitSegmentBuilder.BuildSql(context, oldSql, segment);
             }
 
             return string.Empty;

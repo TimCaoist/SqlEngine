@@ -12,31 +12,6 @@ namespace Tim.SqlEngine.Parser
     {
         private readonly static Dictionary<long, WeakReference<string>> Sqls = new Dictionary<long, WeakReference<string>>();
 
-        private static string GetFormatSql(string sql, Func<string, string> getFormatSql)
-        {
-            WeakReference<string> weakReference;
-            string formatSql = string.Empty;
-            if (Sqls.TryGetValue(sql.GetHashCode(), out weakReference))
-            {
-                weakReference.TryGetTarget(out formatSql);
-                if (!string.IsNullOrEmpty(formatSql))
-                {
-                    return formatSql;
-                }
-
-                formatSql = getFormatSql(sql);
-                weakReference.SetTarget(formatSql);
-            }
-            else
-            {
-                formatSql = getFormatSql(sql);
-                weakReference = new WeakReference<string>(formatSql);
-                Sqls.Add(sql.GetHashCode(), weakReference);
-            }
-
-            return formatSql;
-        }
-
         public static Tuple<string, IDictionary<string, object>> Convert(IContext context, string sql)
         {
             sql = sql.Insert(sql.Length, SqlKeyWorld.WhiteSpace);
@@ -58,7 +33,7 @@ namespace Tim.SqlEngine.Parser
                 return argSql;
             };
 
-            var newSql = GetFormatSql(sql, getFormatSql);
+            var newSql = getFormatSql(sql);
             return Tuple.Create(newSql, ParamsUtil.GetParams(context, newSql).Item1.ParamsToDictionary());
         }
 

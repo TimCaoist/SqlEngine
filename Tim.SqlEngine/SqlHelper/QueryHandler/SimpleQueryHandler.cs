@@ -70,7 +70,12 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
                 {
                     contentData.Add(relatedQueryConfig.Filed, obj);
                 }
-                
+
+                if (relatedQueryConfig.IngoreFill)
+                {
+                    continue;
+                }
+
                 SetSubQueryValue(relatedQueryConfig, valueSetter, parents, (IEnumerable<object>)obj);
             }
         }

@@ -71,7 +71,7 @@ namespace Tim.SqlEngine.ReflectUtil
                 object val;
                 if (!dictObj.TryGetValue(field, out val))
                 {
-                    throw new ArgumentException(string.Concat(field, "不存在"));
+                    return string.Empty;
                 }
 
                 return val;
