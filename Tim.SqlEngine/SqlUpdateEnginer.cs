@@ -44,5 +44,19 @@ namespace Tim.SqlEngine
             UpdateHandlerConfig handlerConfig = JsonParser.ReadHandlerConfig<UpdateHandlerConfig>(name);
             return Update(handlerConfig, complexData, queryParams);
         }
+
+        public static object Update(string name, string jsonData, IDictionary<string, object> queryParams = null)
+        {
+            UpdateHandlerConfig handlerConfig = JsonParser.ReadHandlerConfig<UpdateHandlerConfig>(name);
+            if (string.IsNullOrEmpty(handlerConfig.JType))
+            {
+                return Update(handlerConfig, null, queryParams);
+            }
+
+            var typeStrs = handlerConfig.JType.Split(SqlKeyWorld.Split3);
+            var instanceType = ReflectUtil.ReflectUtil.CreateType(typeStrs[0], typeStrs[1]);
+            var instance = JsonParser.CreateInstance(jsonData, instanceType);
+            return Update(handlerConfig, instance, queryParams);
+        }
     }
 }

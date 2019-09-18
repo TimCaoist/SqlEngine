@@ -22,5 +22,11 @@ namespace Tim.SqlEngine.Models
         /// </summary>
         [DataMember(Name = "configs")]
         public IEnumerable<UpdateConfig> Configs { get; set; }
+
+        /// <summary>
+        /// json提交的类型
+        /// </summary>
+        [DataMember(Name = "json_type")]
+        public string JType { get; set; }
     }
 }

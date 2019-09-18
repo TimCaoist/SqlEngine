@@ -38,7 +38,11 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         protected static IEnumerable<object> GetDatas(UpdateContext context, UpdateConfig config, object complexData)
         {
-            var field = config.Config[BatchFieldPath].ToSingleData<string>(string.Empty);
+            string field = string.Empty;
+            if (config.Config != null && config.Config[BatchFieldPath] != null)
+            {
+               field = config.Config[BatchFieldPath].ToSingleData<string>(string.Empty);
+            }
 
             bool isArray;
             object inputData;

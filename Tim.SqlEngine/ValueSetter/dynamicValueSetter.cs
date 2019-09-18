@@ -43,12 +43,34 @@ namespace Tim.SqlEngine.ValueSetter
 
         public void SetField(string filed, object data)
         {
-            instance.Add(filed, data);
+            SetField(instance, data, filed);
         }
 
         public void SetField(object parent, object obj, string field)
         {
-            ((IDictionary<string, object>)parent).Add(field, obj);
+            var instance = ((IDictionary<string, object>)parent);
+            object existData;
+            if (!instance.TryGetValue(field, out existData))
+            {
+                instance.Add(field, obj);
+                return;
+            }
+
+            if (!(existData is List<object> datas))
+            {
+                throw new ArgumentException("已存在相同的字段!");
+            }
+
+            var insertDatas = (IEnumerable<object>)obj;
+            foreach (var d in insertDatas)
+            {
+                if (datas.Contains(d))
+                {
+                    continue;
+                }
+
+                datas.Add(d);
+            }
         }
 
         public IEnumerable<string> GetFields(object data)

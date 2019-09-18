@@ -17,7 +17,6 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             var key = GetKeyName(config, cols);
             IValueSetter valueSetter = ValueSetterCreater.Create(datas.First());
 
-            //1.自定义SQl一条条插入
             if (!string.IsNullOrEmpty(sql) || !string.IsNullOrEmpty(config.Filter))
             {
                 if (string.IsNullOrEmpty(sql))
@@ -25,7 +24,6 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                     config.Sql = DBHelper.BuildDeleteSql(cols, config, key, SqlKeyWorld.ComplexDataObjectStart);
                 }
 
-                config.ReturnId = true;
                 var keys = valueSetter.GetFields(datas.First());
                 foreach (var data in datas)
                 {

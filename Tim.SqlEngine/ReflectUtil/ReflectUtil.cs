@@ -16,6 +16,8 @@ namespace Tim.SqlEngine.ReflectUtil
 
         private readonly static Dictionary<string, WeakReference<Assembly>> Assemblies = new Dictionary<string, WeakReference<Assembly>>();
 
+        private const string ArrayTypeEnd = "[]";
+
         public static bool IsArray(object data) {
             var type = data.GetType();
             if (type == typeof(string))
@@ -54,13 +56,27 @@ namespace Tim.SqlEngine.ReflectUtil
         public static object CreateInstance(string assemblyString, string typeStr)
         {
             Assembly assembly = GetAssembly(assemblyString);
-            return assembly.CreateInstance(typeStr);
+            var isArray = typeStr.EndsWith(ArrayTypeEnd);
+            if (isArray)
+            {
+                var instanceType = assembly.GetType(typeStr.Substring(0, typeStr.Length - ArrayTypeEnd.Length), true);
+                return Array.CreateInstance(instanceType, 0);
+            }
+
+            return assembly.CreateInstance(typeStr, true);
         }
 
         public static Type CreateType(string assemblyString, string typeStr)
         {
             Assembly assembly = GetAssembly(assemblyString);
-            return assembly.GetType(typeStr);
+            var isArray = typeStr.EndsWith(ArrayTypeEnd);
+            if (isArray)
+            {
+                var instanceType = assembly.GetType(typeStr.Substring(0, typeStr.Length - ArrayTypeEnd.Length), true);
+                return Array.CreateInstance(instanceType, 0).GetType();
+            }
+
+            return assembly.GetType(typeStr, true);
         }
 
         public static object GetProperty(object data, string field)

@@ -26,6 +26,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
             context.Data = outData;
 
             IDictionary<string, object> contentData = new ExpandoObject();
+            IValueSetter contentSetter = ValueSetterCreater.Create(contentData);
 
             foreach (var queryConfig in queryConfigs)
             {
@@ -62,7 +63,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
                     }
                 }
 
-                contentData.Add(queryConfig.Filed, data);
+                contentSetter.SetField(contentData, data, queryConfig.Filed);
                 if (queryConfig.IngoreFill == true)
                 {
                     continue;
