@@ -10,7 +10,9 @@ namespace Tim.SqlEngine.Parser
 {
     public static class ParamsUtil
     {
-        private const string ParamStr = "@.*?[, ]";
+        private const string ParamStr = "@.*?[, ]|@.*?[)]";
+
+        private readonly static char[] ParamEndChar = new char[] { '_', ')', '(', ' ', SqlKeyWorld.Split, SqlKeyWorld.Split3 };
 
         public static Tuple<IEnumerable<ParamInfo>, MatchCollection> GetParams(IContext context, string eval)
         {
@@ -23,7 +25,7 @@ namespace Tim.SqlEngine.Parser
             ICollection<ParamInfo> paramInfos = new List<ParamInfo>();
             foreach (Match match in matches)
             {
-                var paramInfo = GetParamData(context, match.ToString().TrimEnd('_', ')', '(' , ' ', SqlKeyWorld.Split, SqlKeyWorld.Split3));
+                var paramInfo = GetParamData(context, match.ToString().TrimEnd(ParamEndChar));
                 if (paramInfo == null)
                 {
                     continue;
