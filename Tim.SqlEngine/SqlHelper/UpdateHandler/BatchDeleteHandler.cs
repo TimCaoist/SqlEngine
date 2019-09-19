@@ -6,8 +6,26 @@ using Tim.SqlEngine.ValueSetter;
 
 namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 {
+    /// <summary>
+    /// </summary>
     public class BatchDeleteHandler : BaseBatchUpdateHandler
     {
+
+        /*{
+         * Example
+  "configs": [
+    {
+      "table": "organizationroleusers",
+      "filter": " UserId = @v_cd.UserId and RoleId = @roleId ",
+      "config": {
+      }
+    }
+  ],
+  "connection": "sd_organizations",
+  "json_type": "SD.PalmClass.Model,SD.PalmClass.Model.Users.User[]",
+  "name": "",
+  "query_type": 6
+}*/
         public override int Type => 6;
 
         protected override object DoUpdate(UpdateContext context, UpdateConfig config, IEnumerable<object> datas, object complexData)

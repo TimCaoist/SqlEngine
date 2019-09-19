@@ -54,6 +54,10 @@
     <Compile Include="Common\DBHelper.cs" />
     <Compile Include="Common\DictHelper.cs" />
     <Compile Include="Common\EvalHelper.cs" />
+    <Compile Include="Convert\IParamConvert.cs" />
+    <Compile Include="Convert\ParamConvertUtil.cs" />
+    <Compile Include="Convert\ParamConvertUtilFactory.cs" />
+    <Compile Include="Convert\StringToArray.cs" />
     <Compile Include="Models\BaseContext.cs" />
     <Compile Include="Models\BaseHadlerConfig.cs" />
     <Compile Include="Models\Column.cs" />
@@ -62,6 +66,7 @@
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\IHandlerConfig.cs" />
     <Compile Include="Models\IContext.cs" />
+    <Compile Include="Models\ParamConvertConfig.cs" />
     <Compile Include="Models\ParamInfo.cs" />
     <Compile Include="Models\ParamType.cs" />
     <Compile Include="Models\ReleatedQuery.cs" />

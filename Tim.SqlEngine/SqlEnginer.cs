@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tim.SqlEngine.Common;
+using Tim.SqlEngine.Convert;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.Parser;
 using Tim.SqlEngine.PlugIn;
@@ -33,6 +34,7 @@ namespace Tim.SqlEngine
                 ComplexData = complexData,
             };
 
+            ParamConvertUtil.DoConvert(context);
             var returnData = queryHandler.Query(context);
             return handlerConfig.OnQueryEnd(returnData, queryParams);
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Tim.SqlEngine.Convert;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.Parser;
 using Tim.SqlEngine.SqlHelper;
@@ -25,6 +26,7 @@ namespace Tim.SqlEngine
                 ComplexData = complexData
             };
 
+            ParamConvertUtil.DoConvert(context);
             var result = updateHandler.Update(context);
             if (context.Conns != null && context.Conns.Any())
             {

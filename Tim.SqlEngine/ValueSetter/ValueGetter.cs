@@ -127,19 +127,65 @@ namespace Tim.SqlEngine.ValueSetter
                 return data.ToString();
             }
 
-            var datas = (IEnumerable<object>)data;
+            var datas = data as IEnumerable<object>;
+            if (datas == null)
+            {
+                return TryBuilder(data);
+            }
+
             if (datas.Any() == false)
             {
                 return string.Empty;
             }
 
-            var sourceType = datas.First().GetType();
+            var sourceType = datas.GetType().GetElementType();
             if (typeof(string) == sourceType || typeof(char) == sourceType)
             {
                 return string.Join(SqlKeyWorld.Split1, datas.Distinct().Select(d => string.Concat(SqlKeyWorld.Split2, d, SqlKeyWorld.Split2)));
             }
 
             return string.Join(SqlKeyWorld.Split1, datas.Distinct());
+        }
+
+        public static string TryBuilder(object data)
+        {
+            var elementType = data.GetType().GetElementType();
+            if (elementType == typeof(int))
+            {
+                var datas = (IEnumerable<int>)data;
+                return string.Join(SqlKeyWorld.Split1, datas.Distinct());
+            }
+            else if (elementType == typeof(long)) {
+                var datas = (IEnumerable<long>)data;
+                return string.Join(SqlKeyWorld.Split1, datas.Distinct());
+            }
+            else if (elementType == typeof(string))
+            {
+                var datas = (IEnumerable<string>)data;
+                return string.Join(SqlKeyWorld.Split1, datas.Distinct().Select(d => string.Concat(SqlKeyWorld.Split2, d, SqlKeyWorld.Split2)));
+            }
+            else if (elementType == typeof(char))
+            {
+                var datas = (IEnumerable<char>)data;
+                return string.Join(SqlKeyWorld.Split1, datas.Distinct().Select(d => string.Concat(SqlKeyWorld.Split2, d, SqlKeyWorld.Split2)));
+            }
+            else if (elementType == typeof(decimal))
+            {
+                var datas = (IEnumerable<decimal>)data;
+                return string.Join(SqlKeyWorld.Split1, datas.Distinct());
+            }
+            else if (elementType == typeof(double))
+            {
+                var datas = (IEnumerable<double>)data;
+                return string.Join(SqlKeyWorld.Split1, datas.Distinct());
+            }
+            else if (elementType == typeof(float))
+            {
+                var datas = (IEnumerable<float>)data;
+                return string.Join(SqlKeyWorld.Split1, datas.Distinct());
+            }
+
+            return string.Empty;
         }
     }
 }

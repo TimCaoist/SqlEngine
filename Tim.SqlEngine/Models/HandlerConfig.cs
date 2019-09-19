@@ -29,5 +29,8 @@ namespace Tim.SqlEngine.Models
         [DataMember(Name = "templates")]
 
         public IEnumerable<Template> Templates { get; set; }
+
+        [DataMember(Name = "param_converts")]
+        public IEnumerable<ParamConvertConfig> ParamConfigs { get; set; }
     }
 }

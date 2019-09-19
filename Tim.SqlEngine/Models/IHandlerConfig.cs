@@ -9,5 +9,7 @@ namespace Tim.SqlEngine.Models
     public interface IHandlerConfig
     {
         IEnumerable<Template> Templates { get; set; }
+
+        IEnumerable<ParamConvertConfig> ParamConfigs { get; set; }
     }
 }
