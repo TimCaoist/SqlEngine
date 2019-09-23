@@ -10,6 +10,9 @@ using Context = Tim.SqlEngine.Models.Context;
 
 namespace Tim.SqlEngine.Parser.SegmentBuilder
 {
+    /// <summary>
+    /// sample: <in [参数变量]:[当前表字段]></>
+    /// </summary>
     public static class InSegmentBuilder
     {
         internal static string BuildSql(IContext context, string oldSql, Segment segment)

@@ -10,7 +10,7 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
     public static class TempSegmentBuilder
     {
         /// <summary>
-        ///    sample:<temp name=organization_roles></temp>
+        ///    sample:<temp name=[模板名称]></>
         /// </summary>
         /// <returns></returns>
         internal static string BuildSql(IContext context, string oldSql, Segment segment)

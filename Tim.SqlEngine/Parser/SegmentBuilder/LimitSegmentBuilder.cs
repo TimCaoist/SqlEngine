@@ -4,6 +4,9 @@ using Tim.SqlEngine.ValueSetter;
 
 namespace Tim.SqlEngine.Parser.SegmentBuilder
 {
+    /// <summary>
+    /// sample: <lit [起始坐标]:[页面大小]></>
+    /// </summary>
     internal static class LimitSegmentBuilder
     {
         internal static string BuildSql(IContext context, string oldSql, Segment segment)

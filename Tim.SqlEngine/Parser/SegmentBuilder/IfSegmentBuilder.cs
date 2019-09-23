@@ -8,6 +8,9 @@ using Tim.SqlEngine.Models;
 
 namespace Tim.SqlEngine.Parser.SegmentBuilder
 {
+    /// <summary>
+    /// sample: <if sample=true></>
+    /// </summary>
     public static class IfSegmentBuilder
     {
         internal static string BuildSql(IContext context, string oldSql, Segment segment)
