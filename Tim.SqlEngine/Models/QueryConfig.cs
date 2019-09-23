@@ -11,6 +11,11 @@ namespace Tim.SqlEngine.Models
     [DataContract]
     public class QueryConfig : BaseHadlerConfig
     {
+        /// <summary>
+        /// 是否合并字段
+        /// </summary>
+        [DataMember(Name = "megre")]
+        public bool Megre { get; set; } = true;
 
         [DataMember(Name = "one")]
         public bool OnlyOne { get; set; }

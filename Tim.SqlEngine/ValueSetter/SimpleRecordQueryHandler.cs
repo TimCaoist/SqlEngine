@@ -35,6 +35,11 @@ namespace Tim.SqlEngine.ValueSetter
             throw new NotImplementedException();
         }
 
+        public void SetFieldByConfig(object parent, object obj, QueryConfig queryConfig)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<object> SetterDatas(QueryConfig queryConfig, MySqlDataReader dataReader, IEnumerable<string> columns)
         {
             string field = string.Empty;

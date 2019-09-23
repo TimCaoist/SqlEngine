@@ -19,7 +19,7 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
             string inParams = ValueGetter.Builder(data, isArray);
             if (!string.IsNullOrEmpty(inParams))
             {
-                return string.Concat(segment.Args.ElementAt(1), " ", SqlKeyWorld.In, "(", inParams, ")");
+                return string.Concat(segment.Args.ElementAt(1), SqlKeyWorld.WhiteSpace, SqlKeyWorld.In, "(", inParams, ")");
             }
 
             return SegmentUtil.GetContent(oldSql, segment);

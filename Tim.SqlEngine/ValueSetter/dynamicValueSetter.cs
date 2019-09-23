@@ -1,10 +1,8 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
 using Tim.SqlEngine.Models;
 using Tim.SqlEngine.Parser;
 
@@ -48,6 +46,26 @@ namespace Tim.SqlEngine.ValueSetter
 
         public void SetField(object parent, object obj, string field)
         {
+            SetField(parent, obj, field, true);
+        }
+
+        public IEnumerable<string> GetFields(object data)
+        {
+            return ((IDictionary<string, object>)data).Keys;
+        }
+
+        public object GetValue(object data, string key)
+        {
+            return ((IDictionary<string, object>)data)[key];
+        }
+
+        public void SetFieldByConfig(object parent, object obj, QueryConfig queryConfig)
+        {
+            SetField(parent, obj, queryConfig.Filed, queryConfig.Megre);
+        }
+
+        private void SetField(object parent, object obj, string field, bool megre)
+        {
             var instance = ((IDictionary<string, object>)parent);
             object existData;
             if (!instance.TryGetValue(field, out existData))
@@ -62,6 +80,12 @@ namespace Tim.SqlEngine.ValueSetter
             }
 
             var insertDatas = (IEnumerable<object>)obj;
+            if (!megre)
+            {
+                instance[field] = datas.Intersect(insertDatas).ToList();
+                return;
+            }
+
             foreach (var d in insertDatas)
             {
                 if (datas.Contains(d))
@@ -71,16 +95,6 @@ namespace Tim.SqlEngine.ValueSetter
 
                 datas.Add(d);
             }
-        }
-
-        public IEnumerable<string> GetFields(object data)
-        {
-            return ((IDictionary<string, object>)data).Keys;
-        }
-
-        public object GetValue(object data, string key)
-        {
-            return ((IDictionary<string, object>)data)[key];
         }
     }
 }

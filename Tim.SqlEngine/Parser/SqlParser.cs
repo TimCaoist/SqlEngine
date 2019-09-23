@@ -12,13 +12,12 @@ namespace Tim.SqlEngine.Parser
     {
         private readonly static Dictionary<long, WeakReference<string>> Sqls = new Dictionary<long, WeakReference<string>>();
 
-        public static Tuple<string, IDictionary<string, object>> Convert(IContext context, string sql)
-        {
+        public static string GetFormatSql(IContext context, string sql) {
             sql = sql.Insert(sql.Length, SqlKeyWorld.WhiteSpace);
             var matches = SegmentUtil.GetMatch(sql);
             if (matches.Count == 0)
             {
-                return Tuple.Create(sql, ParamsUtil.GetParams(context, sql).Item1.ParamsToDictionary());
+                return sql;
             }
 
             Func<string, string> getFormatSql = (argSql) =>
@@ -34,7 +33,13 @@ namespace Tim.SqlEngine.Parser
             };
 
             var newSql = getFormatSql(sql);
-            return Tuple.Create(newSql, ParamsUtil.GetParams(context, newSql).Item1.ParamsToDictionary());
+            return newSql;
+        }
+
+        public static Tuple<string, IDictionary<string, object>> Convert(IContext context, string sql)
+        {
+            sql = GetFormatSql(context, sql);
+            return Tuple.Create(sql, ParamsUtil.GetParams(context, sql).Item1.ParamsToDictionary());
         }
 
         public static string GetApplyGramarRuleSql(IContext contex, string sql, IEnumerable<Segment> segments)

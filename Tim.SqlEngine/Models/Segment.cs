@@ -19,6 +19,7 @@ namespace Tim.SqlEngine.Models
         public Match Start { get; internal set; }
         public Match End { get; internal set; }
         public IEnumerable<string> Args { get; internal set; }
+        public string ArgContext { get; internal set; }
 
         public ICollection<Segment> Segments = new List<Segment>();
     }

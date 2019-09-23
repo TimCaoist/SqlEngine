@@ -9,9 +9,13 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
 {
     public static class TempSegmentBuilder
     {
+        /// <summary>
+        ///    sample:<temp name=organization_roles></temp>
+        /// </summary>
+        /// <returns></returns>
         internal static string BuildSql(IContext context, string oldSql, Segment segment)
         {
-            var templateName = segment.Args.ElementAt(2);
+            var templateName = segment.Args.ElementAt(1);
             Template template;
             var index = templateName.LastIndexOf('/');
             if (index < 0)
@@ -28,7 +32,8 @@ namespace Tim.SqlEngine.Parser.SegmentBuilder
             var content = SegmentUtil.GetContent(oldSql, segment);
             content = SegmentUtil.BuildContent(context, oldSql, content, segment);
             var paramStrs = content.Trim().Split(SqlKeyWorld.Split4);
-            return string.Format(template.Value, paramStrs);
+            var newTemplateValue = SqlParser.GetFormatSql(context, template.Value);
+            return string.Format(newTemplateValue, paramStrs);
         }
     }
 }

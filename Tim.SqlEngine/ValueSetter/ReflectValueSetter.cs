@@ -96,5 +96,10 @@ namespace Tim.SqlEngine.ValueSetter
 
             return ps.GetValue(data);
         }
+
+        public void SetFieldByConfig(object parent, object obj, QueryConfig queryConfig)
+        {
+            SetField(parent, obj, queryConfig.Filed);
+        }
     }
 }

@@ -54,6 +54,7 @@
     <Compile Include="Common\DBHelper.cs" />
     <Compile Include="Common\DictHelper.cs" />
     <Compile Include="Common\EvalHelper.cs" />
+    <Compile Include="Convert\EvalGetter.cs" />
     <Compile Include="Convert\IParamConvert.cs" />
     <Compile Include="Convert\ParamConvertUtil.cs" />
     <Compile Include="Convert\ParamConvertUtilFactory.cs" />

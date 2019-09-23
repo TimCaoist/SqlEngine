@@ -8,11 +8,13 @@ using Tim.SqlEngine.Models;
 
 namespace Tim.SqlEngine.Parser
 {
-    internal class Grammar
+    public class Grammar
     {
         private readonly List<Match> matches = new List<Match>();
 
         private readonly string sql;
+
+        private readonly static char[] splitArgs = new char[] { SqlKeyWorld.Split, '=', ' '};
 
         public Grammar(MatchCollection matches, string sql)
         {
@@ -57,6 +59,24 @@ namespace Tim.SqlEngine.Parser
             SetParent(segment, seg.Segments);
         }
 
+        private static Segment BuildSegment(Match start, string text, int number)
+        {
+            text = text.Remove(text.Length - 1, 1);
+            text = text.Remove(0, 1);
+            var firstWithSpace = text.IndexOf(SqlKeyWorld.WhiteSpace);
+            var token = text.Substring(0, firstWithSpace);
+            var args = text.Substring(firstWithSpace + 1).Trim();
+            var segment = new Segment(number)
+            {
+                Start = start,
+                Token = token,
+                Args = args.Split(splitArgs),
+                ArgContext = args
+            };
+
+            return segment;
+        }
+
         private Segment Calculation(int number)
         {
             var c = 0;
@@ -70,13 +90,7 @@ namespace Tim.SqlEngine.Parser
                 {
                     if (segment == null)
                     {
-                        var strs = text.Replace(string.Intern("<"), string.Empty).Replace(string.Intern(">"), string.Empty).Split(new char[] { ' ', ':'});
-                        segment = new Segment(number)
-                        {
-                            Start = match,
-                            Token = strs[0],
-                            Args = strs.Skip(1)
-                        };
+                        segment = BuildSegment(match, text, number);
                     }
 
                     c++;

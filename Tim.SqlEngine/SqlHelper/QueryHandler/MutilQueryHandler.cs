@@ -54,6 +54,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
 
                 context.Childs.Add(subContext);
                 var data = queryHandler.Query(subContext);
+                contentSetter.SetFieldByConfig(contentData, data, queryConfig);
                 if (conditionQueryHandler != null)
                 {
                     var result = conditionQueryHandler.WhetheResultStop(subContext, data);
@@ -63,7 +64,6 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
                     }
                 }
 
-                contentSetter.SetField(contentData, data, queryConfig.Filed);
                 if (queryConfig.IngoreFill == true)
                 {
                     continue;
