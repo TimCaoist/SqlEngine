@@ -68,12 +68,12 @@ namespace Tim.SqlEngine.Models
         {
             get
             {
-                if (_params == null)
+                if (Parent == null)
                 {
-                    return Parent.Params;
+                    return _params;
                 }
 
-                return _params;
+                return Parent._params;
             }
             set
             {
@@ -94,12 +94,17 @@ namespace Tim.SqlEngine.Models
         public object ComplexData
         {
             get {
-                if (_complexData == null)
+                if (_complexData != null)
                 {
-                    return Parent.ComplexData;
+                    return _complexData;
                 }
 
-                return _complexData;
+                if (Parent == null)
+                {
+                    return null;
+                }
+
+                return Parent.ComplexData;
             }
             set {
                 _complexData = value;
