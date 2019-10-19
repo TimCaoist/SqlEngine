@@ -119,7 +119,7 @@ namespace Tim.SqlEngine.ReflectUtil
             }
 
             IArrayReflect arrayReflect = ArrayReflectCreator.Create(fieldVal, property.PropertyType);
-            arrayReflect.SetFiled(data, (IEnumerable<object>)data, property);
+            arrayReflect.SetFiled(data, (IEnumerable<object>)fieldVal, property);
         }
 
         public static IEnumerable<Type> GetSubTypes(Type type)

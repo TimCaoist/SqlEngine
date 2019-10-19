@@ -12,7 +12,7 @@ namespace Tim.SqlEngine.ValueSetter
     {
         object CreateInstance();
 
-        IEnumerable<object> SetterDatas(QueryConfig queryConfig, MySqlDataReader dataReader, IEnumerable<string> columns);
+        IEnumerable<object> SetterDatas(BaseHadlerConfig config, MySqlDataReader dataReader, IEnumerable<string> columns);
 
         void SetField(string filed, object data);
 

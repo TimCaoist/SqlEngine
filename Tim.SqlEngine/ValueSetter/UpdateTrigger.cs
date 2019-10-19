@@ -64,7 +64,8 @@ namespace Tim.SqlEngine.ValueSetter
 
         public static void TriggeDefaultValues(UpdateContext updateContext, object data, UpdateConfig config, IDictionary<string, string> cols, IValueSetter valueSetter, IEnumerable<string> keys = null)
         {
-            var valueKeys = keys;
+            return;
+            var valueKeys = keys.ToArray();
             ICollection<string> exceptKeys = new List<string>();
             foreach (var col in cols)
             {

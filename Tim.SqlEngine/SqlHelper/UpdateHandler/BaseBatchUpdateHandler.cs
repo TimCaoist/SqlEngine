@@ -64,8 +64,9 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             {
                 results = new object[] { inputData };
             }
-
-            results = (IEnumerable<object>)inputData;
+            else {
+                results = (IEnumerable<object>)inputData;
+            }
 
             var filterEval = config.Config[FilterEval].ToSingleData<string>(string.Empty);
             if (string.IsNullOrEmpty(filterEval) || results.Any() == false)

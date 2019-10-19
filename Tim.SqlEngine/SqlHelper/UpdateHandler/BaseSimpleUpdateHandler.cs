@@ -23,7 +23,14 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
             var sql = config.Sql;
             if (!string.IsNullOrEmpty(sql))
             {
-                return SqlExcuter.ExcuteScalar(context);
+                if (config.InTran == false)
+                {
+                    return SqlExcuter.Excute(context);
+                }
+                else
+                {
+                    return SqlExcuter.ExcuteTrann(context);
+                }
             }
 
             if (string.IsNullOrEmpty(config.Table))

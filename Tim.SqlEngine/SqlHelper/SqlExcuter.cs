@@ -24,16 +24,16 @@ namespace Tim.SqlEngine.SqlHelper
 
             return columns;
         }
-        internal static IEnumerable<object> ExcuteQuery(IContext context, IValueSetter valueSetter)
+        internal static IEnumerable<object> ExcuteQuery(IContext context, IValueSetter valueSetter, string querySql = "")
         {
             return Excute<IEnumerable<object>>(context, (cmd) =>
             {
                 using (var dataReader = cmd.ExecuteReader())
                 {
                     var columns = GetColumns(dataReader);
-                    return valueSetter.SetterDatas((QueryConfig)context.GetConfig(), dataReader, columns);
+                    return valueSetter.SetterDatas(context.GetConfig(), dataReader, columns);
                 }
-            });
+            }, querySql);
         }
 
         internal static object ExcuteScalar(IContext context)
@@ -44,13 +44,13 @@ namespace Tim.SqlEngine.SqlHelper
             });
         }
 
-        public static TObject Excute<TObject>(IContext context, Func<MySqlCommand, TObject> doExcute)
+        public static TObject Excute<TObject>(IContext context, Func<MySqlCommand, TObject> doExcute, string querySql = "")
         {
             var queryConfig = context.GetConfig();
             using (var connection = new MySqlConnection(SqlEnginerConfig.GetConnection(queryConfig.Connection)))
             {
                 connection.Open();
-                var realSql = SqlParser.Convert(context, queryConfig.Sql);
+                var realSql = SqlParser.Convert(context, string.IsNullOrEmpty(querySql) ? queryConfig.Sql : querySql);
                 using (var cmd = connection.CreateCommand())
                 {
                     cmd.CommandText = realSql.Item1;

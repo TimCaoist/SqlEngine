@@ -34,10 +34,16 @@ namespace Tim.SqlEngine.ValueSetter
             return instance;
         }
 
-        public IEnumerable<object> SetterDatas(QueryConfig queryConfig, MySqlDataReader dataReader, IEnumerable<string> columns)
+        public IEnumerable<object> SetterDatas(BaseHadlerConfig config, MySqlDataReader dataReader, IEnumerable<string> columns)
         {
             ICollection<object> datas = new List<object>();
-            var alias = queryConfig.Alais;
+            var queryConfig = config as QueryConfig;
+            string[] alias = null;
+            if (queryConfig != null)
+            {
+                alias = queryConfig.Alais;
+            }
+
             var count = columns.Count();
             var alaisParser = new AlaisParser(columns, alias);
 
@@ -62,9 +68,6 @@ namespace Tim.SqlEngine.ValueSetter
                 }
 
                 datas.Add(data);
-                if (queryConfig.OnlyOne) {
-                    break;
-                }
             }
 
             return datas;

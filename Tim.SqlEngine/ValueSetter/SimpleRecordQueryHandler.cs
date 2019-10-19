@@ -40,7 +40,7 @@ namespace Tim.SqlEngine.ValueSetter
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> SetterDatas(QueryConfig queryConfig, MySqlDataReader dataReader, IEnumerable<string> columns)
+        public IEnumerable<object> SetterDatas(BaseHadlerConfig config, MySqlDataReader dataReader, IEnumerable<string> columns)
         {
             string field = string.Empty;
             if (columns.Count() == 1)
@@ -48,7 +48,7 @@ namespace Tim.SqlEngine.ValueSetter
                 field = columns.First();
             }
             else {
-                field = queryConfig.Config["simple_field"].ToString();
+                field = config.Config["simple_field"].ToString();
             }
 
             ICollection<object> datas = new List<object>();

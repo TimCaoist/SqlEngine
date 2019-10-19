@@ -138,11 +138,19 @@ namespace Tim.SqlEngine.ValueSetter
                 return string.Empty;
             }
 
-            var sourceType = datas.GetType().GetElementType();
+            var type = datas.GetType();
+            var sourceType = type.GetElementType();
+            if (sourceType == null)
+            {
+                sourceType = type.GetGenericArguments()[0];
+            }
+
             if (typeof(string) == sourceType || typeof(char) == sourceType)
             {
                 return string.Join(SqlKeyWorld.Split1, datas.Distinct().Select(d => string.Concat(SqlKeyWorld.Split2, d, SqlKeyWorld.Split2)));
             }
+
+            
 
             return string.Join(SqlKeyWorld.Split1, datas.Distinct());
         }

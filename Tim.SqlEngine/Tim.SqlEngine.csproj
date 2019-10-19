@@ -31,8 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data">
-      <HintPath>..\..\..\..\..\git代码\sd.plamclass.com.v2\sd.plamclass.com\libs\MySql.Data.6.9.5\lib\net45\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\git代码\sd.plamclass.com.v2\sd.plamclass.com\libs\MySql.Data.6.9.5\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -140,6 +141,7 @@
     <Compile Include="SqlHelper\UpdateHandler\BatchDeleteHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BatchInsertHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\BatchUpdateHandler.cs" />
+    <Compile Include="SqlHelper\UpdateHandler\CopyDataHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\IUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\MutilUpdateHandler.cs" />
     <Compile Include="SqlHelper\UpdateHandler\QuerySupportUpdateHandler.cs" />
