@@ -58,17 +58,42 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
             foreach (var relatedQueryConfig in relatedQueryConfigs)
             {
                 IQueryHandler queryHandler = QueryHandlerFactory.GetQueryHandler(relatedQueryConfig.QueryType);
+                IConditionQueryHandler conditionQueryHandler = queryHandler as IConditionQueryHandler;
+
                 var subContext = new Context(context)
                 {
                     Data = contentData,
                     Configs = new QueryConfig[] { relatedQueryConfig }
                 };
 
+                if (conditionQueryHandler != null)
+                {
+                    var isContinue = conditionQueryHandler.Continue(subContext);
+                    if (isContinue == false)
+                    {
+                        if (conditionQueryHandler.WhetheStop(subContext))
+                        {
+                            return;
+                        }
+
+                        continue;
+                    }
+                }
+
                 context.Childs.Add(subContext);
                 var obj = queryHandler.Query(subContext);
                 if (!string.IsNullOrEmpty(relatedQueryConfig.Filed))
                 {
                     contentData.Add(relatedQueryConfig.Filed, obj);
+                }
+
+                if (conditionQueryHandler != null)
+                {
+                    var result = conditionQueryHandler.WhetheResultStop(subContext, obj);
+                    if (result == true)
+                    {
+                        return;
+                    }
                 }
 
                 if (relatedQueryConfig.IngoreFill)

@@ -36,6 +36,7 @@ namespace Tim.SqlEngine
 
             ParamConvertUtil.DoConvert(context);
             var returnData = queryHandler.Query(context);
+            //执行完查询后回调
             return handlerConfig.OnQueryEnd(returnData, queryParams);
         }
 

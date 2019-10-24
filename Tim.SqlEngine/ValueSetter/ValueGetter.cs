@@ -147,12 +147,10 @@ namespace Tim.SqlEngine.ValueSetter
 
             if (typeof(string) == sourceType || typeof(char) == sourceType)
             {
-                return string.Join(SqlKeyWorld.Split1, datas.Distinct().Select(d => string.Concat(SqlKeyWorld.Split2, d, SqlKeyWorld.Split2)));
+                return string.Join(SqlKeyWorld.Split1, datas.Where(d => !string.IsNullOrEmpty(d.ToString())).Distinct().Select(d => string.Concat(SqlKeyWorld.Split2, d, SqlKeyWorld.Split2)));
             }
 
-            
-
-            return string.Join(SqlKeyWorld.Split1, datas.Distinct());
+            return string.Join(SqlKeyWorld.Split1, datas.Where(d => !string.IsNullOrEmpty(d.ToString())).Distinct());
         }
 
         public static string TryBuilder(object data)

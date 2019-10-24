@@ -10,6 +10,7 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
 
         protected override object DoUpdate(UpdateContext context)
         {
+            context.Submit();
             var queryConfig = context.Config;
             var handlerConfig = context.HandlerConfig;
             if (string.IsNullOrEmpty(queryConfig.Connection))
