@@ -41,8 +41,14 @@ namespace Tim.SqlEngine.SqlHelper.UpdateHandler
                     context.ContentParams.ReplaceOrInsert(SqlKeyWorld.ComplexData, data);
                     UpdateTrigger.TriggeDefaultValues(context, data, config, cols, valueSetter, keys);
                     UpdateTrigger.TriggeValuesChecked(context, data, config, cols, ActionType.Insert, valueSetter, keys);
-                    var id = (long)SqlExcuter.ExcuteTrann(context);
-                    valueSetter.SetField(data, id, key);
+                    var result = SqlExcuter.ExcuteTrann(context);
+                    long id = 0;
+                    if (result is long || result is int)
+                    {
+                        id = long.Parse(result.ToString());
+                        valueSetter.SetField(data, id, key);
+                    }
+
                     ExcuteSubUpdate(context, config, data);
                 }
 

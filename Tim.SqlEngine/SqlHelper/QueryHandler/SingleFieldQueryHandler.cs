@@ -4,6 +4,9 @@ using Tim.SqlEngine.Models;
 
 namespace Tim.SqlEngine.SqlHelper.QueryHandler
 {
+    /// <summary>
+    /// 单个字段查询
+    /// </summary>
     public class SingleFieldQueryHandler : BaseQueryHandler
     {
         public override int Type => 3;

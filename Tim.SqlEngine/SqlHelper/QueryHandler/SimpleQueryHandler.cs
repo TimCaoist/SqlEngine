@@ -9,6 +9,9 @@ using Tim.SqlEngine.ValueSetter;
 
 namespace Tim.SqlEngine.SqlHelper.QueryHandler
 {
+    /// <summary>
+    /// 简单查询
+    /// </summary>
     public class SimpleQueryHandler : BaseQueryHandler
     {
         public override int Type => 1;
