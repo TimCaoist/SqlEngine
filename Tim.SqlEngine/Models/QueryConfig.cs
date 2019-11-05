@@ -17,6 +17,9 @@ namespace Tim.SqlEngine.Models
         [DataMember(Name = "megre")]
         public bool Megre { get; set; } = true;
 
+        /// <summary>
+        /// 是否只有一条记录
+        /// </summary>
         [DataMember(Name = "one")]
         public bool OnlyOne { get; set; }
 
@@ -27,7 +30,7 @@ namespace Tim.SqlEngine.Models
         public string Filed { get;  set; }
 
         /// <summary>
-        /// 忽略填充
+        /// 不填充该字段
         /// </summary>
         [DataMember(Name = "ingore_fill")]
         public bool IngoreFill { get; set; }

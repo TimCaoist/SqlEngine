@@ -68,7 +68,7 @@ namespace Tim.SqlEngine.Models
         {
             get
             {
-                if (Parent == null)
+                if (Parent == null || _params != null)
                 {
                     return _params;
                 }

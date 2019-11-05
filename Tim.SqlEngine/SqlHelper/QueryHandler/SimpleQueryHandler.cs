@@ -66,7 +66,8 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler
                 var subContext = new Context(context)
                 {
                     Data = contentData,
-                    Configs = new QueryConfig[] { relatedQueryConfig }
+                    Configs = new QueryConfig[] { relatedQueryConfig },
+                    Params = context.Params
                 };
 
                 if (conditionQueryHandler != null)

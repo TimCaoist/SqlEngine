@@ -20,7 +20,7 @@ namespace Tim.SqlEngine.SqlHelper.QueryHandler.ReleatedFillHandler
                 for (var i = 0; i < fieldCount; i++)
                 {
                     var field = config.FillFields.ElementAt(i);
-                    if (i <= dValueCount)
+                    if (i >= dValueCount)
                     {
                         break;
                     }

@@ -29,6 +29,9 @@ namespace Tim.SqlEngine.Models
         [DataMember(Name = "json_type")]
         public string JType { get; set; }
 
+        /// <summary>
+        /// 参数转换
+        /// </summary>
         [DataMember(Name = "param_converts")]
         public IEnumerable<ParamConvertConfig> ParamConfigs { get; set; }
     }

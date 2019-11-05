@@ -18,7 +18,7 @@ namespace Tim.SqlEngine.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// 主查询
+        /// 主要查询
         /// </summary>
         [DataMember(Name = "configs")]
         public IEnumerable<QueryConfig> Configs { get; set; }
@@ -30,6 +30,9 @@ namespace Tim.SqlEngine.Models
 
         public IEnumerable<Template> Templates { get; set; }
 
+        /// <summary>
+        /// 参数转换
+        /// </summary>
         [DataMember(Name = "param_converts")]
         public IEnumerable<ParamConvertConfig> ParamConfigs { get; set; }
     }

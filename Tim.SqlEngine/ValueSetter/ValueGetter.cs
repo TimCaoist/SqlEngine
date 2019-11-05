@@ -1,14 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tim.SqlEngine.Models;
 
 namespace Tim.SqlEngine.ValueSetter
 {
     public static class ValueGetter
     {
+        /// <summary>
+        /// 比较父子的对比值
+        /// </summary>
+        /// <param name="cVal">子的值</param>
+        /// <param name="pVal">父的值</param>
+        /// <returns></returns>
+        private static bool Compare(object cVal, object pVal)
+        {
+            if (cVal == null || pVal == null)
+            {
+                return false;
+            }
+
+            if (cVal.Equals(pVal))
+            {
+                return true;
+            }
+
+            return cVal.ToString() == pVal.ToString();
+        }
+
         public static IEnumerable<object> GetFilterValues(Dictionary<string, string> matcherFields, object parent, IEnumerable<object> datas)
         {
             if (!matcherFields.Any())
@@ -24,7 +42,7 @@ namespace Tim.SqlEngine.ValueSetter
                 foreach (var data in datas)
                 {
                     var childValue = ReflectUtil.ReflectUtil.GetProperty(data, mf.Value);
-                    if (childValue.Equals(parentValue))
+                    if (Compare(childValue, parentValue))
                     {
                         matchDatas.Add(data);
                     }
@@ -40,7 +58,7 @@ namespace Tim.SqlEngine.ValueSetter
                 {
                     var parentValue = ReflectUtil.ReflectUtil.GetProperty(parent, mf.Key);
                     var childValue = ReflectUtil.ReflectUtil.GetProperty(data, mf.Value);
-                    if (childValue.Equals(parentValue))
+                    if (Compare(childValue, parentValue))
                     {
                         continue;
                     }

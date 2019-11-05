@@ -6,6 +6,9 @@ using Tim.SqlEngine.ValueSetter;
 
 namespace Tim.SqlEngine.SqlHelper.QueryHandler
 {
+    /// <summary>
+    /// 组合查询
+    /// </summary>
     public class MutilQueryHandler : BaseQueryHandler
     {
         public override int Type => 2;

@@ -56,7 +56,7 @@ namespace Tim.SqlEngine.Common
                 return string.Concat(preix, v, SqlKeyWorld.WhiteSpace);
             });
 
-            return $"INSERT INTO {table} ({string.Join(SqlKeyWorld.Split1, cols.Keys)}) VALUES ({string.Join(SqlKeyWorld.Split1, colStrs)})";
+            return $"INSERT INTO {table} ({string.Join(SqlKeyWorld.Split1, cols.Keys.Select( c=> string.Concat("`", c ,"`")))}) VALUES ({string.Join(SqlKeyWorld.Split1, colStrs)})";
         }
 
         public static string BuildUpdateSql(IDictionary<string, string> cols, UpdateConfig config, string key, string preix)
@@ -74,10 +74,10 @@ namespace Tim.SqlEngine.Common
 
                 if (col.Value.StartsWith(SqlKeyWorld.ParamStart))
                 {
-                    sql.Append($" {col.Key}{Equlas}{col.Value}");
+                    sql.Append($" `{col.Key}`{Equlas}{col.Value}");
                 }
                 else {
-                    sql.Append($" {col.Key}{Equlas}{string.Concat(preix, col.Value)}");
+                    sql.Append($" `{col.Key}`{Equlas}{string.Concat(preix, col.Value)}");
                 }
 
                 if (i != cCount - 1)

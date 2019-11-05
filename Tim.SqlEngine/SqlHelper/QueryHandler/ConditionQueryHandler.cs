@@ -5,6 +5,9 @@ using Tim.SqlEngine.Models;
 
 namespace Tim.SqlEngine.SqlHelper.QueryHandler
 {
+    /// <summary>
+    /// 条件查询
+    /// </summary>
     public class ConditionQueryHandler : BaseQueryHandler, IConditionQueryHandler
     {
         public override int Type => 6;

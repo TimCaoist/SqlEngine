@@ -12,6 +12,9 @@ namespace Tim.SqlEngine
     {
         private readonly static Dictionary<string, string> connectionDict = new Dictionary<string, string>();
 
+        /// <summary>
+        /// 全局变量储存
+        /// </summary>
         private readonly static Dictionary<string, object> globalDatas = new Dictionary<string, object>();
 
         private readonly static Dictionary<string, string> mapConnections = new Dictionary<string, string>();
